@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>GitS Character Sheet</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="sheet">
+<div class="wrap">
+
+  <div class="top">
+    <h1>SECTION 9 &nbsp;//&nbsp; AGENT DOSSIER</h1>
+    <div class="tools noprint">
+      <button class="btn" data-action="export">EXPORT</button>
+      <button class="btn" data-action="import">IMPORT</button>
+      <button class="btn ghost" data-action="reset">RESET</button>
+      <input type="file" id="importFile" accept=".json,application/json" class="sr-only">
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="grid grid-cols-1">
+      <div class="ident">
+        <button class="portrait" id="portrait" title="Click to set a portrait; right-click to clear">AGENT<br>PORTRAIT</button>
+        <input type="file" id="portraitFile" accept="image/*" class="sr-only">
+        <div class="ident-fields">
+          <div class="ident-names">
+            <div class="col">
+              <label class="label" for="field-AgentName">AGENT NAME</label>
+              <input class="field name" id="field-AgentName" data-field="AgentName" placeholder="—">
+            </div>
+            <div class="col">
+              <label class="label" for="field-PlayerName">PLAYER NAME</label>
+              <input class="field" id="field-PlayerName" data-field="PlayerName" placeholder="—">
+            </div>
+          </div>
+          <div class="col" style="flex:1 1 auto">
+            <label class="label" for="field-BackStory">AGENT BACK STORY</label>
+            <textarea class="field" id="field-BackStory" data-field="BackStory" placeholder="—" style="flex:1 1 auto"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3" id="attributes"></div>
+
+  <div class="grid grid-cols-2">
+    <div class="panel" style="display:flex;flex-direction:column">
+      <div class="panel-header">
+        <div class="title">SYNTHESIS CONFLICT</div>
+        <button class="btn small noprint" data-action="conflictToggle" id="conflictToggle">HIDE NOTES</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;padding:14px 0 12px">
+        <input class="field" data-field="Aspect1" placeholder="Aspect" aria-label="First aspect">
+        <div style="font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--mute);padding-bottom:13px">VS</div>
+        <input class="field right" data-field="Aspect2" placeholder="Aspect" aria-label="Second aspect">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px" id="conflictGrid"></div>
+      <textarea class="field" id="conflictNotes" data-field="SC_Notes" placeholder="Details of the conflict."
+        style="margin-top:14px;min-height:120px"></textarea>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="title">HIT POINTS &amp; ARMOR</div>
+        <div class="header-actions noprint">
+          <button class="btn small" type="button" data-action="hpClear" aria-label="Clear all hit point marks">CLEAR</button>
+          <button class="btn small" type="button" id="hpHintToggle" data-action="hpHintToggle" aria-expanded="false" aria-controls="hpHint" aria-label="Hit point controls help">?</button>
+        </div>
+      </div>
+      <div class="hint noprint" id="hpHint" hidden style="padding-top:10px">CLICK = DAMAGE &nbsp;·&nbsp; MIDDLE-CLICK = NON-LETHAL &nbsp;·&nbsp; RIGHT-CLICK = HEAL</div>
+      <div class="locations-grid" id="locations" style="padding-top:14px"></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2" id="sectionTop"></div>
+  <div class="grid grid-cols-2" id="sectionSkills"></div>
+
+  <div class="grid grid-cols-3">
+    <div class="panel">
+      <div class="panel-header"><div class="title">GHOST-WHISPERS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col"><label class="label" for="field-GW1">CURRENT</label>
+          <input class="field num" id="field-GW1" data-field="GW1" inputmode="numeric"></div>
+        <div class="col"><label class="label" for="field-GW2">MAXIMUM</label>
+          <input class="field num" id="field-GW2" data-field="GW2" inputmode="numeric"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="title">SKILL POINTS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col"><span class="label">ALLOCATED</span><div class="total" id="skillPointsTotal">0</div></div>
+        <div class="col"><label class="label" for="field-SP2">MAXIMUM</label>
+          <input class="field num" id="field-SP2" data-field="SP2" inputmode="numeric"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="title">REQUISITION POINTS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col"><span class="label">SPENT</span><div class="total" id="requisitionPointsTotal">0</div></div>
+        <div class="col"><label class="label" for="field-RP2">MAXIMUM</label>
+          <input class="field num" id="field-RP2" data-field="RP2" inputmode="numeric"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1" id="sectionGear"></div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="title">NOTES</div></div>
+    <div class="col" style="padding-top:14px">
+      <textarea class="field" id="field-Notes" data-field="Notes" placeholder="—" style="min-height:160px"></textarea>
+    </div>
+  </div>
+
+  <div class="page-footer">This is an unofficial, fan-made character sheet and is not affiliated with Mantic Games.</div>
+</div>
+</div>
+
+<div class="scrim noprint" id="scrim" hidden><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
+
+<script src="app.js"></script>
+</body>
+</html>
