@@ -251,7 +251,7 @@
       const meta = rowSummaryText(sectionKey, extra);
       const hasQty = sectionKey === 'Equipment' && extra.single !== false && toNumber(extra.qty, 0) > 0;
       const rankLines = sectionKey === 'SpecialtySkills'
-        ? Array.from({ length: Math.max(1, toNumber(extra.maxRanks, 1)) }, (_, index) => ({ label: 'Rank ' + (index + 1), text: extra['r' + (index + 1)] || '' }))
+        ? Array.from({ length: clamp(toNumber(extra.rank, 1), 1, Math.max(1, toNumber(extra.maxRanks, 1))) }, (_, index) => ({ label: 'Rank ' + (index + 1), text: extra['r' + (index + 1)] || '' }))
             .filter((rankLine) => rankLine.text.trim())
         : [];
       const skill = (sectionKey === 'Equipment' && extra.skill) ? extra.skill : '';
