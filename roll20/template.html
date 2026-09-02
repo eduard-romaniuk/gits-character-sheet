@@ -1,0 +1,660 @@
+<div class="sheet">
+<div class="wrap">
+
+  <div class="top">
+    <h1>SECTION 9 &nbsp;//&nbsp; AGENT DOSSIER</h1>
+  </div>
+
+  <div class="panel">
+    <div class="grid grid-cols-1">
+      <div class="ident-fields">
+        <div class="dialog-row">
+          <div class="col" style="flex:2 1 260px">
+            <label class="label">AGENT NAME</label>
+            <input class="field name" type="text" name="attr_AgentName" placeholder="—">
+          </div>
+          <div class="col" style="flex:1 1 180px">
+            <label class="label">PLAYER NAME</label>
+            <input class="field" type="text" name="attr_PlayerName" placeholder="—">
+          </div>
+        </div>
+        <div class="col">
+          <label class="label">AGENT BACK STORY</label>
+          <textarea class="field" name="attr_BackStory" placeholder="—"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3">
+    <div class="panel">
+      <div class="panel-header"><div class="title">GHOST</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
+        <div class="col">
+          <span class="label">AWARENESS</span>
+          <div class="step">
+            <button type="action" name="act_awarnessdn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Awarness" value="d6" readonly tabindex="-1"></div>
+            <button type="action" name="act_awarnessup" aria-label="increase">+</button>
+          </div>
+        </div>
+        <div class="col">
+          <span class="label">PRESENCE</span>
+          <div class="step">
+            <button type="action" name="act_presencedn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Presence" value="d6" readonly tabindex="-1"></div>
+            <button type="action" name="act_presenceup" aria-label="increase">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="title">SHELL</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
+        <div class="col">
+          <span class="label">MUSCLE</span>
+          <div class="step">
+            <button type="action" name="act_muscledn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Muscle" value="d6" readonly tabindex="-1"></div>
+            <button type="action" name="act_muscleup" aria-label="increase">+</button>
+          </div>
+        </div>
+        <div class="col">
+          <span class="label">REFLEXES</span>
+          <div class="step">
+            <button type="action" name="act_reflexesdn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Reflexes" value="d6" readonly tabindex="-1"></div>
+            <button type="action" name="act_reflexesup" aria-label="increase">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="title">CYBERBRAIN</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
+        <div class="col">
+          <span class="label">HACKING</span>
+          <div class="step">
+            <button type="action" name="act_hackingdn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Hacking" value="d6" readonly tabindex="-1"></div>
+            <button type="action" name="act_hackingup" aria-label="increase">+</button>
+          </div>
+        </div>
+        <div class="col">
+          <span class="label">BARRIER</span>
+          <div class="step">
+            <button type="action" name="act_barrierdn" aria-label="decrease">&minus;</button>
+            <div class="step-value"><input class="step-input" type="text" name="attr_Barrier" value="6" readonly tabindex="-1"></div>
+            <button type="action" name="act_barrierup" aria-label="increase">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2">
+    <div class="panel" style="display:flex;flex-direction:column">
+      <div class="panel-header">
+        <div class="title">SYNTHESIS CONFLICT</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;padding:14px 0 12px">
+        <input class="field" type="text" name="attr_Aspect1" placeholder="Aspect" aria-label="First aspect">
+        <div style="font:500 11px/1 var(--mono);letter-spacing:.14em;color:var(--mute);padding-bottom:13px">VS</div>
+        <input class="field right" type="text" name="attr_Aspect2" placeholder="Aspect" aria-label="Second aspect">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="conflict-row">
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_L12"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark left" name="act_scl12" aria-label="left 12"></button>
+          </span>
+          <div class="conflict-die">D12</div>
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_R12"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark right" name="act_scr12" aria-label="right 12"></button>
+          </span>
+        </div>
+        <div class="conflict-row">
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_L10"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark left" name="act_scl10" aria-label="left 10"></button>
+          </span>
+          <div class="conflict-die">D10</div>
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_R10"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark right" name="act_scr10" aria-label="right 10"></button>
+          </span>
+        </div>
+        <div class="conflict-row">
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_L8"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark left" name="act_scl8" aria-label="left 8"></button>
+          </span>
+          <div class="conflict-die">D8</div>
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_R8"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark right" name="act_scr8" aria-label="right 8"></button>
+          </span>
+        </div>
+        <div class="conflict-row">
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_L6"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark left" name="act_scl6" aria-label="left 6"></button>
+          </span>
+          <div class="conflict-die">D6</div>
+          <span class="state-wrap">
+            <select class="sr-only sc-state" name="attr_sc_R6"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option></select>
+            <button type="action" class="mark right" name="act_scr6" aria-label="right 6"></button>
+          </span>
+        </div>
+        <div class="conflict-row">
+          <div class="mark left fixed x"></div><div class="conflict-die">D4</div><div class="mark right fixed x"></div>
+        </div>
+      </div>
+      <textarea class="field" name="attr_SC_Notes" placeholder="Details of the conflict." style="margin-top:14px;min-height:120px"></textarea>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="title">HIT POINTS &amp; ARMOR</div>
+        <div class="header-actions">
+          <button type="action" class="btn small" name="act_hpclear" aria-label="Clear all hit point marks">CLEAR</button>
+        </div>
+      </div>
+      <div class="hint" style="padding-top:10px">CLICK A BOX TO CYCLE: DAMAGE (TEMP/PERM) &nbsp;&middot;&nbsp; STUN (TEMP/PERM) &nbsp;&middot;&nbsp; CLEAR</div>
+      <div class="locations-grid" style="padding-top:14px">
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">19&ndash;20</div><div class="location-name">Head / Neck</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap">
+                  <select class="sr-only hp-state" name="attr_hp_Head_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select>
+                  <button type="action" class="box" name="act_hphead0" aria-label="Head hit box 1"></button>
+                </span>
+                <span class="state-wrap">
+                  <select class="sr-only hp-state" name="attr_hp_Head_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select>
+                  <button type="action" class="box" name="act_hphead1" aria-label="Head hit box 2"></button>
+                </span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_Head_Armor" placeholder="0" aria-label="Head armor"></div>
+          </div>
+        </div>
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">11&ndash;18</div><div class="location-name">Torso</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_Torso_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hptorso0" aria-label="Torso hit box 1"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_Torso_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hptorso1" aria-label="Torso hit box 2"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_Torso_2"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hptorso2" aria-label="Torso hit box 3"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_Torso_3"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hptorso3" aria-label="Torso hit box 4"></button></span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_Torso_Armor" placeholder="0" aria-label="Torso armor"></div>
+          </div>
+        </div>
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">7&ndash;8</div><div class="location-name">Left Arm</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftArm_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftarm0" aria-label="Left Arm hit box 1"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftArm_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftarm1" aria-label="Left Arm hit box 2"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftArm_2"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftarm2" aria-label="Left Arm hit box 3"></button></span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_LeftArm_Armor" placeholder="0" aria-label="Left Arm armor"></div>
+          </div>
+        </div>
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">9&ndash;10</div><div class="location-name">Right Arm</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightArm_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightarm0" aria-label="Right Arm hit box 1"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightArm_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightarm1" aria-label="Right Arm hit box 2"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightArm_2"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightarm2" aria-label="Right Arm hit box 3"></button></span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_RightArm_Armor" placeholder="0" aria-label="Right Arm armor"></div>
+          </div>
+        </div>
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">1&ndash;3</div><div class="location-name">Left Leg</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftLeg_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftleg0" aria-label="Left Leg hit box 1"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftLeg_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftleg1" aria-label="Left Leg hit box 2"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_LeftLeg_2"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hpleftleg2" aria-label="Left Leg hit box 3"></button></span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_LeftLeg_Armor" placeholder="0" aria-label="Left Leg armor"></div>
+          </div>
+        </div>
+
+        <div class="location">
+          <div class="location-header"><div class="location-range">4&ndash;6</div><div class="location-name">Right Leg</div></div>
+          <div class="location-body">
+            <div class="col" style="gap:5px"><div class="hint">HIT POINTS</div>
+              <div class="boxes">
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightLeg_0"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightleg0" aria-label="Right Leg hit box 1"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightLeg_1"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightleg1" aria-label="Right Leg hit box 2"></button></span>
+                <span class="state-wrap"><select class="sr-only hp-state" name="attr_hp_RightLeg_2"><option value=""></option><option value="temp">temp</option><option value="perm">perm</option><option value="stun-temp">stun-temp</option><option value="stun-perm">stun-perm</option></select><button type="action" class="box" name="act_hprightleg2" aria-label="Right Leg hit box 3"></button></span>
+              </div>
+            </div>
+            <div class="col" style="gap:5px"><div class="hint">ARMOR</div>
+              <input class="field armor" type="text" inputmode="numeric" name="attr_RightLeg_Armor" placeholder="0" aria-label="Right Leg armor"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel-header"><div class="title">SETBACKS</div></div>
+      <fieldset class="repeating_setbacks">
+        <div class="row-wrap">
+          <div class="col">
+            <label class="label">NAME</label>
+            <input class="field" type="text" name="attr_name" placeholder="—">
+          </div>
+          <div class="col">
+            <label class="label">DESCRIPTION</label>
+            <textarea class="field" name="attr_notes" placeholder="—"></textarea>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel-header"><div class="title">CYBERNETICS</div></div>
+      <fieldset class="repeating_cybernetics">
+        <div class="row-wrap">
+          <div class="dialog-row">
+            <div class="col" style="flex:2 1 200px">
+              <label class="label">NAME</label>
+              <input class="field" type="text" name="attr_name" placeholder="—">
+            </div>
+            <div class="col" style="flex:1 1 110px">
+              <label class="label">ARMOR</label>
+              <input class="field mono" type="text" name="attr_armor" placeholder="—">
+            </div>
+            <div class="col" style="flex:1 1 140px">
+              <label class="label">UNARMED DAMAGE</label>
+              <input class="field mono" type="text" name="attr_damage" placeholder="—">
+            </div>
+          </div>
+          <div class="col">
+            <label class="label">SPECIAL</label>
+            <textarea class="field" name="attr_notes" placeholder="—"></textarea>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel-header"><div class="title">STANDARD SKILLS</div></div>
+      <fieldset class="repeating_skills">
+        <div class="row-wrap">
+          <div class="dialog-row">
+            <div class="col" style="flex:3 1 200px">
+              <label class="label">NAME</label>
+              <input class="field" type="text" name="attr_name" placeholder="—">
+            </div>
+            <div class="col" style="flex:1 1 140px">
+              <label class="label">RANK</label>
+              <select class="field mono" name="attr_rank">
+                <option value="1">1 &mdash; D4</option>
+                <option value="2" selected>2 &mdash; D6</option>
+                <option value="3">3 &mdash; D8</option>
+                <option value="4">4 &mdash; D10</option>
+                <option value="5">5 &mdash; D12</option>
+                <option value="6">6 &mdash; D20</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <label class="label">DESCRIPTION</label>
+            <textarea class="field" name="attr_notes" placeholder="—"></textarea>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel-header"><div class="title">SPECIALTY SKILLS</div></div>
+      <fieldset class="repeating_specialty">
+        <div class="row-wrap specialty-row">
+          <div class="dialog-row">
+            <div class="col" style="flex:3 1 200px">
+              <label class="label">NAME</label>
+              <input class="field" type="text" name="attr_name" placeholder="—">
+            </div>
+            <div class="col" style="flex:1 1 110px">
+              <label class="label">MAX. RANKS</label>
+              <select class="field mono" name="attr_maxranks">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="col" style="flex:1 1 110px">
+              <label class="label">CURRENT RANK</label>
+              <select class="field mono" name="attr_rank">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <label class="label">DESCRIPTION (RANK 1)</label>
+            <textarea class="field" name="attr_notes" placeholder="—"></textarea>
+          </div>
+          <div class="col r2"><label class="label">RANK 2</label><textarea class="field" name="attr_r2" placeholder="—"></textarea></div>
+          <div class="col r3"><label class="label">RANK 3</label><textarea class="field" name="attr_r3" placeholder="—"></textarea></div>
+          <div class="col r4"><label class="label">RANK 4</label><textarea class="field" name="attr_r4" placeholder="—"></textarea></div>
+          <div class="col r5"><label class="label">RANK 5</label><textarea class="field" name="attr_r5" placeholder="—"></textarea></div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3">
+    <div class="panel">
+      <div class="panel-header"><div class="title">GHOST-WHISPERS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col"><label class="label">CURRENT</label>
+          <input class="field num" type="text" inputmode="numeric" name="attr_GW1" value="4"></div>
+        <div class="col"><label class="label">MAXIMUM</label>
+          <input class="field num" type="text" inputmode="numeric" name="attr_GW2" value="4"></div>
+      </div>
+    </div>
+    <div class="panel total-wrap">
+      <div class="panel-header"><div class="title">SKILL POINTS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col">
+          <span class="label">ALLOCATED</span>
+          <div class="total"><input class="total-input" type="text" name="attr_SkillPointsTotal" readonly tabindex="-1" value="0"></div>
+          <input type="checkbox" class="sr-only" name="attr_SkillPointsExceeded" tabindex="-1">
+        </div>
+        <div class="col"><label class="label">MAXIMUM</label>
+          <input class="field num" type="text" inputmode="numeric" name="attr_SP2" value="12"></div>
+      </div>
+    </div>
+    <div class="panel total-wrap">
+      <div class="panel-header"><div class="title">REQUISITION POINTS</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;padding-top:14px;gap:12px">
+        <div class="col">
+          <span class="label">SPENT</span>
+          <div class="total"><input class="total-input" type="text" name="attr_RequisitionPointsTotal" readonly tabindex="-1" value="0"></div>
+          <input type="checkbox" class="sr-only" name="attr_RequisitionPointsExceeded" tabindex="-1">
+        </div>
+        <div class="col"><label class="label">MAXIMUM</label>
+          <input class="field num" type="text" inputmode="numeric" name="attr_RP2" value="12"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="panel-header"><div class="title">WEAPONS &amp; EQUIPMENT</div></div>
+      <fieldset class="repeating_equipment">
+        <div class="row-wrap">
+          <div class="dialog-row eq-type-row">
+            <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="weapon" checked><span>WEAPON</span></label>
+            <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="attachment"><span>ATTACHMENT</span></label>
+            <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="armor"><span>ARMOR</span></label>
+            <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="throwable"><span>THROWABLE</span></label>
+            <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="utility"><span>UTILITY</span></label>
+          </div>
+
+          <div class="dialog-row">
+            <div class="col" style="flex:3 1 200px">
+              <label class="label">NAME</label>
+              <input class="field" type="text" name="attr_name" placeholder="—">
+            </div>
+            <div class="col" style="flex:1 1 100px">
+              <label class="label">COST</label>
+              <input class="field mono" type="text" inputmode="numeric" name="attr_cost" placeholder="0">
+            </div>
+          </div>
+
+          <div class="dialog-row fx-weapon">
+            <div class="col"><label class="label">RANGE</label><input class="field" type="text" name="attr_range" placeholder="—"></div>
+            <div class="col"><label class="label">DAMAGE</label><input class="field" type="text" name="attr_damage" placeholder="—"></div>
+            <div class="col"><label class="label">ROF</label><input class="field" type="text" name="attr_rof" placeholder="—"></div>
+            <div class="col"><label class="label">SKILL</label><input class="field" type="text" name="attr_skill" placeholder="—"></div>
+          </div>
+
+          <div class="dialog-row fx-armor">
+            <div class="col"><label class="label">HEAD</label><input class="field armor" type="text" inputmode="numeric" name="attr_head" placeholder="0"></div>
+            <div class="col"><label class="label">TORSO</label><input class="field armor" type="text" inputmode="numeric" name="attr_torso" placeholder="0"></div>
+            <div class="col"><label class="label">ARMS</label><input class="field armor" type="text" inputmode="numeric" name="attr_arms" placeholder="0"></div>
+            <div class="col"><label class="label">LEGS</label><input class="field armor" type="text" inputmode="numeric" name="attr_legs" placeholder="0"></div>
+          </div>
+
+          <div class="dialog-row fx-throwable">
+            <div class="col"><label class="label">RANGE</label><input class="field" type="text" name="attr_range" placeholder="—"></div>
+            <div class="col"><label class="label">DAMAGE</label><input class="field" type="text" name="attr_damage" placeholder="—"></div>
+            <div class="col" style="max-width:120px"><label class="label">AMOUNT</label><input class="field num" type="text" inputmode="numeric" name="attr_qty" placeholder="0"></div>
+            <div class="col"><label class="label">SKILL</label><input class="field" type="text" name="attr_skill" placeholder="—"></div>
+          </div>
+
+          <div class="dialog-row fx-utility">
+            <div class="col" style="max-width:160px"><label class="label">AMOUNT</label><input class="field num" type="text" inputmode="numeric" name="attr_qty" placeholder="0"></div>
+          </div>
+
+          <div class="dialog-row fx-attachment">
+            <div class="col"><label class="label">STAT MODIFIER</label><input class="field" type="text" name="attr_mods" placeholder="—"></div>
+            <div class="col"><label class="label">FITTED TO</label><input class="field" type="text" name="attr_fittedto" placeholder="Weapon name"></div>
+          </div>
+
+          <div class="dialog-row single-use-row">
+            <label class="check">
+              <input type="checkbox" class="check-input sr-only" name="attr_single">
+              <span class="checkbox-box"></span>
+              <span class="label">SINGLE-USE</span>
+            </label>
+            <div class="col" style="max-width:140px">
+              <label class="label">USED</label>
+              <input class="field num" type="text" inputmode="numeric" name="attr_used" placeholder="0">
+            </div>
+          </div>
+
+          <div class="col">
+            <label class="label">SPECIAL</label>
+            <textarea class="field" name="attr_notes" placeholder="—"></textarea>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="title">NOTES</div></div>
+    <div class="col" style="padding-top:14px">
+      <textarea class="field" name="attr_Notes" placeholder="—" style="min-height:160px"></textarea>
+    </div>
+  </div>
+
+  <div class="page-footer">This is an unofficial, fan-made character sheet and is not affiliated with Mantic Games.</div>
+</div>
+</div>
+
+<script type="text/worker">
+(function () {
+  'use strict';
+
+  var DICE_STEPS = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+
+  /* Action names (used in button `name="act_X"` and `on('clicked:X', ...)`)
+     must be lowercase with NO underscores beyond the mandatory act_ prefix,
+     or Roll20 silently never fires the clicked: event. Attribute keys (used
+     with getAttrs/setAttrs) keep their real mixed-case/underscored names. */
+
+  var DIE_ACTIONS = [
+    ['awarnessup', 'awarnessdn', 'Awarness'],
+    ['presenceup', 'presencedn', 'Presence'],
+    ['muscleup', 'muscledn', 'Muscle'],
+    ['reflexesup', 'reflexesdn', 'Reflexes'],
+    ['hackingup', 'hackingdn', 'Hacking']
+  ];
+
+  var HP_PAIRS = [
+    ['hphead0', 'hp_Head_0'], ['hphead1', 'hp_Head_1'],
+    ['hptorso0', 'hp_Torso_0'], ['hptorso1', 'hp_Torso_1'], ['hptorso2', 'hp_Torso_2'], ['hptorso3', 'hp_Torso_3'],
+    ['hpleftarm0', 'hp_LeftArm_0'], ['hpleftarm1', 'hp_LeftArm_1'], ['hpleftarm2', 'hp_LeftArm_2'],
+    ['hprightarm0', 'hp_RightArm_0'], ['hprightarm1', 'hp_RightArm_1'], ['hprightarm2', 'hp_RightArm_2'],
+    ['hpleftleg0', 'hp_LeftLeg_0'], ['hpleftleg1', 'hp_LeftLeg_1'], ['hpleftleg2', 'hp_LeftLeg_2'],
+    ['hprightleg0', 'hp_RightLeg_0'], ['hprightleg1', 'hp_RightLeg_1'], ['hprightleg2', 'hp_RightLeg_2']
+  ];
+  var HP_STATES = ['', 'temp', 'perm', 'stun-temp', 'stun-perm'];
+
+  var SC_PAIRS = [
+    ['scl12', 'sc_L12'], ['scr12', 'sc_R12'], ['scl10', 'sc_L10'], ['scr10', 'sc_R10'],
+    ['scl8', 'sc_L8'], ['scr8', 'sc_R8'], ['scl6', 'sc_L6'], ['scr6', 'sc_R6']
+  ];
+  var SC_STATES = ['', 'temp', 'perm'];
+
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  /* -------- die steppers (Awarness/Presence/Muscle/Reflexes/Hacking) -------- */
+
+  function stepDie(attrKey, dir) {
+    getAttrs([attrKey], function (values) {
+      var idx = DICE_STEPS.indexOf(values[attrKey] || 'd6');
+      if (idx < 0) idx = 1;
+      idx = clamp(idx + dir, 0, DICE_STEPS.length - 1);
+      var out = {};
+      out[attrKey] = DICE_STEPS[idx];
+      setAttrs(out);
+    });
+  }
+  DIE_ACTIONS.forEach(function (entry) {
+    var upAction = entry[0], dnAction = entry[1], attrKey = entry[2];
+    on('clicked:' + upAction, function () { stepDie(attrKey, 1); });
+    on('clicked:' + dnAction, function () { stepDie(attrKey, -1); });
+  });
+
+  /* -------- barrier stepper (+/- 2, clamp 6-20) -------- */
+
+  on('clicked:barrierup', function () { stepBarrier(1); });
+  on('clicked:barrierdn', function () { stepBarrier(-1); });
+  function stepBarrier(dir) {
+    getAttrs(['Barrier'], function (values) {
+      var val = parseInt(values.Barrier, 10);
+      if (isNaN(val)) val = 6;
+      val = clamp(val + dir * 2, 6, 20);
+      setAttrs({ Barrier: val });
+    });
+  }
+
+  /* -------- hit location boxes: single click cycles through all 5 states -------- */
+
+  HP_PAIRS.forEach(function (pair) {
+    var action = pair[0], attrKey = pair[1];
+    on('clicked:' + action, function () {
+      getAttrs([attrKey], function (values) {
+        var idx = HP_STATES.indexOf(values[attrKey] || '');
+        var next = HP_STATES[(idx + 1) % HP_STATES.length];
+        var out = {};
+        out[attrKey] = next;
+        setAttrs(out);
+      });
+    });
+  });
+
+  on('clicked:hpclear', function () {
+    var out = {};
+    HP_PAIRS.forEach(function (pair) { out[pair[1]] = ''; });
+    setAttrs(out);
+  });
+
+  /* -------- synthesis conflict marks: click cycles blank/temp/perm -------- */
+
+  SC_PAIRS.forEach(function (pair) {
+    var action = pair[0], attrKey = pair[1];
+    on('clicked:' + action, function () {
+      getAttrs([attrKey], function (values) {
+        var idx = SC_STATES.indexOf(values[attrKey] || '');
+        var next = SC_STATES[(idx + 1) % SC_STATES.length];
+        var out = {};
+        out[attrKey] = next;
+        setAttrs(out);
+      });
+    });
+  });
+
+  /* -------- skill points / requisition points totals -------- */
+
+  function recalcTotals() {
+    getSectionIDs('repeating_skills', function (skillIds) {
+      getSectionIDs('repeating_specialty', function (specialtyIds) {
+        getSectionIDs('repeating_equipment', function (equipIds) {
+          var fields = ['SP2', 'RP2'];
+          skillIds.forEach(function (id) { fields.push('repeating_skills_' + id + '_rank'); });
+          specialtyIds.forEach(function (id) { fields.push('repeating_specialty_' + id + '_rank'); });
+          equipIds.forEach(function (id) {
+            fields.push('repeating_equipment_' + id + '_cost');
+            fields.push('repeating_equipment_' + id + '_qty');
+            fields.push('repeating_equipment_' + id + '_single');
+          });
+
+          getAttrs(fields, function (values) {
+            var skillPoints = 0;
+            skillIds.forEach(function (id) {
+              skillPoints += parseInt(values['repeating_skills_' + id + '_rank'], 10) || 0;
+            });
+            specialtyIds.forEach(function (id) {
+              skillPoints += parseInt(values['repeating_specialty_' + id + '_rank'], 10) || 0;
+            });
+
+            var requisitionPoints = 0;
+            equipIds.forEach(function (id) {
+              var cost = parseInt(values['repeating_equipment_' + id + '_cost'], 10) || 0;
+              var qty = parseInt(values['repeating_equipment_' + id + '_qty'], 10) || 0;
+              var single = values['repeating_equipment_' + id + '_single'];
+              var units = single ? Math.max(1, qty) : 1;
+              requisitionPoints += cost * units;
+            });
+
+            var sp2 = parseInt(values.SP2, 10) || 0;
+            var rp2 = parseInt(values.RP2, 10) || 0;
+
+            setAttrs({
+              SkillPointsTotal: skillPoints,
+              RequisitionPointsTotal: requisitionPoints,
+              SkillPointsExceeded: (sp2 > 0 && skillPoints > sp2) ? 1 : 0,
+              RequisitionPointsExceeded: (rp2 > 0 && requisitionPoints > rp2) ? 1 : 0
+            });
+          });
+        });
+      });
+    });
+  }
+
+  on('sheet:opened change:repeating_skills change:repeating_specialty change:repeating_equipment change:sp2 change:rp2', recalcTotals);
+
+})();
+</script>
