@@ -128,6 +128,13 @@ h1 {
   letter-spacing: .12em;
   align-self: flex-start;
 }
+.btn:disabled,
+.btn:disabled:hover {
+  opacity: .55;
+  cursor: default;
+  border-color: var(--line2);
+  color: var(--green);
+}
 
 /* ==================== panels ==================== */
 
@@ -641,6 +648,21 @@ textarea.field {
   font: 400 12px/1.6 var(--mono);
   color: var(--ghost);
   padding: 2px 0;
+}
+.loadout-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line2);
+}
+.loadout-manage {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
 }
 
 /* ==================== dialog ==================== */

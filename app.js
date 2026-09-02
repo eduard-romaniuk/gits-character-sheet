@@ -86,16 +86,25 @@
       return item;
     });
 
+    let loadouts = Array.isArray(saved.loadouts) ? saved.loadouts.filter((loadout) => loadout && loadout.id) : [];
+    if (!loadouts.length) loadouts = [{ id: 'default', name: 'DEFAULT' }];
+    let activeLoadoutId = saved.activeLoadoutId;
+    if (!loadouts.some((loadout) => loadout.id === activeLoadoutId)) activeLoadoutId = loadouts[0].id;
+    items.Equipment = items.Equipment.map((item) => (item.loadoutId ? item : { ...item, loadoutId: loadouts[0].id }));
+
     return {
       data: data,
       hp: saved.hp || {},
       sc: saved.sc || {},
       scOpen: saved.scOpen !== false,
       items: items,
+      loadouts: loadouts,
+      activeLoadoutId: activeLoadoutId,
       openRows: saved.openRows || {},
       sectionAllOpen: {},
       portrait: saved.portrait || '',
       dialog: null,
+      loadoutDialog: null,
       crop: null,
     };
   }
@@ -107,7 +116,8 @@
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           data: state.data, hp: state.hp, sc: state.sc, scOpen: state.scOpen,
-          items: state.items, openRows: state.openRows, portrait: state.portrait,
+          items: state.items, loadouts: state.loadouts, activeLoadoutId: state.activeLoadoutId,
+          openRows: state.openRows, portrait: state.portrait,
         }));
       } catch (error) {}
     }, 250);
@@ -120,7 +130,7 @@
   const rankToDieLabel = (rank) => RANK_DIE_LABELS[clamp(toNumber(rank, 1), 1, 6) - 1];
   const generateId = () => 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   const weaponOptions = () => (state.items.Equipment || [])
-    .filter((item) => ((item.extra || {}).type || 'weapon') === 'weapon')
+    .filter((item) => item.loadoutId === state.activeLoadoutId && ((item.extra || {}).type || 'weapon') === 'weapon')
     .map((item) => ({ value: item.id, label: item.name }));
 
   function orderItemsForDisplay(sectionKey, list) {
@@ -138,11 +148,13 @@
   const skillPointsTotal = () => (state.items.Skills || []).reduce((sum, item) => sum + toNumber((item.extra || {}).rank, 0), 0)
     + (state.items.SpecialtySkills || []).reduce((sum, item) => sum + toNumber((item.extra || {}).rank, 0), 0);
 
-  const requisitionPointsTotal = () => (state.items.Equipment || []).reduce((sum, item) => {
-    const extra = item.extra || {};
-    const units = isSingleUse(extra) ? Math.max(1, toNumber(extra.qty, 1)) : 1;
-    return sum + toNumber(extra.cost, 0) * units;
-  }, 0);
+  const requisitionPointsTotal = () => (state.items.Equipment || [])
+    .filter((item) => item.loadoutId === state.activeLoadoutId)
+    .reduce((sum, item) => {
+      const extra = item.extra || {};
+      const units = isSingleUse(extra) ? Math.max(1, toNumber(extra.qty, 1)) : 1;
+      return sum + toNumber(extra.cost, 0) * units;
+    }, 0);
 
   /* ==================== render: attributes ==================== */
 
@@ -241,8 +253,25 @@
     }).filter(Boolean).join('  ·  ');
   }
 
+  function renderLoadoutBar() {
+    const loadouts = state.loadouts || [];
+    const chips = loadouts.map((loadout) => '<button class="chip' + (loadout.id === state.activeLoadoutId ? ' selected' : '') + '"'
+      + ' data-action="loadoutSelect" data-loadout-id="' + loadout.id + '">' + escapeHtml(loadout.name) + '</button>').join('');
+    const activeLoadout = loadouts.filter((loadout) => loadout.id === state.activeLoadoutId)[0];
+    return '<div class="loadout-bar noprint">'
+      + '<div class="chips">' + chips
+      + '<button class="chip" data-action="loadoutAdd" aria-label="new loadout">+ NEW</button></div>'
+      + (activeLoadout ? '<div class="loadout-manage">'
+          + '<button class="icon" data-action="loadoutEdit" data-loadout-id="' + activeLoadout.id + '">RENAME</button>'
+          + (loadouts.length > 1 ? '<button class="icon delete" data-action="loadoutDelete" data-loadout-id="' + activeLoadout.id + '" aria-label="delete loadout">×</button>' : '')
+          + '</div>' : '') + '</div>';
+  }
+
   function renderSectionMarkup(sectionKey, label) {
-    const list = state.items[sectionKey] || [];
+    const isEquipmentSection = sectionKey === 'Equipment';
+    const list = isEquipmentSection
+      ? (state.items.Equipment || []).filter((item) => item.loadoutId === state.activeLoadoutId)
+      : (state.items[sectionKey] || []);
     let rows = '';
     orderItemsForDisplay(sectionKey, list).forEach((item) => {
       const extra = item.extra || {};
@@ -292,6 +321,7 @@
       + '<div class="panel-header"><div class="title">' + label + '</div>'
       + '<button class="btn small noprint" data-action="toggleAll" data-section="' + sectionKey + '">'
       + (state.sectionAllOpen[sectionKey] ? 'HIDE ALL' : 'SHOW ALL') + '</button></div>'
+      + (isEquipmentSection ? renderLoadoutBar() : '')
       + '<div class="rows">' + rows + '</div>'
       + '<button class="btn dashed noprint" data-action="add" data-section="' + sectionKey + '">+ ADD</button></div>';
   }
@@ -453,6 +483,17 @@
         }
       }
     }
+    if (isEquipment && dialog.id) {
+      const otherLoadouts = (state.loadouts || []).filter((loadout) => loadout.id !== state.activeLoadoutId);
+      if (otherLoadouts.length) {
+        html += '<div class="col"><span class="label">COPY TO LOADOUT</span>'
+          + '<div style="display:flex;gap:8px">'
+          + '<select class="field" id="dialogCopyTarget">' + otherLoadouts.map((loadout) => '<option value="' + loadout.id + '">' + escapeHtml(loadout.name) + '</option>').join('') + '</select>'
+          + '<button class="btn small" data-action="dlgCopyToLoadout" type="button">COPY</button>'
+          + '</div></div>';
+      }
+    }
+
     html += '<div class="dialog-footer"><button class="btn ghost" data-action="dlgCancel">CANCEL</button>'
       + '<button class="btn primary" data-action="dlgSave">SAVE</button></div>';
 
@@ -483,11 +524,123 @@
       const index = list.findIndex((item) => item.id === dialog.id);
       if (index >= 0) list[index] = { ...list[index], name: name, notes: dialog.notes || '', extra: extra };
     } else {
-      list.push({ id: generateId(), name: name, notes: dialog.notes || '', extra: extra });
+      const newItem = { id: generateId(), name: name, notes: dialog.notes || '', extra: extra };
+      if (dialog.section === 'Equipment') newItem.loadoutId = state.activeLoadoutId;
+      list.push(newItem);
     }
     state.items[dialog.section] = list;
 
     closeItemDialog();
+    persistState();
+    renderItemSections();
+    renderTotals();
+  }
+
+  function copyItemToLoadout(button) {
+    const dialog = state.dialog;
+    if (!dialog || dialog.section !== 'Equipment' || !dialog.id) return;
+    if (button && button.disabled) return;
+    collectDialogInputs();
+    const targetSelect = query('#dialogCopyTarget');
+    const targetLoadoutId = targetSelect ? targetSelect.value : '';
+    if (!targetLoadoutId) return;
+
+    const name = (dialog.name || '').trim();
+    if (!name) return;
+
+    const extra = { ...(dialog.extra || {}) };
+    const newId = generateId();
+    const copies = [{ id: newId, name: name, notes: dialog.notes || '', extra: extra, loadoutId: targetLoadoutId }];
+
+    if (extra.type !== 'attachment') {
+      (state.items.Equipment || []).filter((item) => isAttachment(item) && (item.extra || {}).fittedId === dialog.id)
+        .forEach((attachment) => {
+          copies.push({ id: generateId(), name: attachment.name, notes: attachment.notes || '', extra: { ...(attachment.extra || {}), fittedId: newId }, loadoutId: targetLoadoutId });
+        });
+    }
+
+    state.items.Equipment = (state.items.Equipment || []).concat(copies);
+    persistState();
+    renderItemSections();
+    renderTotals();
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'COPIED';
+      setTimeout(() => { button.disabled = false; button.textContent = 'COPY'; }, 1200);
+    }
+  }
+
+  /* ==================== loadouts ==================== */
+
+  function openLoadoutDialog(loadout) {
+    state.loadoutDialog = { id: loadout ? loadout.id : null, name: loadout ? loadout.name : '' };
+    renderLoadoutDialog();
+  }
+
+  function closeLoadoutDialog() {
+    state.loadoutDialog = null;
+    query('#scrim').hidden = true;
+    query('#dialog').innerHTML = '';
+  }
+
+  function renderLoadoutDialog() {
+    const dialog = state.loadoutDialog;
+    if (!dialog) return;
+    const html = '<div class="panel-header"><div class="title">' + (dialog.id ? 'RENAME LOADOUT' : 'NEW LOADOUT') + '</div></div>'
+      + '<div class="col"><label class="label" for="loadoutDialogName">NAME</label>'
+      + '<input class="field" id="loadoutDialogName" value="' + escapeHtml(dialog.name) + '"></div>'
+      + '<div class="dialog-footer"><button class="btn ghost" data-action="dlgCancel">CANCEL</button>'
+      + '<button class="btn primary" data-action="dlgSave">SAVE</button></div>';
+    query('#dialog').innerHTML = html;
+    query('#scrim').hidden = false;
+    const nameEl = query('#loadoutDialogName');
+    if (nameEl) nameEl.focus();
+  }
+
+  function saveLoadoutDialog() {
+    const dialog = state.loadoutDialog;
+    if (!dialog) return;
+    const nameEl = query('#loadoutDialogName');
+    const name = (nameEl ? nameEl.value : dialog.name || '').trim();
+    if (!name) { closeLoadoutDialog(); return; }
+
+    if (dialog.id) {
+      state.loadouts = (state.loadouts || []).map((loadout) => (loadout.id === dialog.id ? { ...loadout, name: name } : loadout));
+    } else {
+      const newLoadout = { id: generateId(), name: name };
+      state.loadouts = (state.loadouts || []).concat([newLoadout]);
+      state.activeLoadoutId = newLoadout.id;
+    }
+
+    closeLoadoutDialog();
+    persistState();
+    renderItemSections();
+    renderTotals();
+  }
+
+  function activateLoadout(loadoutId) {
+    if (!loadoutId || loadoutId === state.activeLoadoutId) return;
+    state.activeLoadoutId = loadoutId;
+    persistState();
+    renderItemSections();
+    renderTotals();
+  }
+
+  function deleteLoadout(loadoutId) {
+    const loadouts = state.loadouts || [];
+    if (loadouts.length <= 1) return;
+    const loadout = loadouts.filter((entry) => entry.id === loadoutId)[0];
+    if (!loadout) return;
+    const itemCount = (state.items.Equipment || []).filter((item) => item.loadoutId === loadoutId).length;
+    const message = itemCount
+      ? 'Delete loadout "' + loadout.name + '" and its ' + itemCount + ' item' + (itemCount > 1 ? 's' : '') + '?'
+      : 'Delete loadout "' + loadout.name + '"?';
+    if (!window.confirm(message)) return;
+
+    state.items.Equipment = (state.items.Equipment || []).filter((item) => item.loadoutId !== loadoutId);
+    state.loadouts = loadouts.filter((entry) => entry.id !== loadoutId);
+    if (state.activeLoadoutId === loadoutId) state.activeLoadoutId = state.loadouts[0].id;
     persistState();
     renderItemSections();
     renderTotals();
@@ -671,7 +824,8 @@
         const parsed = JSON.parse(fileReader.result);
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           data: parsed.data || {}, hp: parsed.hp || {}, sc: parsed.sc || {}, scOpen: parsed.scOpen !== false,
-          items: parsed.items || {}, openRows: parsed.openRows || {}, portrait: parsed.portrait || '',
+          items: parsed.items || {}, loadouts: parsed.loadouts || [], activeLoadoutId: parsed.activeLoadoutId || '',
+          openRows: parsed.openRows || {}, portrait: parsed.portrait || '',
         }));
         window.location.reload();
       } catch (error) {
@@ -887,8 +1041,13 @@
           renderItemDialog();
           return;
         }
-        case 'dlgCancel': closeItemDialog(); return;
-        case 'dlgSave': saveItemDialog(); return;
+        case 'dlgCancel': if (state.loadoutDialog) { closeLoadoutDialog(); } else { closeItemDialog(); } return;
+        case 'dlgSave': if (state.loadoutDialog) { saveLoadoutDialog(); } else { saveItemDialog(); } return;
+        case 'dlgCopyToLoadout': copyItemToLoadout(actionEl); return;
+        case 'loadoutSelect': activateLoadout(actionEl.getAttribute('data-loadout-id')); return;
+        case 'loadoutAdd': openLoadoutDialog(null); return;
+        case 'loadoutEdit': openLoadoutDialog((state.loadouts || []).filter((loadout) => loadout.id === actionEl.getAttribute('data-loadout-id'))[0]); return;
+        case 'loadoutDelete': deleteLoadout(actionEl.getAttribute('data-loadout-id')); return;
         case 'cropCancel': closeCropDialog(); return;
         case 'cropSave': savePortraitCrop(); return;
       }
@@ -923,6 +1082,7 @@
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && state.loadoutDialog) { closeLoadoutDialog(); return; }
     if (event.key === 'Escape' && state.dialog) { closeItemDialog(); return; }
     if (event.key === 'Escape' && state.crop) { closeCropDialog(); return; }
     const actionEl = event.target.closest && event.target.closest('[data-action="conflict"],[data-action="hp"]');
