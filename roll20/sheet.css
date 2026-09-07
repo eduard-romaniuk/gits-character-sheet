@@ -171,8 +171,8 @@
   font-family: var(--mono);
   font-weight: 500;
 }
-.sheet .field.name {
-  font: 500 20px/1.2 var(--mono);
+.sheet select.field {
+  height: 44px;
 }
 .sheet .field.num {
   text-align: center;
@@ -206,7 +206,7 @@
 }
 .sheet .step button {
   flex: none;
-  width: 44px;
+  width: 28px;
   min-height: 44px;
   background: transparent;
   border: 0;
@@ -423,6 +423,43 @@
   padding: 2px 0;
 }
 
+/* -------- row edit/view state -------- */
+
+.sheet .row-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.sheet .act-save,
+.sheet .act-edit,
+.sheet .act-expand,
+.sheet .act-collapse {
+  display: none;
+}
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-save {
+  display: inline-flex;
+}
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) .act-edit,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) .act-expand {
+  display: inline-flex;
+}
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .act-edit,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .act-collapse {
+  display: inline-flex;
+}
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) > *:not(.row-toolbar):not(.summary):not(.uistate) {
+  display: none;
+}
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) input,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) textarea,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) select:not(.uistate),
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) input,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) textarea,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) select:not(.uistate) {
+  pointer-events: none;
+}
+
 /* -------- equipment: chips + per-type field visibility -------- */
 
 .sheet .chips {
@@ -522,14 +559,6 @@
   clip: rect(0 0 0 0);
 }
 
-.sheet .page-footer {
-  font: 400 11px/1.5 var(--mono);
-  letter-spacing: .06em;
-  color: var(--ghost);
-  text-align: center;
-  padding-top: 6px;
-}
-
 /* ==================== responsive ==================== */
 
 @media (max-width: 520px) {
@@ -545,6 +574,10 @@
   }
   .sheet .locations-grid {
     grid-template-columns: 1fr;
+  }
+  .sheet .step button {
+    min-height: 40px;
+    font-size: 15px;
   }
 }
 @media (min-width: 900px) {

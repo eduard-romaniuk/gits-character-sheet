@@ -5,27 +5,6 @@
     <h1>SECTION 9 &nbsp;//&nbsp; AGENT DOSSIER</h1>
   </div>
 
-  <div class="panel">
-    <div class="grid grid-cols-1">
-      <div class="ident-fields">
-        <div class="dialog-row">
-          <div class="col" style="flex:2 1 260px">
-            <label class="label">AGENT NAME</label>
-            <input class="field name" type="text" name="attr_AgentName" placeholder="—">
-          </div>
-          <div class="col" style="flex:1 1 180px">
-            <label class="label">PLAYER NAME</label>
-            <input class="field" type="text" name="attr_PlayerName" placeholder="—">
-          </div>
-        </div>
-        <div class="col">
-          <label class="label">AGENT BACK STORY</label>
-          <textarea class="field" name="attr_BackStory" placeholder="—"></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="grid grid-cols-3">
     <div class="panel">
       <div class="panel-header"><div class="title">GHOST</div></div>
@@ -268,7 +247,18 @@
       <div class="panel-header"><div class="title">SETBACKS</div></div>
       <fieldset class="repeating_setbacks">
         <div class="row-wrap">
-          <div class="col">
+          <select class="sr-only uistate" name="attr_uistate">
+            <option value="edit" selected>edit</option>
+            <option value="collapsed">collapsed</option>
+            <option value="expanded">expanded</option>
+          </select>
+          <div class="row-toolbar">
+            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
+            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
+            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          </div>
+          <div class="col summary">
             <label class="label">NAME</label>
             <input class="field" type="text" name="attr_name" placeholder="—">
           </div>
@@ -284,7 +274,18 @@
       <div class="panel-header"><div class="title">CYBERNETICS</div></div>
       <fieldset class="repeating_cybernetics">
         <div class="row-wrap">
-          <div class="dialog-row">
+          <select class="sr-only uistate" name="attr_uistate">
+            <option value="edit" selected>edit</option>
+            <option value="collapsed">collapsed</option>
+            <option value="expanded">expanded</option>
+          </select>
+          <div class="row-toolbar">
+            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
+            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
+            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          </div>
+          <div class="dialog-row summary">
             <div class="col" style="flex:2 1 200px">
               <label class="label">NAME</label>
               <input class="field" type="text" name="attr_name" placeholder="—">
@@ -312,7 +313,18 @@
       <div class="panel-header"><div class="title">STANDARD SKILLS</div></div>
       <fieldset class="repeating_skills">
         <div class="row-wrap">
-          <div class="dialog-row">
+          <select class="sr-only uistate" name="attr_uistate">
+            <option value="edit" selected>edit</option>
+            <option value="collapsed">collapsed</option>
+            <option value="expanded">expanded</option>
+          </select>
+          <div class="row-toolbar">
+            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
+            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
+            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          </div>
+          <div class="dialog-row summary">
             <div class="col" style="flex:3 1 200px">
               <label class="label">NAME</label>
               <input class="field" type="text" name="attr_name" placeholder="—">
@@ -341,7 +353,18 @@
       <div class="panel-header"><div class="title">SPECIALTY SKILLS</div></div>
       <fieldset class="repeating_specialty">
         <div class="row-wrap specialty-row">
-          <div class="dialog-row">
+          <select class="sr-only uistate" name="attr_uistate">
+            <option value="edit" selected>edit</option>
+            <option value="collapsed">collapsed</option>
+            <option value="expanded">expanded</option>
+          </select>
+          <div class="row-toolbar">
+            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
+            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
+            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          </div>
+          <div class="dialog-row summary">
             <div class="col" style="flex:3 1 200px">
               <label class="label">NAME</label>
               <input class="field" type="text" name="attr_name" placeholder="—">
@@ -421,7 +444,18 @@
       <div class="panel-header"><div class="title">WEAPONS &amp; EQUIPMENT</div></div>
       <fieldset class="repeating_equipment">
         <div class="row-wrap">
-          <div class="dialog-row eq-type-row">
+          <select class="sr-only uistate" name="attr_uistate">
+            <option value="edit" selected>edit</option>
+            <option value="collapsed">collapsed</option>
+            <option value="expanded">expanded</option>
+          </select>
+          <div class="row-toolbar">
+            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
+            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
+            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          </div>
+          <div class="dialog-row eq-type-row summary">
             <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="weapon" checked><span>WEAPON</span></label>
             <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="attachment"><span>ATTACHMENT</span></label>
             <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="armor"><span>ARMOR</span></label>
@@ -429,7 +463,7 @@
             <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="utility"><span>UTILITY</span></label>
           </div>
 
-          <div class="dialog-row">
+          <div class="dialog-row summary">
             <div class="col" style="flex:3 1 200px">
               <label class="label">NAME</label>
               <input class="field" type="text" name="attr_name" placeholder="—">
@@ -498,7 +532,6 @@
     </div>
   </div>
 
-  <div class="page-footer">This is an unofficial, fan-made character sheet and is not affiliated with Mantic Games.</div>
 </div>
 </div>
 
@@ -655,6 +688,40 @@
   }
 
   on('sheet:opened change:repeating_skills change:repeating_specialty change:repeating_equipment change:sp2 change:rp2', recalcTotals);
+
+  /* -------- repeating row edit/view state (skills, specialty, equipment, cybernetics, setbacks) -------- */
+
+  var UI_SECTIONS = ['skills', 'specialty', 'equipment', 'cybernetics', 'setbacks'];
+  var UI_ACTIONS = [['save', 'collapsed'], ['edit', 'edit'], ['expand', 'expanded'], ['collapse', 'collapsed']];
+
+  function setRowUiState(eventInfo, newState) {
+    var src = eventInfo.sourceAttribute;
+    var stateAttr = src.slice(0, src.lastIndexOf('_')) + '_uistate';
+    var out = {};
+    out[stateAttr] = newState;
+    setAttrs(out);
+  }
+
+  UI_SECTIONS.forEach(function (section) {
+    var repeating = 'repeating_' + section;
+    UI_ACTIONS.forEach(function (pair) {
+      var action = pair[0], state = pair[1];
+      on('clicked:' + repeating + ':' + action, function (eventInfo) {
+        setRowUiState(eventInfo, state);
+      });
+    });
+  });
+
+  on('sheet:opened', function () {
+    UI_SECTIONS.forEach(function (section) {
+      var repeating = 'repeating_' + section;
+      getSectionIDs(repeating, function (ids) {
+        var out = {};
+        ids.forEach(function (id) { out[repeating + '_' + id + '_uistate'] = 'collapsed'; });
+        if (Object.keys(out).length) setAttrs(out);
+      });
+    });
+  });
 
 })();
 </script>
