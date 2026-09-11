@@ -252,11 +252,12 @@
             <option value="collapsed">collapsed</option>
             <option value="expanded">expanded</option>
           </select>
-          <div class="row-toolbar">
-            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
-            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
-            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
-            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          <div class="row-head">
+            <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
+            <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
+            <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
+            <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
           </div>
           <div class="col summary">
             <label class="label">NAME</label>
@@ -279,11 +280,13 @@
             <option value="collapsed">collapsed</option>
             <option value="expanded">expanded</option>
           </select>
-          <div class="row-toolbar">
-            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
-            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
-            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
-            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          <div class="row-head">
+            <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
+            <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
+            <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
+            <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
+            <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
           </div>
           <div class="dialog-row summary">
             <div class="col" style="flex:2 1 200px">
@@ -318,11 +321,13 @@
             <option value="collapsed">collapsed</option>
             <option value="expanded">expanded</option>
           </select>
-          <div class="row-toolbar">
-            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
-            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
-            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
-            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          <div class="row-head">
+            <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
+            <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
+            <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
+            <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
+            <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
           </div>
           <div class="dialog-row summary">
             <div class="col" style="flex:3 1 200px">
@@ -358,11 +363,13 @@
             <option value="collapsed">collapsed</option>
             <option value="expanded">expanded</option>
           </select>
-          <div class="row-toolbar">
-            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
-            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
-            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
-            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          <div class="row-head">
+            <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
+            <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
+            <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
+            <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
+            <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
           </div>
           <div class="dialog-row summary">
             <div class="col" style="flex:3 1 200px">
@@ -449,11 +456,18 @@
             <option value="collapsed">collapsed</option>
             <option value="expanded">expanded</option>
           </select>
-          <div class="row-toolbar">
-            <button type="action" class="btn small act-save" name="act_save">SAVE</button>
-            <button type="action" class="btn small act-edit" name="act_edit">EDIT</button>
-            <button type="action" class="btn small act-expand" name="act_expand">EXPAND</button>
-            <button type="action" class="btn small act-collapse" name="act_collapse">COLLAPSE</button>
+          <div class="row-head">
+            <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
+            <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
+            <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
+            <div class="row-qty">
+              <button type="action" class="row-qty-btn" name="act_userestore" aria-label="restore">&minus;</button>
+              <input class="row-qty-count" type="text" name="attr_qtydisplay" readonly tabindex="-1" placeholder="&mdash;">
+              <button type="action" class="row-qty-btn" name="act_useitem" aria-label="use">+</button>
+            </div>
+            <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
+            <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
+            <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
           </div>
           <div class="dialog-row eq-type-row summary">
             <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="weapon" checked><span>WEAPON</span></label>
@@ -688,6 +702,140 @@
   }
 
   on('sheet:opened change:repeating_skills change:repeating_specialty change:repeating_equipment change:sp2 change:rp2', recalcTotals);
+
+  /* -------- collapsed-row summary text (mirrors app.js rowSummaryText) -------- */
+
+  var RANK_DIE_LABELS = ['D4', 'D6', 'D8', 'D10', 'D12', 'D20'];
+  var META_LABEL_PREFIX = {
+    range: 'RANGE', damage: 'DMG', rof: 'ROF', cost: 'COST',
+    head: 'HEAD', torso: 'TORSO', arms: 'ARMS', legs: 'LEGS'
+  };
+  var EQUIPMENT_TYPE_LABELS = {
+    weapon: 'WEAPON', attachment: 'ATTACHMENT', armor: 'ARMOR',
+    throwable: 'THROWABLE', utility: 'UTILITY'
+  };
+  var EQUIPMENT_FIELDS = {
+    weapon: ['range', 'damage', 'rof', 'cost', 'skill'],
+    armor: ['head', 'torso', 'arms', 'legs', 'cost'],
+    throwable: ['range', 'damage', 'qty', 'cost', 'skill'],
+    utility: ['cost', 'qty'],
+    attachment: ['mods', 'cost', 'fittedId']
+  };
+  var EQUIPMENT_SUMMARY_SKIP = { skill: true, qty: true, fittedId: true, cost: true };
+
+  function rankToDieLabel(rank) {
+    var idx = clamp(parseInt(rank, 10) || 1, 1, 6) - 1;
+    return RANK_DIE_LABELS[idx];
+  }
+
+  function equipmentSummary(values) {
+    var type = values.type || 'weapon';
+    var fields = EQUIPMENT_FIELDS[type] || [];
+    var parts = [];
+    fields.forEach(function (fieldKey) {
+      if (EQUIPMENT_SUMMARY_SKIP[fieldKey]) return;
+      var value = values[fieldKey];
+      if (!value) return;
+      var prefix = META_LABEL_PREFIX[fieldKey];
+      parts.push(prefix ? prefix + ' ' + value : String(value));
+    });
+    if (type !== 'attachment') parts.push(EQUIPMENT_TYPE_LABELS[type] || 'WEAPON');
+    parts.push(META_LABEL_PREFIX.cost + ' ' + (parseInt(values.cost, 10) || 0));
+    return parts.join('  ·  ');
+  }
+
+  function recalcRowSummary(repeating, fields, compute, targetSuffix) {
+    targetSuffix = targetSuffix || 'summary';
+    getSectionIDs(repeating, function (ids) {
+      if (!ids.length) return;
+      var attrFields = [];
+      ids.forEach(function (id) {
+        fields.forEach(function (field) { attrFields.push(repeating + '_' + id + '_' + field); });
+      });
+      getAttrs(attrFields, function (values) {
+        var out = {};
+        ids.forEach(function (id) {
+          var rowValues = {};
+          fields.forEach(function (field) { rowValues[field] = values[repeating + '_' + id + '_' + field]; });
+          out[repeating + '_' + id + '_' + targetSuffix] = compute(rowValues);
+        });
+        setAttrs(out);
+      });
+    });
+  }
+
+  function recalcSkillsSummary() {
+    recalcRowSummary('repeating_skills', ['rank'], function (v) {
+      return rankToDieLabel(v.rank);
+    });
+  }
+  function recalcSpecialtySummary() {
+    recalcRowSummary('repeating_specialty', ['rank', 'maxranks'], function (v) {
+      var maxRank = Math.max(1, parseInt(v.maxranks, 10) || 1);
+      var currentRank = clamp(parseInt(v.rank, 10) || 1, 1, maxRank);
+      return 'RANK ' + currentRank + ' / ' + maxRank;
+    });
+  }
+  function recalcCyberneticsSummary() {
+    recalcRowSummary('repeating_cybernetics', ['armor', 'damage'], function (v) {
+      return [v.armor, v.damage].filter(Boolean).join('  ·  ');
+    });
+  }
+  function recalcEquipmentSummary() {
+    recalcRowSummary(
+      'repeating_equipment',
+      ['type', 'range', 'damage', 'rof', 'head', 'torso', 'arms', 'legs', 'mods', 'cost'],
+      equipmentSummary
+    );
+  }
+
+  on('sheet:opened change:repeating_skills:rank', recalcSkillsSummary);
+  on('sheet:opened change:repeating_specialty:rank change:repeating_specialty:maxranks', recalcSpecialtySummary);
+  on('sheet:opened change:repeating_cybernetics:armor change:repeating_cybernetics:damage', recalcCyberneticsSummary);
+  on(
+    'sheet:opened change:repeating_equipment:type change:repeating_equipment:range change:repeating_equipment:damage'
+    + ' change:repeating_equipment:rof change:repeating_equipment:head change:repeating_equipment:torso'
+    + ' change:repeating_equipment:arms change:repeating_equipment:legs change:repeating_equipment:mods'
+    + ' change:repeating_equipment:cost',
+    recalcEquipmentSummary
+  );
+
+  /* -------- equipment: single-use quantity remaining ("3 / 5"), mirrors app.js hasQty -------- */
+
+  function recalcEquipmentQtyDisplay() {
+    recalcRowSummary(
+      'repeating_equipment',
+      ['type', 'single', 'qty', 'used'],
+      function (v) {
+        var isCountable = v.type === 'throwable' || v.type === 'utility';
+        var qty = parseInt(v.qty, 10) || 0;
+        if (!isCountable || !v.single || qty <= 0) return '';
+        var used = clamp(parseInt(v.used, 10) || 0, 0, qty);
+        return Math.max(0, qty - used) + ' / ' + qty;
+      },
+      'qtydisplay'
+    );
+  }
+
+  on(
+    'sheet:opened change:repeating_equipment:type change:repeating_equipment:single'
+    + ' change:repeating_equipment:qty change:repeating_equipment:used',
+    recalcEquipmentQtyDisplay
+  );
+
+  function stepEquipmentUsed(eventInfo, dir) {
+    var src = eventInfo.sourceAttribute;
+    var prefix = src.slice(0, src.lastIndexOf('_'));
+    getAttrs([prefix + '_used', prefix + '_qty'], function (values) {
+      var qty = parseInt(values[prefix + '_qty'], 10) || 0;
+      var used = clamp((parseInt(values[prefix + '_used'], 10) || 0) + dir, 0, qty);
+      var out = {};
+      out[prefix + '_used'] = used;
+      setAttrs(out);
+    });
+  }
+  on('clicked:repeating_equipment:useitem', function (eventInfo) { stepEquipmentUsed(eventInfo, 1); });
+  on('clicked:repeating_equipment:userestore', function (eventInfo) { stepEquipmentUsed(eventInfo, -1); });
 
   /* -------- repeating row edit/view state (skills, specialty, equipment, cybernetics, setbacks) -------- */
 
