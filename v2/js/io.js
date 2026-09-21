@@ -26,10 +26,16 @@
     fileReader.onload = () => {
       try {
         const parsed = JSON.parse(fileReader.result);
-        const newId = Sheet.generateId();
-        parsed.id = newId;
-        localStorage.setItem(Sheet.characterKey(newId), JSON.stringify(parsed));
-        Sheet.touchImportedCharacter(parsed);
+        if (Sheet.looksLikeV1Export(parsed)) {
+          // touchImportedCharacter is already called inside importV1FromData.
+          const newId = Sheet.importV1FromData(parsed);
+          if (!newId) throw new Error('empty v1 import');
+        } else {
+          const newId = Sheet.generateId();
+          parsed.id = newId;
+          localStorage.setItem(Sheet.characterKey(newId), JSON.stringify(parsed));
+          Sheet.touchImportedCharacter(parsed);
+        }
         Sheet.renderRosterView();
       } catch (error) {
         window.alert('That file could not be read as a character sheet.');
