@@ -47,6 +47,11 @@
     }).filter(Boolean).join('  ·  ');
   }
 
+  function withSourceMarker(meta, isStandalone) {
+    const source = isStandalone ? "LOCAL" : "CODEX"
+    return meta ? source + '  ·  ' + meta : source;
+  }
+
   function renderLoadoutBar() {
     const loadouts = Sheet.state.loadouts || [];
     const chips = loadouts.map((loadout) => '<button class="chip' + (loadout.id === Sheet.state.activeLoadoutId ? ' selected' : '') + '"'
@@ -70,7 +75,7 @@
       const extra = item.extra;
       const open = !!Sheet.state.openRows[sectionKey + ':' + item.instanceId];
       const isAttachmentRow = sectionKey === 'Equipment' && isAttachment(item);
-      const meta = rowSummaryText(sectionKey, extra);
+      const meta = withSourceMarker(rowSummaryText(sectionKey, extra), item.isStandalone);
       const totalQty = toNumber(extra.qty, 0) + toNumber(extra.freeQty, 0);
       const hasQty = sectionKey === 'Equipment' && extra.single !== false && totalQty > 0;
       const rankLines = sectionKey === 'SpecialtySkills'

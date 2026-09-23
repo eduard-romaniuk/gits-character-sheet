@@ -90,5 +90,24 @@
     return libItem;
   };
 
+  // Inverse of promoteInstanceToLibrary: snapshots a linked instance's current
+  // fully-resolved values (Codex def + this character's overlay, merged) into a
+  // standalone instance. The character keeps that snapshot going forward — Codex
+  // edits no longer reach it, and edits to it no longer reach the Codex or other
+  // characters.
+  Sheet.detachInstanceFromLibrary = function detachInstanceFromLibrary(section, instanceId) {
+    const list = Sheet.state.items[section] || [];
+    const index = list.findIndex((i) => i.instanceId === instanceId);
+    if (index < 0) return null;
+    const instance = list[index];
+    if (!instance.libraryId) return null;
+    const resolved = Sheet.resolveItem(section, instance);
+    if (!resolved) return null;
+    const detached = { instanceId: instance.instanceId, libraryId: null, name: resolved.name, notes: resolved.notes, extra: { ...resolved.extra } };
+    list[index] = detached;
+    Sheet.state.items[section] = list;
+    return detached;
+  };
+
   Sheet.buildLibraryDefBag = buildDefBag;
 })(window.Sheet = window.Sheet || {});

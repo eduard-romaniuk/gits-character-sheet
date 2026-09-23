@@ -114,7 +114,10 @@
     }
 
     html += '<div class="dialog-footer">'
-      + '<button class="btn small ghost" data-action="dlgInstanceRemove" type="button" style="margin-right:auto">REMOVE FROM CHARACTER</button>'
+      + '<div style="display:flex;gap:8px;margin-right:auto">'
+      + '<button class="btn small ghost" data-action="dlgInstanceDetach" type="button">DETACH FROM CODEX</button>'
+      + '<button class="btn small ghost" data-action="dlgInstanceRemove" type="button">REMOVE FROM CHARACTER</button>'
+      + '</div>'
       + '<button class="btn ghost" data-action="dlgCancel">CANCEL</button>'
       + '<button class="btn primary" data-action="dlgSave">SAVE</button></div>';
 
@@ -147,5 +150,22 @@
     if (!dialog) return;
     Sheet.closeInstanceDialog();
     Sheet.deleteItemEntry(dialog.section, dialog.instanceId);
+  };
+
+  // Snapshots the linked item into an independent copy this character owns outright,
+  // then opens the full standalone edit dialog on it so the user can rename/adjust it
+  // right away (e.g. splitting a generic cyberlimb into "left"/"right").
+  Sheet.detachInstanceDialogAction = function detachInstanceDialogAction() {
+    const dialog = Sheet.state.instanceDialog;
+    if (!dialog) return;
+    if (!window.confirm('Detach from Codex? This makes an independent copy for this character only — future Codex edits will no longer reach it, and edits you make here will no longer reach the Codex.')) return;
+    Sheet.collectInstanceDialogInputs();
+    Object.keys(dialog.overlay).forEach((field) => { Sheet.setInstanceField(dialog.section, dialog.instanceId, field, dialog.overlay[field]); });
+    const detached = Sheet.detachInstanceFromLibrary(dialog.section, dialog.instanceId);
+    Sheet.closeInstanceDialog();
+    Sheet.persistCharacterState();
+    Sheet.renderItemSections();
+    Sheet.renderTotals();
+    if (detached) Sheet.openStandaloneItemDialog('character', dialog.section, detached);
   };
 })(window.Sheet = window.Sheet || {});

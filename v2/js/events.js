@@ -180,6 +180,7 @@
           return;
         }
         case 'dlgInstanceRemove': Sheet.removeInstanceDialog(); return;
+        case 'dlgInstanceDetach': Sheet.detachInstanceDialogAction(); return;
 
         /* ---- item picker ---- */
         case 'pickerGroup': Sheet.setPickerGroup(actionEl.getAttribute('data-group-id')); return;
