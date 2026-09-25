@@ -55,9 +55,11 @@
   document.addEventListener('input', (event) => {
     const target = event.target;
     if (target.matches('[data-field]')) {
-      Sheet.state.data[target.getAttribute('data-field')] = target.value;
-      Sheet.persistCharacterState();
       const fieldKey = target.getAttribute('data-field');
+      let value = target.value;
+      if (fieldKey === 'AgentId') { value = Sheet.formatAgentId(value); target.value = value; }
+      Sheet.state.data[fieldKey] = value;
+      Sheet.persistCharacterState();
       if (fieldKey === 'SP2' || fieldKey === 'RP2') Sheet.renderTotals();
       return;
     }
@@ -110,6 +112,7 @@
         /* ---- settings ---- */
         case 'openSettings': Sheet.openSettingsDialog(); return;
         case 'dlgToggleAlign': Sheet.toggleSettingsAlignment(); return;
+        case 'dlgToggleShowAgentId': Sheet.toggleSettingsShowAgentId(); return;
 
         /* ---- character shell ---- */
         case 'export': Sheet.exportCharacterById(Sheet.state.id); return;

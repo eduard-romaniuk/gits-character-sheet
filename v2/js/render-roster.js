@@ -4,6 +4,17 @@
   const query = Sheet.query;
   const escapeHtml = Sheet.escapeHtml;
 
+  // Older saves may predate the AgentId field, so meta.characters won't have it
+  // cached yet (touchMetaEntry only writes it on the next save) — fall back to
+  // reading the character's own blob so the roster card still shows something.
+  function resolveAgentId(character) {
+    if (character.agentId) return character.agentId;
+    try {
+      const blob = JSON.parse(localStorage.getItem(Sheet.characterKey(character.id)));
+      return (blob && blob.data && blob.data.AgentId) || '';
+    } catch (error) { return ''; }
+  }
+
   Sheet.renderRosterView = function renderRosterView() {
     // Sheet.meta.characters is already in stable creation order — new entries are
     // pushed to the end and existing ones updated in place (see touchMetaEntry in
@@ -15,13 +26,16 @@
         + '<button class="btn small ghost" data-action="dismissV1Banner">DISMISS</button></div></div></div>'
       : '';
 
+    const showAgentId = !!(Sheet.settings && Sheet.settings.showAgentId);
     const cards = characters.map((character) => {
       const name = character.name || 'UNNAMED AGENT';
+      const agentId = showAgentId ? resolveAgentId(character) : '';
       return '<div class="char-card" data-action="openCharacter" data-character-id="' + character.id + '">'
         + '<div class="char-card-portrait">' + (character.portrait ? '<img alt="" src="' + character.portrait + '">' : '<span>NO PHOTO</span>') + '</div>'
         + '<div class="char-card-body">'
         + '<div class="char-card-name">' + escapeHtml(name) + '</div>'
         + '<div class="char-card-meta">SP MAX ' + escapeHtml(character.sp2 || '0') + '  ·  RP MAX ' + escapeHtml(character.rp2 || '0') + '</div>'
+          + (agentId ? '<div class="char-card-id">' + escapeHtml(agentId) + '</div>' : '')
         + '</div>'
         + '<div class="char-card-actions">'
         + '<button class="icon" data-action="renameCharacter" data-character-id="' + character.id + '" aria-label="Rename" title="Rename">' + Sheet.ICONS.edit + '</button>'

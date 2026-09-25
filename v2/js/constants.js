@@ -60,7 +60,7 @@
   Sheet.MARK_STATES = ['', 'temp', 'perm'];
   Sheet.HIT_LETHAL_STATES = ['', 'temp', 'perm'];
   Sheet.HIT_NONLETHAL_STATES = ['', 'stun-temp', 'stun-perm'];
-  Sheet.TEXT_FIELD_KEYS = ['AgentName', 'PlayerName', 'BackStory', 'Aspect1', 'Aspect2', 'SC_Notes', 'GW1', 'GW2', 'SP2', 'RP2', 'Notes'];
+  Sheet.TEXT_FIELD_KEYS = ['AgentName', 'AgentId', 'PlayerName', 'BackStory', 'Aspect1', 'Aspect2', 'SC_Notes', 'GW1', 'GW2', 'SP2', 'RP2', 'Notes'];
 
   // ---- v2 library additions ----
 

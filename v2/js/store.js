@@ -23,7 +23,7 @@
   function touchMetaEntry(blob) {
     const entry = Sheet.meta.characters.find((c) => c.id === blob.id);
     const data = blob.data || {};
-    const summary = { id: blob.id, name: data.AgentName || '', portrait: blob.portrait || '', sp2: data.SP2 || '', rp2: data.RP2 || '', updatedAt: Date.now() };
+    const summary = { id: blob.id, name: data.AgentName || '', agentId: data.AgentId || '', portrait: blob.portrait || '', sp2: data.SP2 || '', rp2: data.RP2 || '', updatedAt: Date.now() };
     if (entry) Object.assign(entry, summary);
     else Sheet.meta.characters.push(summary);
     Sheet.persistMeta();
@@ -53,7 +53,7 @@
   Sheet.loadSettings = function loadSettings() {
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(Sheet.SETTINGS_KEY)) || {}; } catch (error) { saved = {}; }
-    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment };
+    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment, showAgentId: !!saved.showAgentId };
     return Sheet.settings;
   };
 
@@ -101,6 +101,7 @@
     ['Awarness', 'Presence', 'Muscle', 'Reflexes', 'Hacking'].forEach((key) => { data[key] = 'd6'; });
     data.Barrier = 6;
     data.GW1 = '4'; data.GW2 = '4'; data.SP2 = '12'; data.RP2 = '12';
+    data.AgentId = Sheet.generateAgentId();
     return data;
   }
 
@@ -128,6 +129,7 @@
     if (!data.Barrier) data.Barrier = 6;
     ['GW1', 'GW2'].forEach((key) => { if (data[key] == null) data[key] = '4'; });
     ['SP2', 'RP2'].forEach((key) => { if (data[key] == null) data[key] = '12'; });
+    if (!data.AgentId) data.AgentId = Sheet.generateAgentId();
     blob.data = data;
 
     const items = blob.items || {};
@@ -214,6 +216,7 @@
     clone.id = newId;
     clone.data = clone.data || {};
     clone.data.AgentName = (clone.data.AgentName || 'Agent') + ' (copy)';
+    clone.data.AgentId = Sheet.generateAgentId();
 
     const loadoutIdMap = {};
     clone.loadouts = (clone.loadouts || []).map((loadout) => {

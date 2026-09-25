@@ -321,6 +321,15 @@ textarea.field {
   grid-template-columns: 2fr 1fr;
   gap: 14px;
 }
+#agentIdField {
+  display: none;
+}
+body.show-agent-id .ident-names {
+  grid-template-columns: 1.6fr 1.2fr 1fr;
+}
+body.show-agent-id #agentIdField {
+  display: flex;
+}
 .portrait {
   width: 250px;
   height: 250px;
@@ -925,6 +934,11 @@ textarea.field {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.char-card-id {
+  font: 400 11px/1.4 var(--mono);
+  color: var(--faint);
+  letter-spacing: .04em;
 }
 .char-card-meta {
   font: 400 11px/1.4 var(--mono);
