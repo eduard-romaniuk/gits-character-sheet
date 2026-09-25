@@ -90,6 +90,9 @@ h1 {
   cursor: pointer;
   border-radius: 2px;
 }
+a.btn {
+  text-decoration: none;
+}
 .btn:hover {
   border-color: var(--accent);
   color: var(--ink);
