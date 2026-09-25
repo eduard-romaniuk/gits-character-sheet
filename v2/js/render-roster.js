@@ -6,13 +6,22 @@
 
   // Older saves may predate the AgentId field, so meta.characters won't have it
   // cached yet (touchMetaEntry only writes it on the next save) — fall back to
-  // reading the character's own blob so the roster card still shows something.
+  // reading the character's own blob, backfilling and persisting a fresh id if even
+  // that blob predates the field (mutating `character` here updates Sheet.meta.characters
+  // directly, since it's the same object reference held in that array).
   function resolveAgentId(character) {
     if (character.agentId) return character.agentId;
-    try {
-      const blob = JSON.parse(localStorage.getItem(Sheet.characterKey(character.id)));
-      return (blob && blob.data && blob.data.AgentId) || '';
-    } catch (error) { return ''; }
+    let blob;
+    try { blob = JSON.parse(localStorage.getItem(Sheet.characterKey(character.id))); } catch (error) { blob = null; }
+    if (!blob) return '';
+    blob.data = blob.data || {};
+    if (!blob.data.AgentId) {
+      blob.data.AgentId = Sheet.generateAgentId();
+      try { localStorage.setItem(Sheet.characterKey(character.id), JSON.stringify(blob)); } catch (error) {}
+    }
+    character.agentId = blob.data.AgentId;
+    Sheet.persistMeta();
+    return character.agentId;
   }
 
   Sheet.renderRosterView = function renderRosterView() {
