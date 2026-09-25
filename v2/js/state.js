@@ -6,7 +6,7 @@
 
   // Transient, non-persisted UI state (dialogs etc.) lives directly on Sheet.state
   // (dialog/loadoutDialog/crop/sectionAllOpen) — see store.js loadCharacterState.
-  Sheet.ui = { libraryGroupId: 'ALL', librarySection: 'Setbacks', libraryEquipmentType: 'weapon', librarySearch: '', pickerDialog: null, groupDialog: null, characterDialog: null };
+  Sheet.ui = { libraryGroupId: 'ALL', librarySection: 'Setbacks', libraryEquipmentType: 'weapon', librarySearch: '', pickerDialog: null, groupDialog: null, characterDialog: null, settingsDialog: null };
 
   Sheet.isAttachment = (extraOrItem) => ((extraOrItem.extra || extraOrItem) || {}).type === 'attachment';
   Sheet.isSingleUse = (extra) => { const e = extra || {}; return e.single === undefined ? (e.qty !== undefined && e.qty !== '') : !!e.single; };

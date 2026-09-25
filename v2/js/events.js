@@ -14,6 +14,7 @@
     if (Sheet.state && Sheet.state.loadoutDialog) return 'loadout';
     if (Sheet.ui.groupDialog) return 'group';
     if (Sheet.ui.characterDialog) return 'character';
+    if (Sheet.ui.settingsDialog) return 'settings';
     if (Sheet.state && Sheet.state.crop) return 'crop';
     return null;
   }
@@ -31,6 +32,7 @@
       case 'loadout': Sheet.closeLoadoutDialog(); return;
       case 'group': Sheet.closeGroupDialog(); return;
       case 'character': Sheet.closeCharacterDialog(); return;
+      case 'settings': Sheet.closeSettingsDialog(); return;
       case 'crop': Sheet.closeCropDialog(); return;
     }
   }
@@ -104,6 +106,10 @@
           return;
         }
         case 'dismissV1Banner': Sheet.meta.v1BannerDismissed = true; Sheet.persistMeta(); Sheet.renderRosterView(); return;
+
+        /* ---- settings ---- */
+        case 'openSettings': Sheet.openSettingsDialog(); return;
+        case 'dlgToggleAlign': Sheet.toggleSettingsAlignment(); return;
 
         /* ---- character shell ---- */
         case 'export': Sheet.exportCharacterById(Sheet.state.id); return;

@@ -46,6 +46,21 @@
     try { localStorage.setItem(Sheet.LIBRARY_KEY, JSON.stringify(Sheet.library)); } catch (error) {}
   };
 
+  /* ==================== settings (global, not per-character) ==================== */
+
+  Sheet.settings = null;
+
+  Sheet.loadSettings = function loadSettings() {
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(Sheet.SETTINGS_KEY)) || {}; } catch (error) { saved = {}; }
+    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment };
+    return Sheet.settings;
+  };
+
+  Sheet.persistSettings = function persistSettings() {
+    try { localStorage.setItem(Sheet.SETTINGS_KEY, JSON.stringify(Sheet.settings)); } catch (error) {}
+  };
+
   /* ==================== groups ==================== */
 
   Sheet.groups = null;

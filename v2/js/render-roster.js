@@ -45,6 +45,7 @@
       + '<button class="btn small" data-action="exportBackup">BACKUP ALL</button>'
       + '<button class="btn small ghost" data-action="importBackup">RESTORE BACKUP</button>'
       + '<input type="file" id="importBackupFile" accept=".json,application/json" class="sr-only">'
+      + '<button class="btn small ghost" data-action="openSettings">SETTINGS</button>'
       + '</div></div>'
       + v1Banner
       + '<div class="char-grid">' + cards + ghostCard + '</div>';

@@ -4,6 +4,7 @@
   Sheet.META_KEY = 'gits-v2-meta';
   Sheet.LIBRARY_KEY = 'gits-v2-library';
   Sheet.GROUPS_KEY = 'gits-v2-groups';
+  Sheet.SETTINGS_KEY = 'gits-v2-settings';
   Sheet.CHARACTER_KEY_PREFIX = 'gits-v2-character:';
   Sheet.characterKey = (id) => Sheet.CHARACTER_KEY_PREFIX + id;
   Sheet.V1_STORAGE_KEY = 'gits-character-sheet-v1';

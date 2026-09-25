@@ -195,6 +195,9 @@ h1 {
 .grid-cols-1 {
   grid-template-columns: minmax(0, 1fr);
 }
+body.force-align-blocks .grid {
+  align-items: stretch;
+}
 .col {
   display: flex;
   flex-direction: column;

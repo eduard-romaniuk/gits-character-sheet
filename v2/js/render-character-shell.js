@@ -12,6 +12,7 @@
       + '<button class="btn" data-action="import">IMPORT</button>'
       + '<button class="btn ghost" data-action="reset">RESET</button>'
       + '<input type="file" id="importFile" accept=".json,application/json" class="sr-only">'
+      + '<button class="btn ghost" data-action="openSettings">SETTINGS</button>'
       + '</div></div>';
   };
 
