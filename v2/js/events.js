@@ -113,6 +113,7 @@
         case 'openSettings': Sheet.openSettingsDialog(); return;
         case 'dlgToggleAlign': Sheet.toggleSettingsAlignment(); return;
         case 'dlgToggleShowAgentId': Sheet.toggleSettingsShowAgentId(); return;
+        case 'dlgToggleRosterIdCardStyle': Sheet.toggleSettingsRosterIdCardStyle(); return;
 
         /* ---- character shell ---- */
         case 'export': Sheet.exportCharacterById(Sheet.state.id); return;

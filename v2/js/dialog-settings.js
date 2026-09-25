@@ -7,6 +7,7 @@
     const settings = Sheet.settings || {};
     document.body.classList.toggle('force-align-blocks', !!settings.forceBlockHeightAlignment);
     document.body.classList.toggle('show-agent-id', !!settings.showAgentId);
+    document.body.classList.toggle('roster-id-card-style', !!settings.rosterIdCardStyle);
   };
 
   Sheet.openSettingsDialog = function openSettingsDialog() {
@@ -24,6 +25,7 @@
     if (!Sheet.ui.settingsDialog) return;
     const alignChecked = !!Sheet.settings.forceBlockHeightAlignment;
     const agentIdChecked = !!Sheet.settings.showAgentId;
+    const rosterIdCardStyleChecked = !!Sheet.settings.rosterIdCardStyle;
     const html = '<div class="panel-header"><div class="title">SETTINGS</div></div>'
       + '<button class="check' + (alignChecked ? ' selected' : '') + '" data-action="dlgToggleAlign">'
       + '<span class="checkbox-box">' + (alignChecked ? '✕' : '') + '</span>'
@@ -31,6 +33,9 @@
       + '<button class="check' + (agentIdChecked ? ' selected' : '') + '" data-action="dlgToggleShowAgentId">'
       + '<span class="checkbox-box">' + (agentIdChecked ? '✕' : '') + '</span>'
       + '<span class="label">SHOW AGENT ID FIELD</span></button>'
+      + '<button class="check' + (rosterIdCardStyleChecked ? ' selected' : '') + '" data-action="dlgToggleRosterIdCardStyle">'
+      + '<span class="checkbox-box">' + (rosterIdCardStyleChecked ? '✕' : '') + '</span>'
+      + '<span class="label">ROSTER ID CARD STYLE</span></button>'
       + '<div class="dialog-footer"><button class="btn primary" data-action="dlgCancel">CLOSE</button></div>';
     query('#dialog').className = 'dialog';
     query('#dialog').innerHTML = html;
@@ -52,6 +57,18 @@
     Sheet.applySettings();
     // Roster cards embed the agent ID in their markup (unlike the body-class-driven
     // alignment toggle), so they need a re-render to pick up the change immediately.
+    const rosterEl = query('#view-roster');
+    if (rosterEl && !rosterEl.hidden) Sheet.renderRosterView();
+    renderSettingsDialog();
+  };
+
+  Sheet.toggleSettingsRosterIdCardStyle = function toggleSettingsRosterIdCardStyle() {
+    if (!Sheet.ui.settingsDialog) return;
+    Sheet.settings.rosterIdCardStyle = !Sheet.settings.rosterIdCardStyle;
+    Sheet.persistSettings();
+    Sheet.applySettings();
+    // Roster cards embed braille/barcode markup driven by this setting (not just a
+    // body class), so they need a re-render to pick up the change immediately.
     const rosterEl = query('#view-roster');
     if (rosterEl && !rosterEl.hidden) Sheet.renderRosterView();
     renderSettingsDialog();

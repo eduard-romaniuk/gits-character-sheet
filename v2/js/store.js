@@ -53,7 +53,7 @@
   Sheet.loadSettings = function loadSettings() {
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(Sheet.SETTINGS_KEY)) || {}; } catch (error) { saved = {}; }
-    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment, showAgentId: !!saved.showAgentId };
+    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment, showAgentId: !!saved.showAgentId, rosterIdCardStyle: !!saved.rosterIdCardStyle };
     return Sheet.settings;
   };
 

@@ -27,15 +27,20 @@
       : '';
 
     const showAgentId = !!(Sheet.settings && Sheet.settings.showAgentId);
+    const rosterIdCardStyle = !!(Sheet.settings && Sheet.settings.rosterIdCardStyle);
     const cards = characters.map((character) => {
       const name = character.name || 'UNNAMED AGENT';
       const agentId = showAgentId ? resolveAgentId(character) : '';
+      const brailleName = rosterIdCardStyle ? Sheet.brailleTransliterate(name) : '';
+      const barcodeSvg = (rosterIdCardStyle && agentId) ? Sheet.code128Svg(agentId) : '';
       return '<div class="char-card" data-action="openCharacter" data-character-id="' + character.id + '">'
         + '<div class="char-card-portrait">' + (character.portrait ? '<img alt="" src="' + character.portrait + '">' : '<span>NO PHOTO</span>') + '</div>'
         + '<div class="char-card-body">'
         + '<div class="char-card-name">' + escapeHtml(name) + '</div>'
+        + (brailleName ? '<div class="char-card-braille" aria-hidden="true">' + brailleName + '</div>' : '')
         + '<div class="char-card-meta">SP MAX ' + escapeHtml(character.sp2 || '0') + '  ·  RP MAX ' + escapeHtml(character.rp2 || '0') + '</div>'
           + (agentId ? '<div class="char-card-id">' + escapeHtml(agentId) + '</div>' : '')
+          + (barcodeSvg ? '<div class="char-card-barcode" aria-hidden="true">' + barcodeSvg + '</div>' : '')
         + '</div>'
         + '<div class="char-card-actions">'
         + '<button class="icon" data-action="renameCharacter" data-character-id="' + character.id + '" aria-label="Rename" title="Rename">' + Sheet.ICONS.edit + '</button>'
