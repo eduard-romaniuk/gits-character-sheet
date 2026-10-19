@@ -12,7 +12,7 @@
   };
 
   Sheet.stepBarrier = function stepBarrier(delta) {
-    Sheet.state.data.Barrier = clamp(toNumber(Sheet.state.data.Barrier, 6) + delta * 2, 6, 20);
+    Sheet.state.data.Barrier = clamp(toNumber(Sheet.state.data.Barrier, 6) + delta * 2, 4, 20);
     Sheet.persistCharacterState();
     Sheet.renderAttributes();
   };
