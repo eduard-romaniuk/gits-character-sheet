@@ -10,8 +10,12 @@
   // Print-only document: a single-column, fully expanded rendering of the active
   // character. Nothing here is interactive — every description, rank text and
   // loadout is spelled out, unlike the collapsible rows of the on-screen sheet.
+  // What gets included is driven by an options object (see Sheet.pdfOptions).
 
   const EMPTY = '—';
+
+  // Beyond this many units, a row of tick boxes stops being practical.
+  const MAX_TICK_BOXES = 30;
 
   function text(value) {
     const s = String(value == null ? '' : value).trim();
@@ -31,6 +35,11 @@
     return '<div class="p-prose' + (s ? '' : ' empty') + '">' + (s ? escapeHtml(s) : EMPTY) + '</div>';
   }
 
+  // An empty write-in line, for values players track by hand at the table (current Ghost-Whispers).
+  function blankBox() {
+    return '<span class="p-blank"></span>';
+  }
+
   // Slash marks drawn as inline SVG so they print regardless of the browser's
   // "background graphics" setting (the screen sheet draws them as CSS gradients).
   function markSvg(state, round) {
@@ -43,18 +52,19 @@
       + '</svg>';
   }
 
+  // metaFields: [label, value] pairs, escaped via text(); a third `true` marks value as ready-made HTML.
   function itemBlock(name, metaFields, bodyHtml, extraClass) {
     return '<div class="p-item' + (extraClass ? ' ' + extraClass : '') + '">'
       + '<div class="p-item-head"><div class="p-item-name">' + text(name) + '</div>'
-      + (metaFields.length ? '<div class="p-item-meta">' + metaFields.map(([label, value]) => '<span><b>' + label + '</b> ' + text(value) + '</span>').join('') + '</div>' : '')
+      + (metaFields.length ? '<div class="p-item-meta">' + metaFields.map(([label, value, isHtml]) => '<span><b>' + label + '</b> ' + (isHtml ? value : text(value)) + '</span>').join('') + '</div>' : '')
       + '</div>'
       + (bodyHtml || '')
       + '</div>';
   }
 
-  function itemNotes(notes) {
+  function itemNotes(notes, options) {
     const s = String(notes || '').trim();
-    return s ? '<div class="p-item-body">' + escapeHtml(s) + '</div>' : '';
+    return s && !options.compact ? '<div class="p-item-body">' + escapeHtml(s) + '</div>' : '';
   }
 
   function emptySection() {
@@ -64,19 +74,19 @@
   /* ==================== sections ==================== */
 
   // Mirrors the sheet's identity panel: portrait on the left; names, then back story, on the right.
-  function renderHeader(data, portrait) {
-    const showAgentId = !!(Sheet.settings && Sheet.settings.showAgentId);
+  function renderHeader(data, portrait, options) {
+    const sections = options.sections;
     return '<header class="p-header">'
       + '<div class="p-kicker">SECTION 9 &nbsp;//&nbsp; AGENT DOSSIER</div>'
-      + '<div class="p-ident">'
-      + '<div class="p-portrait">' + (portrait ? '<img alt="" src="' + portrait + '">' : '<span>AGENT<br>PORTRAIT</span>') + '</div>'
+      + '<div class="p-ident' + (sections.portrait ? '' : ' no-portrait') + '">'
+      + (sections.portrait ? '<div class="p-portrait">' + (portrait ? '<img alt="" src="' + portrait + '">' : '<span>AGENT<br>PORTRAIT</span>') + '</div>' : '')
       + '<div class="p-ident-fields">'
-      + '<div class="p-ident-names' + (showAgentId ? ' with-id' : '') + '">'
+      + '<div class="p-ident-names' + (sections.agentId ? ' with-id' : '') + '">'
       + field('AGENT NAME', data.AgentName)
-      + (showAgentId ? field('AGENT ID', data.AgentId) : '')
+      + (sections.agentId ? field('AGENT ID', data.AgentId) : '')
       + field('PLAYER NAME', data.PlayerName)
       + '</div>'
-      + '<div class="p-field"><div class="p-label">AGENT BACK STORY</div>' + prose(data.BackStory) + '</div>'
+      + (sections.backStory ? '<div class="p-field"><div class="p-label">AGENT BACK STORY</div>' + prose(data.BackStory) + '</div>' : '')
       + '</div></div>'
       + '</header>';
   }
@@ -87,7 +97,7 @@
     cells.push(['HACKING', String(data.Hacking || 'd6').toUpperCase()]);
     cells.push(['BARRIER', toNumber(data.Barrier, 6)]);
     const pools = [
-      ['GHOST-WHISPERS', text(data.GW1) + ' / ' + text(data.GW2)],
+      ['GHOST-WHISPERS', blankBox() + ' / ' + text(data.GW2)],
       ['SKILL POINTS', Sheet.skillPointsTotal() + ' / ' + text(data.SP2)],
       ['REQUISITION MAX', text(data.RP2)],
     ];
@@ -97,7 +107,7 @@
       + '</section>';
   }
 
-  function renderConflict(data, sc) {
+  function renderConflict(data, sc, options) {
     // One 3-column grid: each aspect heads its own column of marks, VS heads the die labels.
     let grid = '<div class="p-aspect">' + text(data.Aspect1) + '</div><div class="p-vs">VS</div><div class="p-aspect">' + text(data.Aspect2) + '</div>';
     Sheet.CONFLICT_ROWS.forEach((size) => {
@@ -106,7 +116,7 @@
     grid += markSvg('x') + '<div class="p-conflict-die">D4</div>' + markSvg('x');
     return '<section class="p-section">' + sectionTitle('SYNTHESIS CONFLICT')
       + '<div class="p-conflict">' + grid + '</div>'
-      + prose(data.SC_Notes)
+      + (options.sections.conflictNotes ? prose(data.SC_Notes) : '')
       + '</section>';
   }
 
@@ -125,55 +135,67 @@
       + '</section>';
   }
 
-  function itemSection(sectionKey, label, renderItem) {
+  function itemSection(sectionKey, label, renderItem, options) {
     const items = Sheet.resolveSectionItems(sectionKey);
     return '<section class="p-section">' + sectionTitle(label)
-      + (items.length ? items.map(renderItem).join('') : emptySection())
+      + (items.length ? items.map((item) => renderItem(item, options)).join('') : emptySection())
       + '</section>';
   }
 
-  function renderSetback(item) {
-    return itemBlock(item.name, [], itemNotes(item.notes));
+  function renderSetback(item, options) {
+    return itemBlock(item.name, [], itemNotes(item.notes, options));
   }
 
-  function renderCybernetic(item) {
-    return itemBlock(item.name, Sheet.ITEM_FIELD_SCHEMA.Cybernetics.map(([key, label]) => [label, item.extra[key]]), itemNotes(item.notes));
+  function renderCybernetic(item, options) {
+    return itemBlock(item.name, Sheet.ITEM_FIELD_SCHEMA.Cybernetics.map(([key, label]) => [label, item.extra[key]]), itemNotes(item.notes, options));
   }
 
-  function renderSkill(item) {
+  function renderSkill(item, options) {
     const rank = clamp(toNumber(item.extra.rank, 1), 1, 6);
-    return itemBlock(item.name, [['RANK', rank + ' (' + Sheet.rankToDieLabel(rank) + ')']], itemNotes(item.notes));
+    return itemBlock(item.name, [['RANK', rank + ' (' + Sheet.rankToDieLabel(rank) + ')']], itemNotes(item.notes, options));
   }
 
-  function renderSpecialtySkill(item) {
+  function renderSpecialtySkill(item, options) {
     const extra = item.extra;
     const maxRank = Math.max(1, toNumber(extra.maxRanks, 1));
     const currentRank = clamp(toNumber(extra.rank, 1), 1, maxRank);
     // A single-rank skill has nothing to progress through — its notes are the whole description.
     let ranks = '';
-    if (maxRank > 1) {
-      for (let rank = 1; rank <= maxRank; rank++) {
+    if (maxRank > 1 && !options.compact) {
+      const lastRank = options.hideUnreachedRanks ? currentRank : maxRank;
+      for (let rank = 1; rank <= lastRank; rank++) {
         ranks += '<div class="p-rank">'
           + '<div class="p-rank-key"><span class="p-rank-box' + (rank <= currentRank ? ' filled' : '') + '"></span>RANK ' + rank + '</div>'
           + '<div class="p-rank-text">' + text(extra['r' + rank]) + '</div></div>';
       }
       ranks = '<div class="p-ranks">' + ranks + '</div>';
     }
-    return itemBlock(item.name, [['RANK', currentRank + ' / ' + maxRank]], itemNotes(item.notes) + ranks);
+    return itemBlock(item.name, [['RANK', currentRank + ' / ' + maxRank]], itemNotes(item.notes, options) + ranks);
   }
 
-  function renderEquipmentItem(item, allEquipment) {
+  // A single-use item's amount as one tick box per unit (used ones crossed out), to
+  // tick off at the table; falls back to "remaining / total" when boxes don't fit.
+  function amountMeta(label, extra) {
+    const totalQty = toNumber(extra.qty, 0) + toNumber(extra.freeQty, 0);
+    const used = clamp(toNumber(extra.used, 0), 0, totalQty);
+    if (totalQty > 0 && totalQty <= MAX_TICK_BOXES) {
+      let boxes = '';
+      for (let index = 0; index < totalQty; index++) boxes += markSvg(index < used ? 'perm' : '');
+      return [label, '<span class="p-ticks">' + boxes + '</span>', true];
+    }
+    return [label, (totalQty - used) + ' / ' + totalQty];
+  }
+
+  function renderEquipmentItem(item, allEquipment, options) {
     const extra = item.extra;
     const type = extra.type || 'weapon';
     // EQUIPMENT_TYPES labels are plural group headings (WEAPONS, THROWABLES…); one item reads singular.
     const typeLabel = ((Sheet.EQUIPMENT_TYPES.filter((t) => t[0] === type)[0]) || ['', 'WEAPONS'])[1].replace(/S$/, '');
-    const totalQty = toNumber(extra.qty, 0) + toNumber(extra.freeQty, 0);
     const meta = [['TYPE', typeLabel]];
     (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey, label]) => {
       if (fieldKey === 'skill') return;
       if (fieldKey === 'qty') {
-        if (!Sheet.isSingleUse(extra)) return;
-        meta.push([label, Math.max(0, totalQty - toNumber(extra.used, 0)) + ' / ' + totalQty]);
+        if (Sheet.isSingleUse(extra)) meta.push(amountMeta(label, extra));
         return;
       }
       if (fieldKey === 'fittedId') {
@@ -187,16 +209,19 @@
       }
       meta.push([label, extra[fieldKey]]);
     });
-    const skill = extra.skill ? '<div class="p-item-line"><b>SKILL</b> ' + escapeHtml(extra.skill) + '</div>' : '';
-    return itemBlock(item.name, meta, skill + itemNotes(item.notes), isAttachment(item) ? 'p-attachment' : '');
+    const skill = extra.skill && !options.compact ? '<div class="p-item-line"><b>SKILL</b> ' + escapeHtml(extra.skill) + '</div>' : '';
+    return itemBlock(item.name, meta, skill + itemNotes(item.notes, options), isAttachment(item) ? 'p-attachment' : '');
   }
 
-  function renderEquipment(data) {
+  function renderEquipment(data, options) {
     const allEquipment = Sheet.resolveSectionItems('Equipment');
     const loadouts = Sheet.state.loadouts || [];
-    const groups = loadouts.map((loadout) => ({ loadout: loadout, items: allEquipment.filter((item) => item.extra.loadoutId === loadout.id) }));
+    const selected = loadouts.filter((loadout) => options.loadoutIds.indexOf(loadout.id) >= 0);
+    if (!selected.length) return '';
+    const groups = selected.map((loadout) => ({ loadout: loadout, items: allEquipment.filter((item) => item.extra.loadoutId === loadout.id) }));
+    // Items whose loadout no longer exists can't be picked individually, so they ride along with "all loadouts".
     const unassigned = allEquipment.filter((item) => !loadouts.some((loadout) => loadout.id === item.extra.loadoutId));
-    if (unassigned.length) groups.push({ loadout: null, items: unassigned });
+    if (unassigned.length && selected.length === loadouts.length) groups.push({ loadout: null, items: unassigned });
 
     const body = groups.map(({ loadout, items }) => {
       const spent = loadout ? Sheet.requisitionPointsTotalFor(loadout.id) : null;
@@ -204,7 +229,7 @@
         + '<div class="p-loadout-head"><div class="p-loadout-name">LOADOUT: ' + (loadout ? text(loadout.name) : 'UNASSIGNED') + '</div>'
         + (spent != null ? '<div class="p-loadout-rp">RP SPENT ' + spent + ' / ' + text(data.RP2) + '</div>' : '')
         + '</div>'
-        + (items.length ? Sheet.orderItemsForDisplay('Equipment', items).map((item) => renderEquipmentItem(item, allEquipment)).join('') : emptySection())
+        + (items.length ? Sheet.orderItemsForDisplay('Equipment', items).map((item) => renderEquipmentItem(item, allEquipment, options)).join('') : emptySection())
         + '</div>';
     }).join('');
 
@@ -213,19 +238,38 @@
 
   /* ==================== document ==================== */
 
+  // Options for the active character: the saved global PDF settings, plus the loadouts
+  // picked in the export dialog when it's open (all loadouts otherwise, e.g. for Ctrl+P).
+  Sheet.pdfOptions = function pdfOptions() {
+    const pdf = (Sheet.settings && Sheet.settings.pdf) || Sheet.normalizePdfSettings(null);
+    const loadoutIds = Sheet.ui.pdfDialog ? Sheet.ui.pdfDialog.loadoutIds.slice() : (Sheet.state.loadouts || []).map((loadout) => loadout.id);
+    return { ...pdf, sections: { ...pdf.sections }, loadoutIds: loadoutIds };
+  };
+
+  // The whole print document as an HTML string — rendered into #printView for printing
+  // and into the export dialog's preview, so the two can't drift apart.
+  Sheet.buildPrintDocument = function buildPrintDocument(options) {
+    const data = Sheet.state.data || {};
+    const sections = options.sections;
+    return renderHeader(data, Sheet.state.portrait, options)
+      + renderAttributes(data)
+      + '<div class="p-pair">' + renderConflict(data, Sheet.state.sc || {}, options) + renderHitLocations(data) + '</div>'
+      + (sections.setbacks ? itemSection('Setbacks', 'SETBACKS', renderSetback, options) : '')
+      + (sections.cybernetics ? itemSection('Cybernetics', 'CYBERNETICS', renderCybernetic, options) : '')
+      + (sections.skills ? itemSection('Skills', 'STANDARD SKILLS', renderSkill, options) : '')
+      + (sections.specialtySkills ? itemSection('SpecialtySkills', 'SPECIALTY SKILLS', renderSpecialtySkill, options) : '')
+      + (sections.equipment ? renderEquipment(data, options) : '')
+      + (sections.notes && String(data.Notes || '').trim() ? '<section class="p-section">' + sectionTitle('NOTES') + prose(data.Notes) + '</section>' : '');
+  };
+
+  // Options handed to printCharacter (e.g. the export dialog's loadout picks) outlive
+  // the dialog itself, which closes before printing; they apply until afterprint.
+  let pendingOptions = null;
+
   Sheet.renderPrintView = function renderPrintView() {
     const el = query('#printView');
     if (!el || !Sheet.state) return;
-    const data = Sheet.state.data || {};
-    el.innerHTML = renderHeader(data, Sheet.state.portrait)
-      + renderAttributes(data)
-      + '<div class="p-pair">' + renderConflict(data, Sheet.state.sc || {}) + renderHitLocations(data) + '</div>'
-      + itemSection('Setbacks', 'SETBACKS', renderSetback)
-      + itemSection('Cybernetics', 'CYBERNETICS', renderCybernetic)
-      + itemSection('Skills', 'STANDARD SKILLS', renderSkill)
-      + itemSection('SpecialtySkills', 'SPECIALTY SKILLS', renderSpecialtySkill)
-      + renderEquipment(data)
-      + (String(data.Notes || '').trim() ? '<section class="p-section">' + sectionTitle('NOTES') + prose(data.Notes) + '</section>' : '');
+    el.innerHTML = Sheet.buildPrintDocument(pendingOptions || Sheet.pdfOptions());
   };
 
   function characterViewActive() {
@@ -250,8 +294,9 @@
     return active;
   }
 
-  Sheet.printCharacter = function printCharacter() {
-    if (!preparePrint()) return;
+  Sheet.printCharacter = function printCharacter(options) {
+    pendingOptions = options || null;
+    if (!preparePrint()) { pendingOptions = null; return; }
     savedTitle = document.title;
     document.title = Sheet.slugName(Sheet.state.data.AgentName) + '-sheet';
     window.print();
@@ -261,6 +306,7 @@
   window.addEventListener('beforeprint', preparePrint);
   window.addEventListener('afterprint', () => {
     document.body.classList.remove('print-character');
+    pendingOptions = null;
     restoreTitle();
   });
 })(window.Sheet = window.Sheet || {});

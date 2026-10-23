@@ -776,6 +776,63 @@ body.show-agent-id #agentIdField {
 .dialog.dialog-wide {
   max-width: 760px;
 }
+
+/* ---- PDF export dialog: settings column + live preview of the print document ---- */
+
+.dialog.dialog-pdf {
+  max-width: 1200px;
+  height: min(90vh, 1100px);
+}
+.pdf-layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 16px;
+}
+.pdf-settings {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 4px;
+}
+.pdf-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pdf-group-title {
+  margin-bottom: 4px;
+}
+.pdf-group .check:disabled {
+  opacity: .45;
+  cursor: default;
+}
+.pdf-preview {
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--line3);
+  padding: 12px;
+}
+.p-paper {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 14mm;
+  box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .45);
+}
+@media (max-width: 900px) {
+  .dialog.dialog-pdf {
+    height: auto;
+  }
+  .pdf-layout {
+    grid-template-columns: 1fr;
+  }
+  .pdf-preview {
+    max-height: 70vh;
+  }
+}
 .dialog-row {
   display: flex;
   flex-wrap: wrap;

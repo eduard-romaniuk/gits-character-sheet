@@ -66,6 +66,9 @@
   gap: 14px;
   align-items: start;
 }
+.p-ident.no-portrait {
+  grid-template-columns: minmax(0, 1fr);
+}
 .p-ident-fields {
   display: flex;
   flex-direction: column;
@@ -181,6 +184,27 @@
 }
 .p-mark.fixed line {
   stroke: var(--p-mute);
+}
+
+/* write-in box for values tracked by hand (blank session trackers) */
+.p-blank {
+  display: inline-block;
+  width: 2.4em;
+  height: 1.1em;
+  border-bottom: 1px solid var(--p-ink);
+  vertical-align: -2px;
+}
+/* one box per consumable unit */
+.p-ticks {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  vertical-align: middle;
+  max-width: 60mm;
+}
+.p-ticks .p-mark {
+  width: 11px;
+  height: 11px;
 }
 
 /* ---- synthesis conflict + hit points (side by side) ---- */

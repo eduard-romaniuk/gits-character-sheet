@@ -50,10 +50,32 @@
 
   Sheet.settings = null;
 
+  // PDF export options (see render-print.js / dialog-pdf.js). Everything is included by
+  // default; the Agent ID follows the on-screen "show Agent ID" setting until changed here.
+  Sheet.PDF_SECTION_KEYS = ['portrait', 'agentId', 'backStory', 'conflictNotes', 'setbacks', 'cybernetics', 'skills', 'specialtySkills', 'equipment', 'notes'];
+
+  Sheet.normalizePdfSettings = function normalizePdfSettings(saved, showAgentId) {
+    const pdf = saved || {};
+    const savedSections = pdf.sections || {};
+    const sections = {};
+    Sheet.PDF_SECTION_KEYS.forEach((key) => {
+      const fallback = key === 'agentId' ? !!showAgentId : true;
+      sections[key] = savedSections[key] === undefined ? fallback : !!savedSections[key];
+    });
+    return {
+      hideUnreachedRanks: !!pdf.hideUnreachedRanks,
+      compact: !!pdf.compact,
+      sections: sections,
+    };
+  };
+
   Sheet.loadSettings = function loadSettings() {
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(Sheet.SETTINGS_KEY)) || {}; } catch (error) { saved = {}; }
-    Sheet.settings = { forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment, showAgentId: !!saved.showAgentId, rosterIdCardStyle: !!saved.rosterIdCardStyle };
+    Sheet.settings = {
+      forceBlockHeightAlignment: !!saved.forceBlockHeightAlignment, showAgentId: !!saved.showAgentId, rosterIdCardStyle: !!saved.rosterIdCardStyle,
+      pdf: Sheet.normalizePdfSettings(saved.pdf, saved.showAgentId),
+    };
     return Sheet.settings;
   };
 

@@ -41,10 +41,10 @@
   Sheet.HIT_LOCATIONS = [
     ['Head / Neck', '19–20', 'Head', 2],
     ['Torso', '11–18', 'Torso', 4],
-    ['Left Arm', '7–8', 'LeftArm', 3],
     ['Right Arm', '9–10', 'RightArm', 3],
-    ['Left Leg', '1–3', 'LeftLeg', 3],
+    ['Left Arm', '7–8', 'LeftArm', 3],
     ['Right Leg', '4–6', 'RightLeg', 3],
+    ['Left Leg', '1–3', 'LeftLeg', 3],
   ];
   Sheet.CONFLICT_ROWS = ['12', '10', '8', '6'];
   Sheet.MARK_STATES = ['', 'temp', 'perm'];

@@ -15,6 +15,7 @@
     if (Sheet.ui.groupDialog) return 'group';
     if (Sheet.ui.characterDialog) return 'character';
     if (Sheet.ui.settingsDialog) return 'settings';
+    if (Sheet.ui.pdfDialog) return 'pdf';
     if (Sheet.state && Sheet.state.crop) return 'crop';
     return null;
   }
@@ -33,6 +34,7 @@
       case 'group': Sheet.closeGroupDialog(); return;
       case 'character': Sheet.closeCharacterDialog(); return;
       case 'settings': Sheet.closeSettingsDialog(); return;
+      case 'pdf': Sheet.closePdfDialog(); return;
       case 'crop': Sheet.closeCropDialog(); return;
     }
   }
@@ -134,7 +136,12 @@
         /* ---- character shell ---- */
         case 'exportMenuToggle': setExportMenuOpen(!isExportMenuOpen()); return;
         case 'export': setExportMenuOpen(false); Sheet.exportCharacterById(Sheet.state.id); return;
-        case 'exportPdf': setExportMenuOpen(false); Sheet.printCharacter(); return;
+        case 'exportPdf': setExportMenuOpen(false); Sheet.openPdfDialog(); return;
+
+        /* ---- pdf export dialog ---- */
+        case 'pdfToggle': Sheet.togglePdfSetting(actionEl.getAttribute('data-key')); return;
+        case 'pdfLoadout': Sheet.togglePdfLoadout(actionEl.getAttribute('data-loadout-id')); return;
+        case 'pdfPrint': Sheet.printFromPdfDialog(); return;
         case 'import': query('#importFile').click(); return;
         case 'reset': Sheet.resetCharacter(); return;
 
