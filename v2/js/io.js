@@ -14,6 +14,8 @@
     return String(name || 'agent').replace(/[^\w\-]+/g, '-').toLowerCase();
   }
 
+  Sheet.slugName = slug;
+
   Sheet.exportCharacterById = function exportCharacterById(id) {
     let blob = null;
     try { blob = JSON.parse(localStorage.getItem(Sheet.characterKey(id))); } catch (error) { blob = null; }

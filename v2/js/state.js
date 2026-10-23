@@ -19,8 +19,10 @@
   Sheet.skillPointsTotal = () => Sheet.resolveSectionItems('Skills').reduce((sum, item) => sum + toNumber(item.extra.rank, 0), 0)
     + Sheet.resolveSectionItems('SpecialtySkills').reduce((sum, item) => sum + toNumber(item.extra.rank, 0), 0);
 
-  Sheet.requisitionPointsTotal = () => Sheet.resolveSectionItems('Equipment')
-    .filter((item) => item.extra.loadoutId === Sheet.state.activeLoadoutId)
+  Sheet.requisitionPointsTotal = () => Sheet.requisitionPointsTotalFor(Sheet.state.activeLoadoutId);
+
+  Sheet.requisitionPointsTotalFor = (loadoutId) => Sheet.resolveSectionItems('Equipment')
+    .filter((item) => item.extra.loadoutId === loadoutId)
     .reduce((sum, item) => {
       const extra = item.extra;
       const units = Sheet.isSingleUse(extra) ? toNumber(extra.qty, 0) : 1;

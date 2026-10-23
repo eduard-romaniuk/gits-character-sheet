@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="print.css">
 </head>
 <body>
 <div class="sheet">
@@ -127,6 +128,8 @@
 </div>
 </div>
 
+<div id="printView" class="print-doc"></div>
+
 <div class="scrim" id="scrim" hidden><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
 
 <script src="js/constants.js"></script>
@@ -146,6 +149,7 @@
 <script src="js/render-character-shell.js"></script>
 <script src="js/render-roster.js"></script>
 <script src="js/render-library.js"></script>
+<script src="js/render-print.js"></script>
 <script src="js/dialog-item-standalone.js"></script>
 <script src="js/dialog-item-instance.js"></script>
 <script src="js/dialog-item-picker.js"></script>

@@ -48,6 +48,21 @@
     }
   }
 
+  // Toolbar EXPORT dropdown — a plain DOM toggle (like the HP hint), not render state.
+  // No-op when the character shell (and so the menu) isn't on screen.
+  function isExportMenuOpen() {
+    const list = query('#exportMenuList');
+    return !!(list && !list.hidden);
+  }
+
+  function setExportMenuOpen(open) {
+    const list = query('#exportMenuList');
+    if (!list) return;
+    list.hidden = !open;
+    const trigger = query('[data-action="exportMenuToggle"]');
+    if (trigger) trigger.setAttribute('aria-expanded', String(open));
+  }
+
   function rawInstance(section, instanceId) {
     return (Sheet.state.items[section] || []).find((i) => i.instanceId === instanceId);
   }
@@ -79,6 +94,7 @@
   });
 
   document.addEventListener('click', (event) => {
+    if (isExportMenuOpen() && !event.target.closest('#exportMenu')) setExportMenuOpen(false);
     const actionEl = event.target.closest('[data-action]');
     if (actionEl) {
       const action = actionEl.getAttribute('data-action');
@@ -116,7 +132,9 @@
         case 'dlgToggleRosterIdCardStyle': Sheet.toggleSettingsRosterIdCardStyle(); return;
 
         /* ---- character shell ---- */
-        case 'export': Sheet.exportCharacterById(Sheet.state.id); return;
+        case 'exportMenuToggle': setExportMenuOpen(!isExportMenuOpen()); return;
+        case 'export': setExportMenuOpen(false); Sheet.exportCharacterById(Sheet.state.id); return;
+        case 'exportPdf': setExportMenuOpen(false); Sheet.printCharacter(); return;
         case 'import': query('#importFile').click(); return;
         case 'reset': Sheet.resetCharacter(); return;
 
@@ -269,6 +287,7 @@
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isExportMenuOpen()) { setExportMenuOpen(false); query('[data-action="exportMenuToggle"]').focus(); return; }
     if (event.key === 'Escape' && activeDialogKind()) { closeActiveDialog(); return; }
     const actionEl = event.target.closest && event.target.closest('[data-action="conflict"],[data-action="hp"]');
     if (actionEl && (event.key === ' ' || event.key === 'Enter')) { event.preventDefault(); actionEl.click(); }

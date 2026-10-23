@@ -126,6 +126,8 @@
       + '</div>';
   }
 
+  Sheet.orderItemsForDisplay = orderItemsForDisplay;
+
   Sheet.renderItemSections = function renderItemSections() {
     query('#sectionTop').innerHTML = renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[0]) + renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[1]);
     query('#sectionSkills').innerHTML = renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[2]) + renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[3]);

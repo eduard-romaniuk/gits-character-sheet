@@ -137,6 +137,43 @@ h1 {
   letter-spacing: .12em;
   align-self: flex-start;
 }
+.menu {
+  position: relative;
+  display: inline-flex;
+}
+.menu-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 2px;
+  z-index: 20;
+}
+.menu-list[hidden] {
+  display: none;
+}
+.menu-item {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: .12em;
+  text-align: left;
+  padding: 0 14px;
+  min-height: 40px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--sub);
+  color: var(--ink);
+  outline: none;
+}
 .btn:disabled,
 .btn:disabled:hover {
   opacity: .55;
