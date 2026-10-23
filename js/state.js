@@ -68,6 +68,32 @@
     }, 250);
   };
 
+  /* ==================== PDF export settings ==================== */
+
+  // See render-print.js / dialog-pdf.js. Everything is included by default.
+  Sheet.PDF_SETTINGS_KEY = 'gits-character-sheet-v1-pdf';
+  Sheet.PDF_SECTION_KEYS = ['portrait', 'backStory', 'conflictNotes', 'setbacks', 'cybernetics', 'skills', 'specialtySkills', 'equipment', 'notes'];
+  Sheet.pdfSettings = null;
+
+  Sheet.normalizePdfSettings = function normalizePdfSettings(saved) {
+    const pdf = saved || {};
+    const savedSections = pdf.sections || {};
+    const sections = {};
+    Sheet.PDF_SECTION_KEYS.forEach((key) => { sections[key] = savedSections[key] === undefined ? true : !!savedSections[key]; });
+    return { hideUnreachedRanks: !!pdf.hideUnreachedRanks, compact: !!pdf.compact, sections: sections };
+  };
+
+  Sheet.loadPdfSettings = function loadPdfSettings() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(Sheet.PDF_SETTINGS_KEY)); } catch (error) { saved = null; }
+    Sheet.pdfSettings = Sheet.normalizePdfSettings(saved);
+    return Sheet.pdfSettings;
+  };
+
+  Sheet.persistPdfSettings = function persistPdfSettings() {
+    try { localStorage.setItem(Sheet.PDF_SETTINGS_KEY, JSON.stringify(Sheet.pdfSettings)); } catch (error) {}
+  };
+
   /* ==================== derived ==================== */
 
   Sheet.isAttachment = (item) => (item.extra || {}).type === 'attachment';
@@ -81,8 +107,10 @@
   Sheet.skillPointsTotal = () => (Sheet.state.items.Skills || []).reduce((sum, item) => sum + toNumber((item.extra || {}).rank, 0), 0)
     + (Sheet.state.items.SpecialtySkills || []).reduce((sum, item) => sum + toNumber((item.extra || {}).rank, 0), 0);
 
-  Sheet.requisitionPointsTotal = () => (Sheet.state.items.Equipment || [])
-    .filter((item) => item.loadoutId === Sheet.state.activeLoadoutId)
+  Sheet.requisitionPointsTotal = () => Sheet.requisitionPointsTotalFor(Sheet.state.activeLoadoutId);
+
+  Sheet.requisitionPointsTotalFor = (loadoutId) => (Sheet.state.items.Equipment || [])
+    .filter((item) => item.loadoutId === loadoutId)
     .reduce((sum, item) => {
       const extra = item.extra || {};
       const units = Sheet.isSingleUse(extra) ? Math.max(1, toNumber(extra.qty, 1)) : 1;

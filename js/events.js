@@ -4,6 +4,20 @@
   const toNumber = Sheet.toNumber;
   const query = Sheet.query;
 
+  // Toolbar EXPORT dropdown — a plain DOM toggle (like the HP hint), not render state.
+  function isExportMenuOpen() {
+    const list = query('#exportMenuList');
+    return !!(list && !list.hidden);
+  }
+
+  function setExportMenuOpen(open) {
+    const list = query('#exportMenuList');
+    if (!list) return;
+    list.hidden = !open;
+    const trigger = query('[data-action="exportMenuToggle"]');
+    if (trigger) trigger.setAttribute('aria-expanded', String(open));
+  }
+
   document.addEventListener('input', (event) => {
     const target = event.target;
     if (target.matches('[data-field]')) {
@@ -24,6 +38,7 @@
   });
 
   document.addEventListener('click', (event) => {
+    if (isExportMenuOpen() && !event.target.closest('#exportMenu')) setExportMenuOpen(false);
     const actionEl = event.target.closest('[data-action]');
     if (actionEl) {
       const action = actionEl.getAttribute('data-action');
@@ -31,7 +46,12 @@
       const itemId = actionEl.getAttribute('data-id');
       const delta = toNumber(actionEl.getAttribute('data-delta'), 1);
       switch (action) {
-        case 'export': Sheet.exportSheet(); return;
+        case 'exportMenuToggle': setExportMenuOpen(!isExportMenuOpen()); return;
+        case 'export': setExportMenuOpen(false); Sheet.exportSheet(); return;
+        case 'exportPdf': setExportMenuOpen(false); Sheet.openPdfDialog(); return;
+        case 'pdfToggle': Sheet.togglePdfSetting(actionEl.getAttribute('data-key')); return;
+        case 'pdfLoadout': Sheet.togglePdfLoadout(actionEl.getAttribute('data-loadout-id')); return;
+        case 'pdfPrint': Sheet.printFromPdfDialog(); return;
         case 'import': query('#importFile').click(); return;
         case 'reset':
           if (window.confirm('Clear this character sheet? Export first if you want to keep it.')) {
@@ -88,7 +108,11 @@
           Sheet.renderItemDialog();
           return;
         }
-        case 'dlgCancel': if (Sheet.state.loadoutDialog) { Sheet.closeLoadoutDialog(); } else { Sheet.closeItemDialog(); } return;
+        case 'dlgCancel':
+          if (Sheet.state.pdfDialog) Sheet.closePdfDialog();
+          else if (Sheet.state.loadoutDialog) Sheet.closeLoadoutDialog();
+          else Sheet.closeItemDialog();
+          return;
         case 'dlgSave': if (Sheet.state.loadoutDialog) { Sheet.saveLoadoutDialog(); } else { Sheet.saveItemDialog(); } return;
         case 'dlgCopyToLoadout': Sheet.copyItemToLoadout(actionEl); return;
         case 'loadoutSelect': Sheet.activateLoadout(actionEl.getAttribute('data-loadout-id')); return;
@@ -129,6 +153,8 @@
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isExportMenuOpen()) { setExportMenuOpen(false); query('[data-action="exportMenuToggle"]').focus(); return; }
+    if (event.key === 'Escape' && Sheet.state.pdfDialog) { Sheet.closePdfDialog(); return; }
     if (event.key === 'Escape' && Sheet.state.loadoutDialog) { Sheet.closeLoadoutDialog(); return; }
     if (event.key === 'Escape' && Sheet.state.dialog) { Sheet.closeItemDialog(); return; }
     if (event.key === 'Escape' && Sheet.state.crop) { Sheet.closeCropDialog(); return; }

@@ -120,6 +120,8 @@
       + '<button class="btn dashed" data-action="add" data-section="' + sectionKey + '">+ ADD</button></div>';
   }
 
+  Sheet.orderItemsForDisplay = orderItemsForDisplay;
+
   Sheet.renderItemSections = function renderItemSections() {
     query('#sectionTop').innerHTML = renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[0]) + renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[1]);
     query('#sectionSkills').innerHTML = renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[2]) + renderSectionMarkup.apply(null, Sheet.ITEM_SECTIONS[3]);
