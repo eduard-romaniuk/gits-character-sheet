@@ -1,17 +1,7 @@
 (function (Sheet) {
   'use strict';
 
-  Sheet.META_KEY = 'gits-v2-meta';
-  Sheet.LIBRARY_KEY = 'gits-v2-library';
-  Sheet.GROUPS_KEY = 'gits-v2-groups';
-  Sheet.SETTINGS_KEY = 'gits-v2-settings';
-  Sheet.CHARACTER_KEY_PREFIX = 'gits-v2-character:';
-  Sheet.characterKey = (id) => Sheet.CHARACTER_KEY_PREFIX + id;
-  Sheet.V1_STORAGE_KEY = 'gits-character-sheet-v1';
-  // Display label for the "ungrouped" bucket (groupId: null) — it isn't a real,
-  // deletable group entity, just the name shown for items with no group assigned.
-  Sheet.DEFAULT_GROUP_NAME = 'Core Rulebook';
-
+  Sheet.STORAGE_KEY = 'gits-character-sheet-v1';
   Sheet.DICE_STEPS = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
   Sheet.RANK_DIE_LABELS = ['D4', 'D6', 'D8', 'D10', 'D12', 'D20'];
   Sheet.ITEM_SECTIONS = [
@@ -27,10 +17,10 @@
     SpecialtySkills: [['maxRanks', 'MAX. RANKS', 'max'], ['rank', 'CURRENT RANK', 'cur']],
   };
   Sheet.EQUIPMENT_TYPES = [
-    ['weapon', 'WEAPONS'],
-    ['attachment', 'ATTACHMENTS'],
+    ['weapon', 'WEAPON'],
+    ['attachment', 'ATTACHMENT'],
     ['armor', 'ARMOR'],
-    ['throwable', 'THROWABLES'],
+    ['throwable', 'THROWABLE'],
     ['utility', 'UTILITY'],
   ];
   Sheet.EQUIPMENT_FIELDS = {
@@ -60,29 +50,5 @@
   Sheet.MARK_STATES = ['', 'temp', 'perm'];
   Sheet.HIT_LETHAL_STATES = ['', 'temp', 'perm'];
   Sheet.HIT_NONLETHAL_STATES = ['', 'stun-temp', 'stun-perm'];
-  Sheet.TEXT_FIELD_KEYS = ['AgentName', 'AgentId', 'PlayerName', 'BackStory', 'Aspect1', 'Aspect2', 'SC_Notes', 'GW1', 'GW2', 'SP2', 'RP2', 'Notes'];
-
-  // ---- v2 library additions ----
-
-  // Per-section split of fields that live on the shared library definition ("def")
-  // vs. fields that are per-character state layered on top ("overlay").
-  Sheet.LIBRARY_FIELD_SPLIT = {
-    Setbacks: { def: ['name', 'notes'], overlay: [] },
-    Cybernetics: { def: ['name', 'notes', 'armor', 'damage'], overlay: [] },
-    Skills: { def: ['name', 'notes'], overlay: ['rank'] },
-    SpecialtySkills: { def: ['name', 'notes', 'maxRanks', 'r1', 'r2', 'r3', 'r4', 'r5'], overlay: ['rank'] },
-    Equipment: {
-      def: ['name', 'notes', 'type', 'range', 'damage', 'rof', 'cost', 'skill', 'head', 'torso', 'arms', 'legs', 'mods', 'single'],
-      overlay: ['qty', 'freeQty', 'used', 'loadoutId', 'fittedId'],
-    },
-  };
-
-  // Equipment field lists for the library dialog: same as EQUIPMENT_FIELDS but
-  // strip fields that are per-character overlay (qty = owned count, fittedId = which
-  // character instance it's attached to) — those only make sense once an item is
-  // placed on a character.
-  Sheet.EQUIPMENT_LIBRARY_FIELDS = {};
-  Object.keys(Sheet.EQUIPMENT_FIELDS).forEach((type) => {
-    Sheet.EQUIPMENT_LIBRARY_FIELDS[type] = Sheet.EQUIPMENT_FIELDS[type].filter(([fieldKey]) => fieldKey !== 'qty' && fieldKey !== 'fittedId');
-  });
+  Sheet.TEXT_FIELD_KEYS = ['AgentName', 'PlayerName', 'BackStory', 'Aspect1', 'Aspect2', 'SC_Notes', 'GW1', 'GW2', 'SP2', 'RP2', 'Notes'];
 })(window.Sheet = window.Sheet || {});

@@ -64,7 +64,6 @@
       + '<input class="range" id="cropZoomRange" type="range" min="1" max="3" step="0.01" value="' + crop.zoom + '"></div>'
       + '<div class="dialog-footer"><button class="btn ghost" data-action="cropCancel">CANCEL</button>'
       + '<button class="btn primary" data-action="cropSave">USE PHOTO</button></div>';
-    query('#dialog').className = 'dialog';
     query('#dialog').innerHTML = html;
     query('#scrim').hidden = false;
     bindCropDragHandlers();
@@ -118,7 +117,7 @@
     canvas.getContext('2d').drawImage(query('#cropImage'), cropX, cropY, cropSize, cropSize, 0, 0, CROP_OUTPUT_SIZE, CROP_OUTPUT_SIZE);
     Sheet.state.portrait = canvas.toDataURL('image/jpeg', 0.88);
     Sheet.closeCropDialog();
-    Sheet.persistCharacterState();
+    Sheet.persistState();
     Sheet.renderPortrait();
   };
 })(window.Sheet = window.Sheet || {});

@@ -1,19 +1,11 @@
 (function (Sheet) {
   'use strict';
 
-  const query = Sheet.query;
-
-  Sheet.state = Sheet.loadState();
-  Sheet.loadPdfSettings();
-  Sheet.TEXT_FIELD_KEYS.forEach((fieldKey) => {
-    const el = query('[data-field="' + fieldKey + '"]');
-    if (el) el.value = Sheet.state.data[fieldKey] || '';
-  });
-  Sheet.renderPortrait();
-  Sheet.renderAttributes();
-  Sheet.renderConflictTracker();
-  Sheet.renderHitLocations();
-  Sheet.renderItemSections();
-  Sheet.renderTotals();
-  Sheet.persistState();
+  Sheet.loadMeta();
+  Sheet.loadLibrary();
+  Sheet.loadGroups();
+  Sheet.loadSettings();
+  Sheet.migrateLegacyDefaultGroup();
+  Sheet.applySettings();
+  Sheet.handleRoute();
 })(window.Sheet = window.Sheet || {});

@@ -30,8 +30,8 @@
     // store.js), so no re-sort here: oldest first, newest next to the ghost tile.
     const characters = Sheet.meta.characters || [];
     const v1Banner = (Sheet.detectV1Data && Sheet.detectV1Data() && !Sheet.meta.v1BannerDismissed)
-      ? '<div class="panel v1-banner"><div class="col"><span class="label">A V1 CHARACTER SHEET WAS FOUND IN THIS BROWSER</span>'
-        + '<div class="dialog-row"><button class="btn small" data-action="importV1">IMPORT FROM V1</button>'
+      ? '<div class="panel v1-banner"><div class="col"><span class="label">A CLASSIC SHEET CHARACTER WAS FOUND IN THIS BROWSER</span>'
+        + '<div class="dialog-row"><button class="btn small" data-action="importV1">IMPORT FROM CLASSIC SHEET</button>'
         + '<button class="btn small ghost" data-action="dismissV1Banner">DISMISS</button></div></div></div>'
       : '';
 
@@ -74,6 +74,7 @@
       + '<button class="btn small ghost" data-action="importBackup">RESTORE BACKUP</button>'
       + '<input type="file" id="importBackupFile" accept=".json,application/json" class="sr-only">'
       + '<button class="btn small ghost" data-action="openSettings">SETTINGS</button>'
+      + '<a class="btn small" href="classic/" title="The original single-character sheet. Characters saved there are still available.">CLASSIC SHEET</a>'
       + '</div></div>'
       + v1Banner
       + '<div class="char-grid">' + cards + ghostCard + '</div>';

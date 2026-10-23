@@ -23,7 +23,6 @@
       + '<input class="field" id="loadoutDialogName" value="' + escapeHtml(dialog.name) + '"></div>'
       + '<div class="dialog-footer"><button class="btn ghost" data-action="dlgCancel">CANCEL</button>'
       + '<button class="btn primary" data-action="dlgSave">SAVE</button></div>';
-    query('#dialog').className = 'dialog';
     query('#dialog').innerHTML = html;
     query('#scrim').hidden = false;
     const nameEl = query('#loadoutDialogName');
@@ -46,7 +45,7 @@
     }
 
     Sheet.closeLoadoutDialog();
-    Sheet.persistCharacterState();
+    Sheet.persistState();
     Sheet.renderItemSections();
     Sheet.renderTotals();
   };
@@ -54,7 +53,7 @@
   Sheet.activateLoadout = function activateLoadout(loadoutId) {
     if (!loadoutId || loadoutId === Sheet.state.activeLoadoutId) return;
     Sheet.state.activeLoadoutId = loadoutId;
-    Sheet.persistCharacterState();
+    Sheet.persistState();
     Sheet.renderItemSections();
     Sheet.renderTotals();
   };
@@ -64,16 +63,16 @@
     if (loadouts.length <= 1) return;
     const loadout = loadouts.filter((entry) => entry.id === loadoutId)[0];
     if (!loadout) return;
-    const itemCount = (Sheet.state.items.Equipment || []).filter((instance) => (instance.overlay ? instance.overlay.loadoutId : (instance.extra || {}).loadoutId) === loadoutId).length;
+    const itemCount = (Sheet.state.items.Equipment || []).filter((item) => item.loadoutId === loadoutId).length;
     const message = itemCount
       ? 'Delete loadout "' + loadout.name + '" and its ' + itemCount + ' item' + (itemCount > 1 ? 's' : '') + '?'
       : 'Delete loadout "' + loadout.name + '"?';
     if (!window.confirm(message)) return;
 
-    Sheet.state.items.Equipment = (Sheet.state.items.Equipment || []).filter((instance) => (instance.overlay ? instance.overlay.loadoutId : (instance.extra || {}).loadoutId) !== loadoutId);
+    Sheet.state.items.Equipment = (Sheet.state.items.Equipment || []).filter((item) => item.loadoutId !== loadoutId);
     Sheet.state.loadouts = loadouts.filter((entry) => entry.id !== loadoutId);
     if (Sheet.state.activeLoadoutId === loadoutId) Sheet.state.activeLoadoutId = Sheet.state.loadouts[0].id;
-    Sheet.persistCharacterState();
+    Sheet.persistState();
     Sheet.renderItemSections();
     Sheet.renderTotals();
   };

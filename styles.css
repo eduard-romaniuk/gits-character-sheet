@@ -56,6 +56,14 @@ button {
   flex-direction: column;
   gap: 14px;
 }
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.view[hidden] {
+  display: none;
+}
 
 /* ==================== header ==================== */
 
@@ -76,6 +84,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-left: auto;
 }
 .btn {
   background: var(--field);
@@ -89,8 +98,6 @@ h1 {
   align-items: center;
   cursor: pointer;
   border-radius: 2px;
-}
-a.btn {
   text-decoration: none;
 }
 .btn:hover {
@@ -226,6 +233,9 @@ a.btn {
 .grid-cols-1 {
   grid-template-columns: minmax(0, 1fr);
 }
+body.force-align-blocks .grid {
+  align-items: stretch;
+}
 .col {
   display: flex;
   flex-direction: column;
@@ -348,6 +358,15 @@ textarea.field {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 14px;
+}
+#agentIdField {
+  display: none;
+}
+body.show-agent-id .ident-names {
+  grid-template-columns: 1.6fr 1.2fr 1fr;
+}
+body.show-agent-id #agentIdField {
+  display: flex;
 }
 .portrait {
   width: 250px;
@@ -491,6 +510,17 @@ textarea.field {
   font: 500 12px/1 var(--sans);
   letter-spacing: .04em;
   color: var(--dim);
+}
+.location-status {
+  font: 600 10px/1 var(--mono);
+  letter-spacing: .1em;
+  margin-left: auto;
+}
+.location-status.injured {
+  color: var(--yellow);
+}
+.location-status.destroyed {
+  color: var(--red);
 }
 .location-body {
   display: flex;
@@ -643,18 +673,28 @@ textarea.field {
   border: 0;
   cursor: pointer;
   color: var(--faint);
-  font: 500 10px/1 var(--mono);
-  letter-spacing: .1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 34px;
   min-height: 34px;
+  padding: 0;
+}
+.icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+.icon.text {
+  font: 500 10px/1 var(--mono);
+  letter-spacing: .1em;
+  padding: 0 10px;
 }
 .icon:hover {
   color: var(--accent);
 }
 .icon.delete {
   color: #5a6274;
-  font: 400 16px/1 var(--mono);
-  transform: translateY(-1.5px);
 }
 .icon.delete:hover {
   color: var(--red);
@@ -734,6 +774,10 @@ textarea.field {
   gap: 14px;
   margin: auto;
 }
+.dialog.dialog-wide {
+  max-width: 760px;
+}
+
 /* ---- PDF export dialog: settings column + live preview of the print document ---- */
 
 .dialog.dialog-pdf {
@@ -931,5 +975,153 @@ textarea.field {
   }
   h1 {
     font-size: 20px;
+  }
+}
+
+/* ==================== v2: roster ==================== */
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.char-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  clip-path: var(--notch);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.char-card:hover {
+  border-color: var(--accent);
+}
+.char-card-portrait {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.char-card-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.char-card-portrait span {
+  font: 500 9px/1.4 var(--mono);
+  letter-spacing: .08em;
+  color: var(--ghost);
+}
+.char-card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.char-card-name {
+  font: 500 15px/1.3 var(--mono);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.char-card-id {
+  font: 400 11px/1.4 var(--mono);
+  color: var(--faint);
+  letter-spacing: .04em;
+}
+.char-card-meta {
+  font: 400 11px/1.4 var(--mono);
+  color: var(--mute);
+}
+.char-card-braille {
+  font: 400 17px/1.3 var(--mono);
+  letter-spacing: .12em;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.char-card-barcode {
+  width: 100%;
+  margin-top: 2px;
+  padding: 6px 8px;
+  background: var(--panel);
+  color: var(--mute);
+}
+.char-card-barcode svg {
+  display: block;
+  width: 100%;
+  height: 36px;
+}
+.char-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px 8px;
+  border-top: 1px solid var(--line3);
+}
+body.roster-id-card-style .char-card-body {
+  align-items: center;
+  text-align: center;
+}
+body.roster-id-card-style .char-card-actions {
+  justify-content: center;
+}
+body.roster-id-card-style .char-card-name {
+  text-transform: uppercase;
+}
+.char-card.ghost {
+  border-style: dashed;
+  border-color: var(--line2);
+  background: transparent;
+}
+.char-card.ghost:hover {
+  border-color: var(--accent);
+}
+.char-card.ghost .char-card-portrait {
+  background: transparent;
+}
+.char-card.ghost .ghost-glyph {
+  font: 500 42px/1 var(--mono);
+  color: var(--ghost);
+}
+.char-card.ghost .char-card-name {
+  color: var(--mute);
+  text-align: center;
+}
+.v1-banner {
+  border-color: var(--yellow);
+  /* clip-path clips the border along with the box, but doesn't draw a stroke along
+     the newly-cut diagonal edge — on the muted default border color that gap blends
+     in, but on this bright accent color it reads as a broken/grey corner. Plain
+     corners read fine for a transient alert, so skip the notch here. */
+  clip-path: none;
+}
+
+/* ==================== v2: library / item linking ==================== */
+
+.dialog-readonly {
+  font: 400 13px/1.6 var(--sans);
+  color: var(--dim);
+  background: var(--field);
+  border: 1px solid var(--line3);
+  border-radius: 2px;
+  padding: 10px 12px;
+  white-space: pre-wrap;
+}
+.picker-list {
+  max-height: 44vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 520px) {
+  .char-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }

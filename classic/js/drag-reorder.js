@@ -39,34 +39,28 @@
     event.preventDefault();
 
     const sectionKey = row.dataset.section;
-    const instanceId = row.dataset.id;
-    if (sectionKey !== dragged.section || instanceId === dragged.id) { Sheet.renderItemSections(); return; }
+    const itemId = row.dataset.id;
+    if (sectionKey !== dragged.section || itemId === dragged.id) { Sheet.renderItemSections(); return; }
 
     const list = (Sheet.state.items[sectionKey] || []).slice();
-    const from = list.findIndex((instance) => instance.instanceId === dragged.id);
-    const targetInstance = list.find((instance) => instance.instanceId === instanceId);
-    if (from < 0 || !targetInstance) { Sheet.renderItemSections(); return; }
+    const from = list.findIndex((item) => item.id === dragged.id);
+    const target = list.filter((item) => item.id === itemId)[0];
+    if (from < 0 || !target) { Sheet.renderItemSections(); return; }
 
-    if (sectionKey === 'Equipment') {
-      const movedResolved = Sheet.resolveItem(sectionKey, list[from]);
-      if (Sheet.isAttachment(movedResolved)) {
-        const targetResolved = Sheet.resolveItem(sectionKey, targetInstance);
-        const parentId = Sheet.isAttachment(targetResolved) ? targetResolved.extra.fittedId
-          : ((targetResolved.extra.type || 'weapon') === 'weapon' ? targetResolved.instanceId : null);
-        if (!parentId) { Sheet.renderItemSections(); return; }
-        Sheet.setInstanceField(sectionKey, dragged.id, 'fittedId', parentId);
-      }
+    let moved = list[from];
+    if (sectionKey === 'Equipment' && Sheet.isAttachment(moved)) {
+      const parentId = Sheet.isAttachment(target) ? (target.extra || {}).fittedId
+        : ((((target.extra || {}).type) || 'weapon') === 'weapon' ? target.id : null);
+      if (!parentId) { Sheet.renderItemSections(); return; }
+      moved = { ...moved, extra: { ...(moved.extra || {}), fittedId: parentId } };
     }
 
-    const workingList = (Sheet.state.items[sectionKey] || []).slice();
-    const movedIndex = workingList.findIndex((instance) => instance.instanceId === dragged.id);
-    const moved = workingList[movedIndex];
-    workingList.splice(movedIndex, 1);
-    const to = workingList.findIndex((instance) => instance.instanceId === instanceId);
-    workingList.splice(to < 0 ? workingList.length : to, 0, moved);
-    Sheet.state.items[sectionKey] = workingList;
+    list.splice(from, 1);
+    const to = list.findIndex((item) => item.id === itemId);
+    list.splice(to < 0 ? list.length : to, 0, moved);
+    Sheet.state.items[sectionKey] = list;
 
-    Sheet.persistCharacterState();
+    Sheet.persistState();
     Sheet.renderItemSections();
   });
 })(window.Sheet = window.Sheet || {});

@@ -17,15 +17,6 @@
   // Beyond this many units, a row of tick boxes stops being practical.
   const MAX_TICK_BOXES = 30;
 
-  // v1 keeps items flat ({ id, name, notes, extra, loadoutId }); give them the shape the
-  // renderers below expect (instanceId, loadoutId inside extra), keeping `id` for
-  // orderItemsForDisplay's attachment matching.
-  function printItems(section) {
-    return (Sheet.state.items[section] || []).map((item) => ({
-      ...item, instanceId: item.id, extra: { ...(item.extra || {}), loadoutId: item.loadoutId },
-    }));
-  }
-
   function text(value) {
     const s = String(value == null ? '' : value).trim();
     return s ? escapeHtml(s) : EMPTY;
@@ -90,8 +81,9 @@
       + '<div class="p-ident' + (sections.portrait ? '' : ' no-portrait') + '">'
       + (sections.portrait ? '<div class="p-portrait">' + (portrait ? '<img alt="" src="' + portrait + '">' : '<span>AGENT<br>PORTRAIT</span>') + '</div>' : '')
       + '<div class="p-ident-fields">'
-      + '<div class="p-ident-names">'
+      + '<div class="p-ident-names' + (sections.agentId ? ' with-id' : '') + '">'
       + field('AGENT NAME', data.AgentName)
+      + (sections.agentId ? field('AGENT ID', data.AgentId) : '')
       + field('PLAYER NAME', data.PlayerName)
       + '</div>'
       + (sections.backStory ? '<div class="p-field"><div class="p-label">AGENT BACK STORY</div>' + prose(data.BackStory) + '</div>' : '')
@@ -144,7 +136,7 @@
   }
 
   function itemSection(sectionKey, label, renderItem, options) {
-    const items = printItems(sectionKey);
+    const items = Sheet.resolveSectionItems(sectionKey);
     return '<section class="p-section">' + sectionTitle(label)
       + (items.length ? items.map((item) => renderItem(item, options)).join('') : emptySection())
       + '</section>';
@@ -184,7 +176,7 @@
   // A single-use item's amount as one tick box per unit (used ones crossed out), to
   // tick off at the table; falls back to "remaining / total" when boxes don't fit.
   function amountMeta(label, extra) {
-    const totalQty = toNumber(extra.qty, 0);
+    const totalQty = toNumber(extra.qty, 0) + toNumber(extra.freeQty, 0);
     const used = clamp(toNumber(extra.used, 0), 0, totalQty);
     if (totalQty > 0 && totalQty <= MAX_TICK_BOXES) {
       let boxes = '';
@@ -197,7 +189,8 @@
   function renderEquipmentItem(item, allEquipment, options) {
     const extra = item.extra;
     const type = extra.type || 'weapon';
-    const typeLabel = ((Sheet.EQUIPMENT_TYPES.filter((t) => t[0] === type)[0]) || ['', 'WEAPON'])[1];
+    // EQUIPMENT_TYPES labels are plural group headings (WEAPONS, THROWABLES…); one item reads singular.
+    const typeLabel = ((Sheet.EQUIPMENT_TYPES.filter((t) => t[0] === type)[0]) || ['', 'WEAPONS'])[1].replace(/S$/, '');
     const meta = [['TYPE', typeLabel]];
     (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey, label]) => {
       if (fieldKey === 'skill') return;
@@ -221,7 +214,7 @@
   }
 
   function renderEquipment(data, options) {
-    const allEquipment = printItems('Equipment');
+    const allEquipment = Sheet.resolveSectionItems('Equipment');
     const loadouts = Sheet.state.loadouts || [];
     const selected = loadouts.filter((loadout) => options.loadoutIds.indexOf(loadout.id) >= 0);
     if (!selected.length) return '';
@@ -245,11 +238,11 @@
 
   /* ==================== document ==================== */
 
-  // Options for the sheet: the saved PDF settings, plus the loadouts picked in the
-  // export dialog when it's open (all loadouts otherwise, e.g. for Ctrl+P).
+  // Options for the active character: the saved global PDF settings, plus the loadouts
+  // picked in the export dialog when it's open (all loadouts otherwise, e.g. for Ctrl+P).
   Sheet.pdfOptions = function pdfOptions() {
-    const pdf = Sheet.pdfSettings || Sheet.normalizePdfSettings(null);
-    const loadoutIds = Sheet.state.pdfDialog ? Sheet.state.pdfDialog.loadoutIds.slice() : (Sheet.state.loadouts || []).map((loadout) => loadout.id);
+    const pdf = (Sheet.settings && Sheet.settings.pdf) || Sheet.normalizePdfSettings(null);
+    const loadoutIds = Sheet.ui.pdfDialog ? Sheet.ui.pdfDialog.loadoutIds.slice() : (Sheet.state.loadouts || []).map((loadout) => loadout.id);
     return { ...pdf, sections: { ...pdf.sections }, loadoutIds: loadoutIds };
   };
 
@@ -279,6 +272,10 @@
     el.innerHTML = Sheet.buildPrintDocument(pendingOptions || Sheet.pdfOptions());
   };
 
+  function characterViewActive() {
+    const characterEl = query('#view-character');
+    return !!(Sheet.state && characterEl && !characterEl.hidden);
+  }
 
   // Browsers use the document title as the suggested PDF filename.
   let savedTitle = null;
@@ -288,9 +285,10 @@
     savedTitle = null;
   }
 
-  // The print stylesheet only swaps the app for #printView while body has .print-character.
+  // The print stylesheet only swaps the app for #printView while body has
+  // .print-character, so printing the roster or Codex still prints those views.
   function preparePrint() {
-    const active = !!Sheet.state;
+    const active = characterViewActive();
     document.body.classList.toggle('print-character', active);
     if (active) Sheet.renderPrintView();
     return active;
