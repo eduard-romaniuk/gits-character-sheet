@@ -17,7 +17,7 @@
         <div class="panel-header"><div class="title">GHOST</div></div>
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
           <div class="col">
-            <span class="label">AWARENESS</span>
+            <button type="action" class="label roll-label" name="act_rollawarness" title="Roll Awareness">AWARENESS</button>
             <div class="step">
               <button type="action" name="act_awarnessdn" aria-label="decrease">&minus;</button>
               <div class="step-value"><input class="step-input" type="text" name="attr_Awarness" value="d6" readonly tabindex="-1"></div>
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="col">
-            <span class="label">PRESENCE</span>
+            <button type="action" class="label roll-label" name="act_rollpresence" title="Roll Presence">PRESENCE</button>
             <div class="step">
               <button type="action" name="act_presencedn" aria-label="decrease">&minus;</button>
               <div class="step-value"><input class="step-input" type="text" name="attr_Presence" value="d6" readonly tabindex="-1"></div>
@@ -38,7 +38,7 @@
         <div class="panel-header"><div class="title">SHELL</div></div>
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
           <div class="col">
-            <span class="label">MUSCLE</span>
+            <button type="action" class="label roll-label" name="act_rollmuscle" title="Roll Muscle">MUSCLE</button>
             <div class="step">
               <button type="action" name="act_muscledn" aria-label="decrease">&minus;</button>
               <div class="step-value"><input class="step-input" type="text" name="attr_Muscle" value="d6" readonly tabindex="-1"></div>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="col">
-            <span class="label">REFLEXES</span>
+            <button type="action" class="label roll-label" name="act_rollreflexes" title="Roll Reflexes">REFLEXES</button>
             <div class="step">
               <button type="action" name="act_reflexesdn" aria-label="decrease">&minus;</button>
               <div class="step-value"><input class="step-input" type="text" name="attr_Reflexes" value="d6" readonly tabindex="-1"></div>
@@ -59,7 +59,7 @@
         <div class="panel-header"><div class="title">CYBERBRAIN</div></div>
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px;padding-top:14px">
           <div class="col">
-            <span class="label">HACKING</span>
+            <button type="action" class="label roll-label" name="act_rollhacking" title="Roll Hacking">HACKING</button>
             <div class="step">
               <button type="action" name="act_hackingdn" aria-label="decrease">&minus;</button>
               <div class="step-value"><input class="step-input" type="text" name="attr_Hacking" value="d6" readonly tabindex="-1"></div>
@@ -603,6 +603,19 @@
     </table>
     <div style="margin-top:6px;font:500 10px/1.6 'IBM Plex Mono',monospace;color:#8a90a0"><span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">⊠</span> perm <span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">⧄</span> temp <span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">□</span> free</div>
     {{/scL1}}
+    {{#result}}
+    <!-- Exploding roll: one row per die the chain reached (unreached dice are computed to 0 and hidden). -->
+    <!-- Values are printed as plain text via rollTotal() checks (1..20) so they can be themed; eN = 1 marks a die that exploded; crit 1/2 = critical success/failure. -->
+    <table style="margin-top:6px;border-collapse:collapse">
+      {{#^rollTotal() computed::d1 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n1}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d1 1}}1{{/rollTotal() computed::d1 1}}{{#rollTotal() computed::d1 2}}2{{/rollTotal() computed::d1 2}}{{#rollTotal() computed::d1 3}}3{{/rollTotal() computed::d1 3}}{{#rollTotal() computed::d1 4}}4{{/rollTotal() computed::d1 4}}{{#rollTotal() computed::d1 5}}5{{/rollTotal() computed::d1 5}}{{#rollTotal() computed::d1 6}}6{{/rollTotal() computed::d1 6}}{{#rollTotal() computed::d1 7}}7{{/rollTotal() computed::d1 7}}{{#rollTotal() computed::d1 8}}8{{/rollTotal() computed::d1 8}}{{#rollTotal() computed::d1 9}}9{{/rollTotal() computed::d1 9}}{{#rollTotal() computed::d1 10}}10{{/rollTotal() computed::d1 10}}{{#rollTotal() computed::d1 11}}11{{/rollTotal() computed::d1 11}}{{#rollTotal() computed::d1 12}}12{{/rollTotal() computed::d1 12}}{{#rollTotal() computed::d1 13}}13{{/rollTotal() computed::d1 13}}{{#rollTotal() computed::d1 14}}14{{/rollTotal() computed::d1 14}}{{#rollTotal() computed::d1 15}}15{{/rollTotal() computed::d1 15}}{{#rollTotal() computed::d1 16}}16{{/rollTotal() computed::d1 16}}{{#rollTotal() computed::d1 17}}17{{/rollTotal() computed::d1 17}}{{#rollTotal() computed::d1 18}}18{{/rollTotal() computed::d1 18}}{{#rollTotal() computed::d1 19}}19{{/rollTotal() computed::d1 19}}{{#rollTotal() computed::d1 20}}20{{/rollTotal() computed::d1 20}}{{#rollTotal() computed::e1 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e1 1}}</td></tr>{{/^rollTotal() computed::d1 0}}
+      {{#^rollTotal() computed::d2 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n2}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d2 1}}1{{/rollTotal() computed::d2 1}}{{#rollTotal() computed::d2 2}}2{{/rollTotal() computed::d2 2}}{{#rollTotal() computed::d2 3}}3{{/rollTotal() computed::d2 3}}{{#rollTotal() computed::d2 4}}4{{/rollTotal() computed::d2 4}}{{#rollTotal() computed::d2 5}}5{{/rollTotal() computed::d2 5}}{{#rollTotal() computed::d2 6}}6{{/rollTotal() computed::d2 6}}{{#rollTotal() computed::d2 7}}7{{/rollTotal() computed::d2 7}}{{#rollTotal() computed::d2 8}}8{{/rollTotal() computed::d2 8}}{{#rollTotal() computed::d2 9}}9{{/rollTotal() computed::d2 9}}{{#rollTotal() computed::d2 10}}10{{/rollTotal() computed::d2 10}}{{#rollTotal() computed::d2 11}}11{{/rollTotal() computed::d2 11}}{{#rollTotal() computed::d2 12}}12{{/rollTotal() computed::d2 12}}{{#rollTotal() computed::d2 13}}13{{/rollTotal() computed::d2 13}}{{#rollTotal() computed::d2 14}}14{{/rollTotal() computed::d2 14}}{{#rollTotal() computed::d2 15}}15{{/rollTotal() computed::d2 15}}{{#rollTotal() computed::d2 16}}16{{/rollTotal() computed::d2 16}}{{#rollTotal() computed::d2 17}}17{{/rollTotal() computed::d2 17}}{{#rollTotal() computed::d2 18}}18{{/rollTotal() computed::d2 18}}{{#rollTotal() computed::d2 19}}19{{/rollTotal() computed::d2 19}}{{#rollTotal() computed::d2 20}}20{{/rollTotal() computed::d2 20}}{{#rollTotal() computed::e2 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e2 1}}</td></tr>{{/^rollTotal() computed::d2 0}}
+      {{#^rollTotal() computed::d3 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n3}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d3 1}}1{{/rollTotal() computed::d3 1}}{{#rollTotal() computed::d3 2}}2{{/rollTotal() computed::d3 2}}{{#rollTotal() computed::d3 3}}3{{/rollTotal() computed::d3 3}}{{#rollTotal() computed::d3 4}}4{{/rollTotal() computed::d3 4}}{{#rollTotal() computed::d3 5}}5{{/rollTotal() computed::d3 5}}{{#rollTotal() computed::d3 6}}6{{/rollTotal() computed::d3 6}}{{#rollTotal() computed::d3 7}}7{{/rollTotal() computed::d3 7}}{{#rollTotal() computed::d3 8}}8{{/rollTotal() computed::d3 8}}{{#rollTotal() computed::d3 9}}9{{/rollTotal() computed::d3 9}}{{#rollTotal() computed::d3 10}}10{{/rollTotal() computed::d3 10}}{{#rollTotal() computed::d3 11}}11{{/rollTotal() computed::d3 11}}{{#rollTotal() computed::d3 12}}12{{/rollTotal() computed::d3 12}}{{#rollTotal() computed::d3 13}}13{{/rollTotal() computed::d3 13}}{{#rollTotal() computed::d3 14}}14{{/rollTotal() computed::d3 14}}{{#rollTotal() computed::d3 15}}15{{/rollTotal() computed::d3 15}}{{#rollTotal() computed::d3 16}}16{{/rollTotal() computed::d3 16}}{{#rollTotal() computed::d3 17}}17{{/rollTotal() computed::d3 17}}{{#rollTotal() computed::d3 18}}18{{/rollTotal() computed::d3 18}}{{#rollTotal() computed::d3 19}}19{{/rollTotal() computed::d3 19}}{{#rollTotal() computed::d3 20}}20{{/rollTotal() computed::d3 20}}{{#rollTotal() computed::e3 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e3 1}}</td></tr>{{/^rollTotal() computed::d3 0}}
+      {{#^rollTotal() computed::d4 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n4}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d4 1}}1{{/rollTotal() computed::d4 1}}{{#rollTotal() computed::d4 2}}2{{/rollTotal() computed::d4 2}}{{#rollTotal() computed::d4 3}}3{{/rollTotal() computed::d4 3}}{{#rollTotal() computed::d4 4}}4{{/rollTotal() computed::d4 4}}{{#rollTotal() computed::d4 5}}5{{/rollTotal() computed::d4 5}}{{#rollTotal() computed::d4 6}}6{{/rollTotal() computed::d4 6}}{{#rollTotal() computed::d4 7}}7{{/rollTotal() computed::d4 7}}{{#rollTotal() computed::d4 8}}8{{/rollTotal() computed::d4 8}}{{#rollTotal() computed::d4 9}}9{{/rollTotal() computed::d4 9}}{{#rollTotal() computed::d4 10}}10{{/rollTotal() computed::d4 10}}{{#rollTotal() computed::d4 11}}11{{/rollTotal() computed::d4 11}}{{#rollTotal() computed::d4 12}}12{{/rollTotal() computed::d4 12}}{{#rollTotal() computed::d4 13}}13{{/rollTotal() computed::d4 13}}{{#rollTotal() computed::d4 14}}14{{/rollTotal() computed::d4 14}}{{#rollTotal() computed::d4 15}}15{{/rollTotal() computed::d4 15}}{{#rollTotal() computed::d4 16}}16{{/rollTotal() computed::d4 16}}{{#rollTotal() computed::d4 17}}17{{/rollTotal() computed::d4 17}}{{#rollTotal() computed::d4 18}}18{{/rollTotal() computed::d4 18}}{{#rollTotal() computed::d4 19}}19{{/rollTotal() computed::d4 19}}{{#rollTotal() computed::d4 20}}20{{/rollTotal() computed::d4 20}}{{#rollTotal() computed::e4 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e4 1}}</td></tr>{{/^rollTotal() computed::d4 0}}
+      {{#^rollTotal() computed::d5 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n5}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d5 1}}1{{/rollTotal() computed::d5 1}}{{#rollTotal() computed::d5 2}}2{{/rollTotal() computed::d5 2}}{{#rollTotal() computed::d5 3}}3{{/rollTotal() computed::d5 3}}{{#rollTotal() computed::d5 4}}4{{/rollTotal() computed::d5 4}}{{#rollTotal() computed::d5 5}}5{{/rollTotal() computed::d5 5}}{{#rollTotal() computed::d5 6}}6{{/rollTotal() computed::d5 6}}{{#rollTotal() computed::d5 7}}7{{/rollTotal() computed::d5 7}}{{#rollTotal() computed::d5 8}}8{{/rollTotal() computed::d5 8}}{{#rollTotal() computed::d5 9}}9{{/rollTotal() computed::d5 9}}{{#rollTotal() computed::d5 10}}10{{/rollTotal() computed::d5 10}}{{#rollTotal() computed::d5 11}}11{{/rollTotal() computed::d5 11}}{{#rollTotal() computed::d5 12}}12{{/rollTotal() computed::d5 12}}{{#rollTotal() computed::d5 13}}13{{/rollTotal() computed::d5 13}}{{#rollTotal() computed::d5 14}}14{{/rollTotal() computed::d5 14}}{{#rollTotal() computed::d5 15}}15{{/rollTotal() computed::d5 15}}{{#rollTotal() computed::d5 16}}16{{/rollTotal() computed::d5 16}}{{#rollTotal() computed::d5 17}}17{{/rollTotal() computed::d5 17}}{{#rollTotal() computed::d5 18}}18{{/rollTotal() computed::d5 18}}{{#rollTotal() computed::d5 19}}19{{/rollTotal() computed::d5 19}}{{#rollTotal() computed::d5 20}}20{{/rollTotal() computed::d5 20}}{{#rollTotal() computed::e5 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e5 1}}</td></tr>{{/^rollTotal() computed::d5 0}}
+      {{#^rollTotal() computed::d6 0}}<tr><td style="padding:2px 10px 2px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">{{n6}}</td><td style="padding:2px 0;font:600 13px/1.4 'IBM Plex Mono',monospace;color:#cccccc">{{#rollTotal() computed::d6 1}}1{{/rollTotal() computed::d6 1}}{{#rollTotal() computed::d6 2}}2{{/rollTotal() computed::d6 2}}{{#rollTotal() computed::d6 3}}3{{/rollTotal() computed::d6 3}}{{#rollTotal() computed::d6 4}}4{{/rollTotal() computed::d6 4}}{{#rollTotal() computed::d6 5}}5{{/rollTotal() computed::d6 5}}{{#rollTotal() computed::d6 6}}6{{/rollTotal() computed::d6 6}}{{#rollTotal() computed::d6 7}}7{{/rollTotal() computed::d6 7}}{{#rollTotal() computed::d6 8}}8{{/rollTotal() computed::d6 8}}{{#rollTotal() computed::d6 9}}9{{/rollTotal() computed::d6 9}}{{#rollTotal() computed::d6 10}}10{{/rollTotal() computed::d6 10}}{{#rollTotal() computed::d6 11}}11{{/rollTotal() computed::d6 11}}{{#rollTotal() computed::d6 12}}12{{/rollTotal() computed::d6 12}}{{#rollTotal() computed::d6 13}}13{{/rollTotal() computed::d6 13}}{{#rollTotal() computed::d6 14}}14{{/rollTotal() computed::d6 14}}{{#rollTotal() computed::d6 15}}15{{/rollTotal() computed::d6 15}}{{#rollTotal() computed::d6 16}}16{{/rollTotal() computed::d6 16}}{{#rollTotal() computed::d6 17}}17{{/rollTotal() computed::d6 17}}{{#rollTotal() computed::d6 18}}18{{/rollTotal() computed::d6 18}}{{#rollTotal() computed::d6 19}}19{{/rollTotal() computed::d6 19}}{{#rollTotal() computed::d6 20}}20{{/rollTotal() computed::d6 20}}{{#rollTotal() computed::e6 1}}<span style="color:#93b7b5;margin-left:6px">&#8593; max</span>{{/rollTotal() computed::e6 1}}</td></tr>{{/^rollTotal() computed::d6 0}}
+    </table>
+    <div style="margin-top:6px;padding-top:6px;border-top:1px solid #424650;font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#93b7b5">{{#rollTotal() computed::crit 1}}<span style="float:right;margin-top:4px;padding:2px 6px;border:1px solid #a3be8c;border-radius:2px;font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#a3be8c">CRITICAL SUCCESS</span>{{/rollTotal() computed::crit 1}}{{#rollTotal() computed::crit 2}}<span style="float:right;margin-top:4px;padding:2px 6px;border:1px solid #bf6165;border-radius:2px;font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#bf6165">CRITICAL FAILURE</span>{{/rollTotal() computed::crit 2}}RESULT <span style="font:600 20px/1 'IBM Plex Mono',monospace;letter-spacing:0;color:#cccccc;margin-left:8px">{{#rollTotal() computed::result 1}}1{{/rollTotal() computed::result 1}}{{#rollTotal() computed::result 2}}2{{/rollTotal() computed::result 2}}{{#rollTotal() computed::result 3}}3{{/rollTotal() computed::result 3}}{{#rollTotal() computed::result 4}}4{{/rollTotal() computed::result 4}}{{#rollTotal() computed::result 5}}5{{/rollTotal() computed::result 5}}{{#rollTotal() computed::result 6}}6{{/rollTotal() computed::result 6}}{{#rollTotal() computed::result 7}}7{{/rollTotal() computed::result 7}}{{#rollTotal() computed::result 8}}8{{/rollTotal() computed::result 8}}{{#rollTotal() computed::result 9}}9{{/rollTotal() computed::result 9}}{{#rollTotal() computed::result 10}}10{{/rollTotal() computed::result 10}}{{#rollTotal() computed::result 11}}11{{/rollTotal() computed::result 11}}{{#rollTotal() computed::result 12}}12{{/rollTotal() computed::result 12}}{{#rollTotal() computed::result 13}}13{{/rollTotal() computed::result 13}}{{#rollTotal() computed::result 14}}14{{/rollTotal() computed::result 14}}{{#rollTotal() computed::result 15}}15{{/rollTotal() computed::result 15}}{{#rollTotal() computed::result 16}}16{{/rollTotal() computed::result 16}}{{#rollTotal() computed::result 17}}17{{/rollTotal() computed::result 17}}{{#rollTotal() computed::result 18}}18{{/rollTotal() computed::result 18}}{{#rollTotal() computed::result 19}}19{{/rollTotal() computed::result 19}}{{#rollTotal() computed::result 20}}20{{/rollTotal() computed::result 20}}</span></div>
+    {{/result}}
     {{#desc}}<div style="margin-top:8px">{{desc}}</div>{{/desc}}
     {{#rank1}}<div style="margin-top:8px"><div style="font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#93b7b5">RANK 1</div><div style="margin-top:2px">{{rank1}}</div></div>{{/rank1}}
     {{#rank2}}<div style="margin-top:8px"><div style="font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#93b7b5">RANK 2</div><div style="margin-top:2px">{{rank2}}</div></div>{{/rank2}}
@@ -1096,6 +1109,58 @@
       card.scL1 = card.scR1 = SC_GLYPHS.perm;  // D4 is always marked on the sheet
       postCard(card);
     });
+  });
+
+  /* -------- attribute rolls: exploding dice -------- */
+
+  // Roll the attribute's die; on its max, step up to the next die and roll again, up to D20.
+  // The result is the highest value rolled. Every die the chain could reach is rolled up front
+  // (one inline roll each) and the chain is resolved here: dice it never reached are set to 0,
+  // which the template hides.
+  var ROLL_ACTIONS = [
+    ['rollawarness', 'Awarness', 'Awareness'],
+    ['rollpresence', 'Presence', 'Presence'],
+    ['rollmuscle', 'Muscle', 'Muscle'],
+    ['rollreflexes', 'Reflexes', 'Reflexes'],
+    ['rollhacking', 'Hacking', 'Hacking']
+  ];
+
+  function rollExploding(attrKey, title) {
+    getAttrs([attrKey], function (values) {
+      var start = DICE_STEPS.indexOf(values[attrKey] || 'd6');
+      if (start < 0) start = 1;
+      var chain = DICE_STEPS.slice(start);
+      // eN and crit are placeholder rolls ([[0]]) only so they can carry computed flags.
+      var roll = '&{template:gits} {{charname=@{character_name}}} {{kicker=ROLL}} {{name=' + title + '}}'
+        + ' {{result=[[0]]}} {{crit=[[0]]}}';
+      chain.forEach(function (die, i) {
+        var n = i + 1;
+        roll += ' {{n' + n + '=' + die.toUpperCase() + '}} {{d' + n + '=[[1' + die + ']]}} {{e' + n + '=[[0]]}}';
+      });
+      startRoll(roll, function (results) {
+        var computed = {}, best = 0, reached = true;
+        chain.forEach(function (die, i) {
+          var n = i + 1;
+          computed['e' + n] = 0;
+          if (!reached) { computed['d' + n] = 0; return; }
+          var value = results.results['d' + n].result;
+          computed['d' + n] = value;  // the template reads computed::dN to show/print each row
+          best = Math.max(best, value);
+          reached = value === parseInt(die.slice(1), 10);  // a max roll explodes into the next die
+          if (reached && die !== 'd20') computed['e' + n] = 1;  // nothing explodes past D20
+        });
+        computed.result = best;
+        // crit: 1 = critical success (a 20 on the D20, first die or reached by exploding),
+        // 2 = critical failure (a 1 on the first die; an exploded roll can never be one).
+        var first = computed.d1;
+        computed.crit = best === 20 ? 1 : (first === 1 ? 2 : 0);
+        finishRoll(results.rollId, computed);
+      });
+    });
+  }
+
+  ROLL_ACTIONS.forEach(function (entry) {
+    on('clicked:' + entry[0], function () { rollExploding(entry[1], entry[2]); });
   });
 
 })();

@@ -181,6 +181,23 @@
   letter-spacing: .12em;
   color: var(--accent);
 }
+/* Attribute labels double as roll buttons (exploding dice, see clicked:roll* in the worker). */
+.sheet .label.roll-label {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.sheet .label.roll-label::after {
+  content: '\2684';  /* die face */
+  font: 400 13px/1 'Segoe UI Symbol', 'DejaVu Sans', sans-serif;
+  margin-left: 5px;
+  color: var(--mute);
+}
+.sheet .label.roll-label:hover,
+.sheet .label.roll-label:hover::after {
+  color: var(--ink);
+}
 .sheet .hint {
   font: 500 10px/1 var(--mono);
   letter-spacing: .1em;
