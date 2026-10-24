@@ -98,8 +98,8 @@
 
 /* ==================== tabs ==================== */
 
-/* Tab bar reuses .chips/.chip (radio attr_tab, persisted per character);
-   the checked state comes from .chip:has(input:checked). */
+/* Tab bar reuses .chips/.chip (radio attr_tab, persisted per character); */
+/* the checked state comes from .chip:has(input:checked). */
 .sheet .chip.tab {
   min-height: 40px;
   padding: 0 18px;
@@ -116,8 +116,8 @@
 .sheet .wrap:has(input[name="attr_tab"][value="gear"]:checked) .tab-gear {
   display: flex;
 }
-/* Panels sharing a row are stretched to the same height. Only the tab's own
-   layout rows; grids nested inside panels keep align-items: start. */
+/* Panels sharing a row are stretched to the same height. Only the tab's own */
+/* layout rows; grids nested inside panels keep align-items: start. */
 .sheet .tab-pane > .grid {
   align-items: stretch;
 }
@@ -147,9 +147,9 @@
   letter-spacing: .14em;
   color: var(--ink);
 }
-/* Roll20's base CSS styles both a Bootstrap-like `.label` class (centered,
-   padded) and bare `label` elements (margin, width, padding) — reset both so
-   <span class="label"> and <label class="label"> render alike. */
+/* Roll20's base CSS styles both a Bootstrap-like `.label` class (centered, */
+/* padded) and bare `label` elements (margin, width, padding) — reset both so */
+/* <span class="label"> and <label class="label"> render alike. */
 .sheet .label {
   display: block;
   width: auto;
@@ -531,6 +531,9 @@
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .act-collapse {
   display: inline-flex;
 }
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-chat {
+  display: none;
+}
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) > *:not(.row-head):not(.uistate) {
   display: none;
 }
@@ -602,9 +605,9 @@
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .col:has(.field:placeholder-shown) {
   display: none;
 }
-/* Expanded should show only extra detail not already covered by the row's
-   meta line (mirrors the website's read-only `.notes` panel, which never repeats
-   the name/type/rank/cost/stat fields that are already summarized inline). */
+/* Expanded should show only extra detail not already covered by the row's */
+/* meta line (mirrors the website's read-only `.notes` panel, which never repeats */
+/* the name/type/rank/cost/stat fields that are already summarized inline). */
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .summary,
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-armor,
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-attachment,
