@@ -35,6 +35,27 @@
 .sheet button {
   font-family: inherit;
 }
+/* Roll20's icon buttons (e.g. the trash can on rows in Modify mode) are glyphs in the Pictos font; */
+/* without this, .sheet button / .sheet .btn win and the raw "#" shows instead of the icon. */
+.sheet .pictos,
+.sheet .btn.pictos {
+  font-family: Pictos;
+}
+/* Roll20's own "+Add" label has no space; hide it and draw "+ Add" instead. */
+.sheet .btn.repcontrol_add {
+  font-size: 0;
+}
+.sheet .btn.repcontrol_add::before {
+  content: '+ Add';
+  font-size: 11px;
+  letter-spacing: .12em;  /* the button's own .12em is 0 at font-size 0 */
+}
+/* Delete button in Modify mode: red on hover as a "this deletes" cue (.sheet .btn would otherwise hide Roll20's own red). */
+.sheet .btn.repcontrol_del:hover {
+  color: var(--red);
+  border-color: var(--red);
+  background: #372f3b;  /* --red at ~12% over --field, kept opaque: the button sits on top of the row's EDIT label */
+}
 
 .sheet .wrap {
   max-width: 1180px;
@@ -513,6 +534,12 @@
 }
 .sheet .row-icon:hover {
   color: var(--accent);
+}
+/* Icon variant (Pictos glyph: "w" speech bubble = chat, "p" pencil = edit, "3" checkmark = save). */
+.sheet .row-icon.row-glyph {
+  font: 400 14px/1 Pictos;
+  letter-spacing: 0;
+  padding: 4px 2px 4px 8px;
 }
 .sheet .act-save,
 .sheet .act-edit,

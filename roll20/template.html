@@ -118,6 +118,9 @@
       <div class="panel" style="display:flex;flex-direction:column">
         <div class="panel-header">
           <div class="title">SYNTHESIS CONFLICT</div>
+          <div class="header-actions">
+            <button type="action" class="btn small" name="act_scchat" title="Send to chat">CHAT</button>
+          </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;padding:14px 0 12px">
           <input class="field" type="text" name="attr_Aspect1" placeholder="Aspect" aria-label="First aspect">
@@ -179,6 +182,7 @@
       <div class="panel">
         <div class="panel-header"><div class="title">HIT POINTS &amp; ARMOR</div>
           <div class="header-actions">
+            <button type="action" class="btn small" name="act_hpchat" title="Send to chat">CHAT</button>
             <button type="action" class="btn small" name="act_hpclear" aria-label="Clear all hit point marks">CLEAR</button>
           </div>
         </div>
@@ -308,9 +312,9 @@
               <button type="action" class="row-toggle act-expand" name="act_expand" aria-label="expand">&#9656;</button>
               <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
               <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
-              <button type="action" class="row-icon act-chat" name="act_chat" title="Send to chat">CHAT</button>
-              <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
-              <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
+              <button type="action" class="row-icon row-glyph pictos act-chat" name="act_chat" title="Send to chat" aria-label="Send to chat">w</button>
+              <button type="action" class="row-icon row-glyph pictos act-edit" name="act_edit" title="Edit" aria-label="Edit">p</button>
+              <button type="action" class="row-icon row-glyph pictos act-save" name="act_save" title="Save" aria-label="Save">3</button>
             </div>
             <div class="col summary">
               <label class="label">NAME</label>
@@ -338,9 +342,9 @@
               <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
               <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
               <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
-              <button type="action" class="row-icon act-chat" name="act_chat" title="Send to chat">CHAT</button>
-              <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
-              <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
+              <button type="action" class="row-icon row-glyph pictos act-chat" name="act_chat" title="Send to chat" aria-label="Send to chat">w</button>
+              <button type="action" class="row-icon row-glyph pictos act-edit" name="act_edit" title="Edit" aria-label="Edit">p</button>
+              <button type="action" class="row-icon row-glyph pictos act-save" name="act_save" title="Save" aria-label="Save">3</button>
             </div>
             <div class="dialog-row summary">
               <div class="col" style="flex:2 1 200px">
@@ -380,9 +384,9 @@
               <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
               <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
               <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
-              <button type="action" class="row-icon act-chat" name="act_chat" title="Send to chat">CHAT</button>
-              <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
-              <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
+              <button type="action" class="row-icon row-glyph pictos act-chat" name="act_chat" title="Send to chat" aria-label="Send to chat">w</button>
+              <button type="action" class="row-icon row-glyph pictos act-edit" name="act_edit" title="Edit" aria-label="Edit">p</button>
+              <button type="action" class="row-icon row-glyph pictos act-save" name="act_save" title="Save" aria-label="Save">3</button>
             </div>
             <div class="dialog-row summary">
               <div class="col" style="flex:3 1 200px">
@@ -423,9 +427,9 @@
               <button type="action" class="row-toggle act-collapse" name="act_collapse" aria-label="collapse">&#9662;</button>
               <input class="row-name-input" type="text" name="attr_name" readonly tabindex="-1">
               <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
-              <button type="action" class="row-icon act-chat" name="act_chat" title="Send to chat">CHAT</button>
-              <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
-              <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
+              <button type="action" class="row-icon row-glyph pictos act-chat" name="act_chat" title="Send to chat" aria-label="Send to chat">w</button>
+              <button type="action" class="row-icon row-glyph pictos act-edit" name="act_edit" title="Edit" aria-label="Edit">p</button>
+              <button type="action" class="row-icon row-glyph pictos act-save" name="act_save" title="Save" aria-label="Save">3</button>
             </div>
             <div class="dialog-row summary">
               <div class="col" style="flex:3 1 200px">
@@ -488,9 +492,9 @@
                 <button type="action" class="row-qty-btn" name="act_userestore" aria-label="restore one">+</button>
               </div>
               <input class="row-meta-input" type="text" name="attr_summary" readonly tabindex="-1">
-              <button type="action" class="row-icon act-chat" name="act_chat" title="Send to chat">CHAT</button>
-              <button type="action" class="row-icon act-edit" name="act_edit">EDIT</button>
-              <button type="action" class="row-icon act-save" name="act_save">SAVE</button>
+              <button type="action" class="row-icon row-glyph pictos act-chat" name="act_chat" title="Send to chat" aria-label="Send to chat">w</button>
+              <button type="action" class="row-icon row-glyph pictos act-edit" name="act_edit" title="Edit" aria-label="Edit">p</button>
+              <button type="action" class="row-icon row-glyph pictos act-save" name="act_save" title="Save" aria-label="Save">3</button>
             </div>
             <div class="dialog-row eq-type-row summary">
               <label class="chip"><input type="radio" class="sr-only" name="attr_type" value="weapon" checked><span>WEAPON</span></label>
@@ -573,9 +577,32 @@
     <div style="font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#93b7b5">
       <span style="float:right;margin-left:8px;font-weight:500;letter-spacing:0;color:#8a90a0">{{charname}}</span>{{kicker}}
     </div>
-    <div style="font:600 15px/1.3 'IBM Plex Sans',system-ui,sans-serif;color:#cccccc;margin-top:2px;padding-bottom:6px;border-bottom:1px solid #424650">{{name}}</div>
+    {{^name2}}<div style="font:600 15px/1.3 'IBM Plex Sans',system-ui,sans-serif;color:#cccccc;margin-top:2px;padding-bottom:6px;border-bottom:1px solid #424650">{{name}}</div>{{/name2}}
+    <!-- Two-part title (e.g. the conflict's aspects): first part, "vs", second part. -->
+    {{#name2}}<div style="font:600 15px/1.3 'IBM Plex Sans',system-ui,sans-serif;color:#cccccc;margin-top:2px">{{name}}</div><div style="font:500 10px/1.6 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#8a90a0">vs</div><div style="font:600 15px/1.3 'IBM Plex Sans',system-ui,sans-serif;color:#cccccc;padding-bottom:6px;border-bottom:1px solid #424650">{{name2}}</div>{{/name2}}
     {{#meta}}<div style="font:500 11px/1.5 'IBM Plex Mono',monospace;color:#8a90a0;margin-top:6px">{{meta}}</div>{{/meta}}
     {{#info}}<div style="font:500 11px/1.5 'IBM Plex Mono',monospace;color:#8a90a0;margin-top:2px">{{info}}</div>{{/info}}
+    {{#hp1_label}}
+    <!-- Hit points: colored circles like the sheet (red damage, yellow stun; one stroke temporary, X permanent). -->
+    <table style="margin-top:6px;border-collapse:collapse">
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp1_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp1_p}}</span><span style="color:#bf6165">{{hp1_t}}</span><span style="color:#d9b34d">{{hp1_sp}}</span><span style="color:#d9b34d">{{hp1_st}}</span><span style="color:#697083">{{hp1_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp1_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp1_status}}</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp2_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp2_p}}</span><span style="color:#bf6165">{{hp2_t}}</span><span style="color:#d9b34d">{{hp2_sp}}</span><span style="color:#d9b34d">{{hp2_st}}</span><span style="color:#697083">{{hp2_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp2_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp2_status}}</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp3_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp3_p}}</span><span style="color:#bf6165">{{hp3_t}}</span><span style="color:#d9b34d">{{hp3_sp}}</span><span style="color:#d9b34d">{{hp3_st}}</span><span style="color:#697083">{{hp3_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp3_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp3_status}}</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp4_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp4_p}}</span><span style="color:#bf6165">{{hp4_t}}</span><span style="color:#d9b34d">{{hp4_sp}}</span><span style="color:#d9b34d">{{hp4_st}}</span><span style="color:#697083">{{hp4_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp4_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp4_status}}</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp5_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp5_p}}</span><span style="color:#bf6165">{{hp5_t}}</span><span style="color:#d9b34d">{{hp5_sp}}</span><span style="color:#d9b34d">{{hp5_st}}</span><span style="color:#697083">{{hp5_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp5_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp5_status}}</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;color:#8a90a0;white-space:nowrap">{{hp6_label}}</td><td style="padding:3px 8px 3px 0;font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;white-space:nowrap"><span style="color:#bf6165">{{hp6_p}}</span><span style="color:#bf6165">{{hp6_t}}</span><span style="color:#d9b34d">{{hp6_sp}}</span><span style="color:#d9b34d">{{hp6_st}}</span><span style="color:#697083">{{hp6_f}}</span></td><td style="padding:3px 8px 3px 0;font:500 11px/1.4 'IBM Plex Mono',monospace;text-align:right">{{hp6_ar}}</td><td style="padding:3px 0;font:600 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.06em;color:#bf6165">{{hp6_status}}</td></tr>
+    </table>
+    <div style="margin-top:6px;font:500 10px/1.6 'IBM Plex Mono',monospace;color:#8a90a0"><span style="font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#bf6165">⊗</span> perm <span style="font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#bf6165">⊘</span> temp <span style="font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#d9b34d">⊗⊘</span> stun <span style="font:400 15px/1 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#697083">○</span> free · number = armor</div>
+    {{/hp1_label}}
+    {{#scL1}}
+    <!-- Synthesis conflict, horizontal: first aspect's marks on top, second aspect's below (same order as the title). -->
+    <table style="margin-top:8px;border-collapse:collapse">
+      <tr><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scL1}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scL2}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scL3}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scL4}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scL5}}</td></tr>
+      <tr><td style="padding:1px 7px;text-align:center;font:500 10px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">D4</td><td style="padding:1px 7px;text-align:center;font:500 10px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">D6</td><td style="padding:1px 7px;text-align:center;font:500 10px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">D8</td><td style="padding:1px 7px;text-align:center;font:500 10px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">D10</td><td style="padding:1px 7px;text-align:center;font:500 10px/1.4 'IBM Plex Mono',monospace;color:#8a90a0">D12</td></tr>
+      <tr><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scR1}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scR2}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scR3}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scR4}}</td><td style="padding:1px 7px;text-align:center;font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">{{scR5}}</td></tr>
+    </table>
+    <div style="margin-top:6px;font:500 10px/1.6 'IBM Plex Mono',monospace;color:#8a90a0"><span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">⊠</span> perm <span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">⧄</span> temp <span style="font:400 17px/1.2 'Segoe UI Symbol','DejaVu Sans',sans-serif;color:#cccccc">□</span> free</div>
+    {{/scL1}}
     {{#desc}}<div style="margin-top:8px">{{desc}}</div>{{/desc}}
     {{#rank1}}<div style="margin-top:8px"><div style="font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#93b7b5">RANK 1</div><div style="margin-top:2px">{{rank1}}</div></div>{{/rank1}}
     {{#rank2}}<div style="margin-top:8px"><div style="font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#93b7b5">RANK 2</div><div style="margin-top:2px">{{rank2}}</div></div>{{/rank2}}
@@ -981,7 +1008,25 @@
       }
     }
   };
-  var CHAT_FIELD_ORDER = ['kicker', 'name', 'meta', 'info', 'desc', 'rank1', 'rank2', 'rank3', 'rank4', 'rank5'];
+  // hpN_* fields feed the hit point table (one row per hit location).
+  var HP_ROW_FIELDS = ['label', 'p', 't', 'sp', 'st', 'f', 'ar', 'status'];
+  // scL1..5 / scR1..5 feed the synthesis conflict table (D4 up to D12).
+  var CHAT_FIELD_ORDER = ['kicker', 'name', 'name2', 'meta', 'info']
+    .concat([1, 2, 3, 4, 5, 6].reduce(function (keys, n) {
+      return keys.concat(HP_ROW_FIELDS.map(function (field) { return 'hp' + n + '_' + field; }));
+    }, []))
+    .concat(['scL1', 'scL2', 'scL3', 'scL4', 'scL5', 'scR1', 'scR2', 'scR3', 'scR4', 'scR5',
+      'desc', 'rank1', 'rank2', 'rank3', 'rank4', 'rank5']);
+
+  function postCard(card) {
+    // The chat speaker is whatever the "As:" dropdown says, so the card names the character itself.
+    var roll = '&{template:gits} {{charname=@{character_name}}}';
+    CHAT_FIELD_ORDER.forEach(function (key) {
+      var text = chatText(card[key]);
+      if (text) roll += ' {{' + key + '=' + text + '}}';
+    });
+    startRoll(roll, function (results) { finishRoll(results.rollId); });
+  }
 
   function sendRowToChat(section, eventInfo) {
     var config = CHAT_SECTIONS[section];
@@ -992,18 +1037,65 @@
       config.fields.forEach(function (field) { rowValues[field] = values[prefix + '_' + field]; });
       var card = config.build(rowValues);
       card.name = rowValues.name || '(unnamed)';
-      // The chat speaker is whatever the "As:" dropdown says, so the card names the character itself.
-      var roll = '&{template:gits} {{charname=@{character_name}}}';
-      CHAT_FIELD_ORDER.forEach(function (key) {
-        var text = chatText(card[key]);
-        if (text) roll += ' {{' + key + '=' + text + '}}';
-      });
-      startRoll(roll, function (results) { finishRoll(results.rollId); });
+      postCard(card);
     });
   }
 
   Object.keys(CHAT_SECTIONS).forEach(function (section) {
     on('clicked:repeating_' + section + ':chat', function (eventInfo) { sendRowToChat(section, eventInfo); });
+  });
+
+  /* -------- hit points & armor / synthesis conflict summaries to chat -------- */
+
+  var SC_GLYPHS = { '': '□', temp: '⧄', perm: '⊠' };
+  // Hit box state -> hpN_* field holding its glyphs. The template colours each field
+  // (red damage, yellow stun), so boxes come out grouped by severity.
+  var HP_STATE_FIELDS = { perm: 'p', temp: 't', 'stun-perm': 'sp', 'stun-temp': 'st', '': 'f' };
+  var HP_STATE_GLYPHS = { perm: '⊗', temp: '⊘', 'stun-perm': '⊗', 'stun-temp': '⊘', '': '○' };
+  var HIT_LOCATIONS = [
+    ['HEAD', 'Head', 2], ['TORSO', 'Torso', 4], ['R ARM', 'RightArm', 3],
+    ['L ARM', 'LeftArm', 3], ['R LEG', 'RightLeg', 3], ['L LEG', 'LeftLeg', 3]
+  ];
+  var CONFLICT_DICE = [6, 8, 10, 12];  // D4 is fixed, see clicked:scchat
+
+  on('clicked:hpchat', function () {
+    var fields = [];
+    HIT_LOCATIONS.forEach(function (loc) {
+      fields.push(loc[1] + '_Armor');
+      for (var i = 0; i < loc[2]; i++) fields.push('hp_' + loc[1] + '_' + i);
+    });
+    getAttrs(fields, function (values) {
+      var card = { kicker: 'STATUS', name: 'Hit Points & Armor' };
+      HIT_LOCATIONS.forEach(function (loc, index) {
+        var row = 'hp' + (index + 1) + '_', permCount = 0;
+        card[row + 'label'] = loc[0];
+        for (var i = 0; i < loc[2]; i++) {
+          var state = values['hp_' + loc[1] + '_' + i] || '';
+          if (!HP_STATE_FIELDS.hasOwnProperty(state)) state = '';
+          card[row + HP_STATE_FIELDS[state]] = (card[row + HP_STATE_FIELDS[state]] || '') + HP_STATE_GLYPHS[state];
+          if (state === 'perm') permCount++;
+        }
+        card[row + 'ar'] = String(parseInt(values[loc[1] + '_Armor'], 10) || 0);
+        // Same rule as the website: only 'perm' boxes count toward Injured/Destroyed.
+        card[row + 'status'] = permCount === 0 ? '' : (permCount === loc[2] ? 'DESTROYED' : 'INJURED');
+      });
+      postCard(card);
+    });
+  });
+
+  on('clicked:scchat', function () {
+    var fields = ['Aspect1', 'Aspect2', 'SC_Notes'];
+    CONFLICT_DICE.forEach(function (size) { fields.push('sc_L' + size, 'sc_R' + size); });
+    getAttrs(fields, function (values) {
+      var aspects = [values.Aspect1, values.Aspect2].map(function (a) { return (a || '').trim() || '?'; });
+      var card = { kicker: 'SYNTHESIS CONFLICT', name: aspects[0], name2: aspects[1], desc: values.SC_Notes };
+      CONFLICT_DICE.forEach(function (size, index) {
+        card['scL' + (index + 2)] = SC_GLYPHS[values['sc_L' + size] || ''] || SC_GLYPHS[''];
+        card['scR' + (index + 2)] = SC_GLYPHS[values['sc_R' + size] || ''] || SC_GLYPHS[''];
+      });
+      card.scL1 = card.scR1 = SC_GLYPHS.perm;  // D4 is always marked on the sheet
+      postCard(card);
+    });
   });
 
 })();
