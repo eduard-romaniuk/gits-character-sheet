@@ -558,6 +558,10 @@
   letter-spacing: 0;
   padding: 4px 2px 4px 8px;
 }
+/* Pictos has no die, so the roll icon uses a symbol font. */
+.sheet .row-icon.row-glyph.roll-glyph {
+  font: 400 15px/1 'Segoe UI Symbol', 'DejaVu Sans', sans-serif;
+}
 .sheet .act-save,
 .sheet .act-edit,
 .sheet .act-expand,
@@ -575,7 +579,8 @@
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .act-collapse {
   display: inline-flex;
 }
-.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-chat {
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-chat,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-roll {
   display: none;
 }
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) > *:not(.row-head):not(.uistate) {
