@@ -16,11 +16,56 @@
 
   Sheet.slugName = slug;
 
+  // A character file that stands on its own: every library-linked item also carries a
+  // copy of its Codex definition (`def`, with its group's name), so it can be imported
+  // into a browser whose Codex doesn't have those items (a GM's, or an empty site).
+  Sheet.buildPortableCharacter = function buildPortableCharacter(blob) {
+    const portable = JSON.parse(JSON.stringify(blob));
+    portable.portable = 1;
+    Sheet.ITEM_SECTIONS.forEach(([sectionKey]) => {
+      const split = Sheet.LIBRARY_FIELD_SPLIT[sectionKey];
+      const list = (portable.items && portable.items[sectionKey]) || [];
+      list.forEach((instance) => {
+        const libItem = instance.libraryId && Sheet.findLibraryItem(sectionKey, instance.libraryId);
+        if (!libItem) return;
+        const def = {};
+        split.def.forEach((field) => { def[field] = libItem[field]; });
+        const group = libItem.groupId && (Sheet.groups || []).find((g) => g.id === libItem.groupId);
+        def.group = group ? group.name : null;
+        instance.def = def;
+      });
+    });
+    return portable;
+  };
+
+  // Inverse of buildPortableCharacter: links every item that carries a `def` to a
+  // matching Codex item, creating it (and its group) when this Codex has none.
+  // Items without a `def` (older files) keep their libraryId as-is.
+  function linkPortableItems(blob) {
+    const sourceLabel = ((blob.data && blob.data.AgentName) || '').trim() || 'Agent';
+    Sheet.ITEM_SECTIONS.forEach(([sectionKey]) => {
+      const split = Sheet.LIBRARY_FIELD_SPLIT[sectionKey];
+      const list = (blob.items && blob.items[sectionKey]) || [];
+      list.forEach((instance) => {
+        if (sectionKey === 'Equipment' && !instance.libraryId && instance.extra) Sheet.convertDamageField(instance.extra, instance);
+        const def = instance.def;
+        if (!def) return;
+        const candidate = { id: Sheet.generateId(), groupId: Sheet.findOrCreateGroup(def.group), name: def.name || '', notes: def.notes || '' };
+        split.def.forEach((field) => { if (field !== 'name' && field !== 'notes') candidate[field] = def[field]; });
+        instance.libraryId = Sheet.findOrCreateLibraryItem(sectionKey, candidate, sourceLabel);
+        delete instance.def;
+      });
+    });
+    delete blob.portable;
+    Sheet.persistLibrary();
+    Sheet.persistGroups();
+  }
+
   Sheet.exportCharacterById = function exportCharacterById(id) {
     let blob = null;
     try { blob = JSON.parse(localStorage.getItem(Sheet.characterKey(id))); } catch (error) { blob = null; }
     if (!blob) return;
-    download(slug((blob.data || {}).AgentName) + '-sheet.json', blob);
+    download(slug((blob.data || {}).AgentName) + '-sheet.json', Sheet.buildPortableCharacter(blob));
   };
 
   Sheet.importCharacterFile = function importCharacterFile(file) {
@@ -35,6 +80,7 @@
         } else {
           const newId = Sheet.generateId();
           parsed.id = newId;
+          linkPortableItems(parsed);
           localStorage.setItem(Sheet.characterKey(newId), JSON.stringify(parsed));
           Sheet.touchImportedCharacter(parsed);
         }
@@ -60,6 +106,7 @@
         const parsed = JSON.parse(fileReader.result);
         const id = Sheet.state.id;
         parsed.id = id;
+        linkPortableItems(parsed);
         localStorage.setItem(Sheet.characterKey(id), JSON.stringify(parsed));
         Sheet.loadCharacterState(id);
         Sheet.persistCharacterStateImmediately();
@@ -92,6 +139,7 @@
         Sheet.persistMeta();
         Sheet.persistLibrary();
         Sheet.persistGroups();
+        Sheet.migrateDamageDice();  // backups made before damage dice
         window.location.hash = '#/roster';
         Sheet.renderRosterView();
       } catch (error) {

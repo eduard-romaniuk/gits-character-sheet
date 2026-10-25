@@ -14,14 +14,15 @@
   function summaryFor(section, item) {
     if (section === 'Equipment') {
       const type = item.type || 'weapon';
-      const parts = [];
+      const parts = Sheet.equipmentTags(item);
       (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey]) => {
-        if (fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost') return;
+        if (fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost' || fieldKey === 'attack') return;
         if (item[fieldKey]) parts.push((Sheet.META_LABEL_PREFIX[fieldKey] || fieldKey.toUpperCase()) + ' ' + item[fieldKey]);
       });
       parts.push('COST ' + (item.cost || 0));
       return parts.join('  ·  ');
     }
+    if (section === 'Skills') return Sheet.ATTRIBUTE_NAMES[item.linked] || '';
     if (section === 'SpecialtySkills') return 'MAX RANKS ' + (item.maxRanks || 1);
     if (section === 'Cybernetics') return [item.armor ? 'ARMOR ' + item.armor : '', item.damage ? 'DMG ' + item.damage : ''].filter(Boolean).join('  ·  ');
     return '';

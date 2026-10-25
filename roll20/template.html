@@ -409,9 +409,10 @@
               </div>
             </div>
             <div class="col">
-              <label class="label">DESCRIPTION (RANK 1)</label>
+              <label class="label">DESCRIPTION</label>
               <textarea class="field" name="attr_notes" placeholder="—"></textarea>
             </div>
+            <div class="col r1"><label class="label">RANK 1</label><textarea class="field" name="attr_r1" placeholder="—"></textarea></div>
             <div class="col r2"><label class="label">RANK 2</label><textarea class="field" name="attr_r2" placeholder="—"></textarea></div>
             <div class="col r3"><label class="label">RANK 3</label><textarea class="field" name="attr_r3" placeholder="—"></textarea></div>
             <div class="col r4"><label class="label">RANK 4</label><textarea class="field" name="attr_r4" placeholder="—"></textarea></div>
@@ -1101,13 +1102,13 @@
       }
     },
     specialty: {
-      fields: ['name', 'rank', 'maxranks', 'notes', 'r2', 'r3', 'r4', 'r5'],
+      fields: ['name', 'rank', 'maxranks', 'notes', 'r1', 'r2', 'r3', 'r4', 'r5'],
       build: function (v) {
         var maxRank = Math.max(1, parseInt(v.maxranks, 10) || 1);
         var currentRank = clamp(parseInt(v.rank, 10) || 1, 1, maxRank);
-        var card = { kicker: 'SPECIALTY SKILL', meta: 'RANK ' + currentRank + ' / ' + maxRank, rank1: v.notes };
-        // Only unlocked ranks, like the website's expanded view.
-        for (var rank = 2; rank <= currentRank; rank++) card['rank' + rank] = v['r' + rank];
+        var card = { kicker: 'SPECIALTY SKILL', meta: 'RANK ' + currentRank + ' / ' + maxRank, desc: v.notes };
+        // Description, then the unlocked ranks' texts (multi-rank skills only), like the website's expanded view.
+        if (maxRank > 1) for (var rank = 1; rank <= currentRank; rank++) card['rank' + rank] = v['r' + rank];
         return card;
       }
     },

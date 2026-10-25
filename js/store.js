@@ -114,6 +114,31 @@
     Sheet.persistGroups();
   };
 
+  // Free-text damage -> one die (see Sheet.convertDamageField). Runs on every load and after a
+  // backup restore; a no-op once everything is converted. Covers the Codex and the standalone
+  // (legacy) equipment stored on characters, including characters that are never opened;
+  // library-linked instances hold no damage of their own.
+  Sheet.migrateDamageDice = function migrateDamageDice() {
+    let libraryChanged = false;
+    (Sheet.library.Equipment || []).forEach((item) => {
+      if (Sheet.convertDamageField(item, item)) libraryChanged = true;
+    });
+    if (libraryChanged) Sheet.persistLibrary();
+
+    (Sheet.meta.characters || []).forEach((character) => {
+      let blob = null;
+      try { blob = JSON.parse(localStorage.getItem(Sheet.characterKey(character.id))); } catch (error) { blob = null; }
+      const list = blob && blob.items && blob.items.Equipment;
+      if (!Array.isArray(list)) return;
+      let changed = false;
+      list.forEach((instance) => {
+        if (!instance.libraryId && instance.extra && Sheet.convertDamageField(instance.extra, instance)) changed = true;
+      });
+      if (!changed) return;
+      try { localStorage.setItem(Sheet.characterKey(character.id), JSON.stringify(blob)); } catch (error) {}
+    });
+  };
+
   /* ==================== character (active sheet) ==================== */
 
   Sheet.state = null;

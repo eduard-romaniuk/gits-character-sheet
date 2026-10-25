@@ -13,6 +13,12 @@
   Sheet.DEFAULT_GROUP_NAME = 'Core Rulebook';
 
   Sheet.DICE_STEPS = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+  // Weapon/throwable damage is one of these dice ('' = none), as on the Roll20 sheet's attack rolls.
+  Sheet.DAMAGE_DICE = ['D4', 'D6', 'D8', 'D10', 'D12', 'D20'];
+  // A skill can be linked to an attribute, whose die is rolled alongside it (Roll20 skill rolls).
+  // Keys are the sheet's own attribute keys (note the "Awarness" spelling).
+  Sheet.ATTRIBUTE_NAMES = { Awarness: 'AWARENESS', Presence: 'PRESENCE', Muscle: 'MUSCLE', Reflexes: 'REFLEXES', Hacking: 'HACKING' };
+  Sheet.ATTRIBUTE_SHORT = { Awarness: 'AWA', Presence: 'PRE', Muscle: 'MUS', Reflexes: 'REF', Hacking: 'HCK' };
   Sheet.RANK_DIE_LABELS = ['D4', 'D6', 'D8', 'D10', 'D12', 'D20'];
   Sheet.ITEM_SECTIONS = [
     ['Setbacks', 'SETBACKS'],
@@ -23,7 +29,7 @@
   ];
   Sheet.ITEM_FIELD_SCHEMA = {
     Cybernetics: [['armor', 'ARMOR'], ['damage', 'UNARMED DAMAGE']],
-    Skills: [['rank', 'RANK', 'rank']],
+    Skills: [['rank', 'RANK', 'rank'], ['linked', 'ATTRIBUTE', 'attribute']],
     SpecialtySkills: [['maxRanks', 'MAX. RANKS', 'max'], ['rank', 'CURRENT RANK', 'cur']],
   };
   Sheet.EQUIPMENT_TYPES = [
@@ -34,9 +40,9 @@
     ['utility', 'UTILITY'],
   ];
   Sheet.EQUIPMENT_FIELDS = {
-    weapon: [['range', 'RANGE'], ['damage', 'DAMAGE'], ['rof', 'ROF'], ['cost', 'COST'], ['skill', 'SKILL']],
+    weapon: [['range', 'RANGE'], ['damage', 'DAMAGE', 'die'], ['rof', 'ROF'], ['attack', 'ATTACK', 'attack'], ['cost', 'COST'], ['skill', 'SKILL']],
     armor: [['head', 'HEAD'], ['torso', 'TORSO'], ['arms', 'ARMS'], ['legs', 'LEGS'], ['cost', 'COST']],
-    throwable: [['range', 'RANGE'], ['damage', 'DAMAGE'], ['qty', 'AMOUNT'], ['cost', 'COST'], ['skill', 'SKILL']],
+    throwable: [['range', 'RANGE'], ['damage', 'DAMAGE', 'die'], ['qty', 'AMOUNT'], ['cost', 'COST'], ['skill', 'SKILL']],
     utility: [['cost', 'COST'], ['qty', 'AMOUNT']],
     attachment: [['mods', 'STAT MODIFIER'], ['cost', 'COST'], ['fittedId', 'FITTED TO', 'weapon']],
   };
@@ -69,10 +75,10 @@
   Sheet.LIBRARY_FIELD_SPLIT = {
     Setbacks: { def: ['name', 'notes'], overlay: [] },
     Cybernetics: { def: ['name', 'notes', 'armor', 'damage'], overlay: [] },
-    Skills: { def: ['name', 'notes'], overlay: ['rank'] },
+    Skills: { def: ['name', 'notes', 'linked'], overlay: ['rank'] },
     SpecialtySkills: { def: ['name', 'notes', 'maxRanks', 'r1', 'r2', 'r3', 'r4', 'r5'], overlay: ['rank'] },
     Equipment: {
-      def: ['name', 'notes', 'type', 'range', 'damage', 'rof', 'cost', 'skill', 'head', 'torso', 'arms', 'legs', 'mods', 'single'],
+      def: ['name', 'notes', 'type', 'range', 'damage', 'rof', 'attack', 'cost', 'skill', 'head', 'torso', 'arms', 'legs', 'mods', 'single', 'explosive'],
       overlay: ['qty', 'freeQty', 'used', 'loadoutId', 'fittedId'],
     },
   };

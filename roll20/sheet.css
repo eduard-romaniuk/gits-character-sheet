@@ -752,12 +752,18 @@
 
 /* -------- specialty skills: rank description visibility -------- */
 
+/* Like the website: per-rank texts only for skills with more than one rank. */
+.sheet .specialty-row .r1,
 .sheet .specialty-row .r2,
 .sheet .specialty-row .r3,
 .sheet .specialty-row .r4,
 .sheet .specialty-row .r5 {
   display: none;
 }
+.sheet .specialty-row:has(select[name="attr_maxranks"] option[value="2"]:checked) .r1,
+.sheet .specialty-row:has(select[name="attr_maxranks"] option[value="3"]:checked) .r1,
+.sheet .specialty-row:has(select[name="attr_maxranks"] option[value="4"]:checked) .r1,
+.sheet .specialty-row:has(select[name="attr_maxranks"] option[value="5"]:checked) .r1,
 .sheet .specialty-row:has(select[name="attr_maxranks"] option[value="2"]:checked) .r2,
 .sheet .specialty-row:has(select[name="attr_maxranks"] option[value="3"]:checked) .r2,
 .sheet .specialty-row:has(select[name="attr_maxranks"] option[value="4"]:checked) .r2,

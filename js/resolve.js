@@ -109,5 +109,57 @@
     return detached;
   };
 
+  // Comparison key for "is this the same item" — every def field except name (name is
+  // the dedup match key itself). Missing fields are normalized to '' so this matches
+  // consistently regardless of whether a field was ever set (undefined) or cleared ('').
+  function bodyFingerprint(sectionKey, candidate) {
+    const split = Sheet.LIBRARY_FIELD_SPLIT[sectionKey];
+    const body = {};
+    split.def.forEach((field) => { if (field !== 'name') body[field] = candidate[field] == null ? '' : candidate[field]; });
+    return JSON.stringify(body);
+  }
+
+  // Adds an imported item definition to the library (v1 import, portable character files).
+  // Dedup by name (trimmed, exact match — no case-folding): reuse an existing library
+  // item's id when the name and every other def field match exactly; on a same-name
+  // collision with different field values, keep both by renaming the new one with a
+  // source-tagged suffix (falling back to a counter if even that's taken).
+  // Updates Sheet.library in memory; the caller persists it.
+  Sheet.findOrCreateLibraryItem = function findOrCreateLibraryItem(sectionKey, candidate, sourceLabel) {
+    // Imported files may predate damage dice; convert first so they dedup against the migrated Codex.
+    if (sectionKey === 'Equipment') Sheet.convertDamageField(candidate, candidate);
+    const list = Sheet.library[sectionKey] || [];
+    const name = (candidate.name || '').trim();
+    const sameName = list.filter((existing) => (existing.name || '').trim() === name);
+    const exact = sameName.find((existing) => bodyFingerprint(sectionKey, existing) === bodyFingerprint(sectionKey, candidate));
+    if (exact) return exact.id;
+
+    if (sameName.length) {
+      let suffixed = name + ' (from ' + sourceLabel + ')';
+      let n = 2;
+      while (list.some((existing) => (existing.name || '').trim() === suffixed)) {
+        suffixed = name + ' (from ' + sourceLabel + ') (' + n + ')';
+        n += 1;
+      }
+      candidate.name = suffixed;
+    }
+
+    Sheet.library[sectionKey] = list.concat([candidate]);
+    return candidate.id;
+  };
+
+  // Group id for an imported item's group name: the existing group with that exact
+  // (trimmed) name, or a newly created one. No name = ungrouped ("Core Rulebook").
+  // Updates Sheet.groups in memory; the caller persists it.
+  Sheet.findOrCreateGroup = function findOrCreateGroup(name) {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return null;
+    const existing = (Sheet.groups || []).find((group) => (group.name || '').trim() === trimmed);
+    if (existing) return existing.id;
+    const group = { id: Sheet.generateId(), name: trimmed, createdAt: Date.now() };
+    Sheet.groups = (Sheet.groups || []).concat([group]);
+    return group.id;
+  };
+
   Sheet.buildLibraryDefBag = buildDefBag;
 })(window.Sheet = window.Sheet || {});

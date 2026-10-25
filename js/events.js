@@ -190,6 +190,12 @@
           Sheet.ui.itemDialog.extra.single = !Sheet.isSingleUse(Sheet.ui.itemDialog.extra);
           Sheet.renderStandaloneItemDialog();
           return;
+        case 'dlgExplosive':
+          Sheet.collectStandaloneDialogInputs();
+          // Off is '' rather than false, so it matches items saved before this field existed (import dedup).
+          Sheet.ui.itemDialog.extra.explosive = Sheet.ui.itemDialog.extra.explosive ? '' : true;
+          Sheet.renderStandaloneItemDialog();
+          return;
         case 'dlgStep': {
           Sheet.collectStandaloneDialogInputs();
           const fieldKey = actionEl.getAttribute('data-key');

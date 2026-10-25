@@ -78,6 +78,14 @@
             const valid = options.some((option) => option.value === current) ? current : (options[0] ? options[0].value : '');
             return { kind: 'select', field: fieldKey, label: label, value: valid, options: options };
           }
+          if (kind === 'die') {
+            Sheet.convertDamageField(extra, dialog);
+            return selectField(fieldKey, label, extra[fieldKey] || '', [{ value: '', label: '—' }].concat(Sheet.DAMAGE_DICE.map((die) => ({ value: die, label: die }))));
+          }
+          if (kind === 'attack') {
+            // Ranged is stored as '' (the default), so it matches items saved before this field existed.
+            return selectField(fieldKey, label, extra[fieldKey] === 'melee' ? 'melee' : '', [{ value: '', label: 'Ranged' }, { value: 'melee', label: 'Melee' }]);
+          }
           return { kind: 'text', field: fieldKey, label: label, value: extra[fieldKey] || '' };
         });
     }
@@ -96,8 +104,18 @@
           extra[fieldKey] = value;
           return { kind: 'num', field: fieldKey, label: label, value: value, lo: 1, hi: hi };
         }
+        if (kind === 'attribute') {
+          const options = [{ value: '', label: '—' }].concat(Object.keys(Sheet.ATTRIBUTE_NAMES).map((key) => ({ value: key, label: Sheet.ATTRIBUTE_NAMES[key] })));
+          return selectField(fieldKey, label, Sheet.ATTRIBUTE_NAMES[raw] ? raw : '', options);
+        }
         return { kind: 'text', field: fieldKey, label: label, value: raw || '' };
       });
+  }
+
+  // Every default option has the value '' (no die, ranged, no attribute), the same as an unset
+  // field, so saving an untouched item keeps it identical to older copies for import dedup.
+  function selectField(fieldKey, label, value, options) {
+    return { kind: 'select', field: fieldKey, label: label, value: value, options: options };
   }
 
   Sheet.renderStandaloneItemDialog = function renderStandaloneItemDialog() {
@@ -138,6 +156,11 @@
       html += '<button class="check' + (Sheet.isSingleUse(extra) ? ' selected' : '') + '" data-action="dlgSingle">'
         + '<span class="checkbox-box">' + (Sheet.isSingleUse(extra) ? '✕' : '') + '</span>'
         + '<span class="label">SINGLE-USE</span></button>';
+    }
+    if (isEquipment && ['weapon', 'throwable'].indexOf(extra.type || 'weapon') >= 0) {
+      html += '<button class="check' + (extra.explosive ? ' selected' : '') + '" data-action="dlgExplosive">'
+        + '<span class="checkbox-box">' + (extra.explosive ? '✕' : '') + '</span>'
+        + '<span class="label">EXPLOSIVE</span></button>';
     }
 
     const fields = buildDialogFields();

@@ -152,7 +152,9 @@
 
   function renderSkill(item, options) {
     const rank = clamp(toNumber(item.extra.rank, 1), 1, 6);
-    return itemBlock(item.name, [['RANK', rank + ' (' + Sheet.rankToDieLabel(rank) + ')']], itemNotes(item.notes, options));
+    const meta = [['RANK', rank + ' (' + Sheet.rankToDieLabel(rank) + ')']];
+    if (Sheet.ATTRIBUTE_NAMES[item.extra.linked]) meta.push(['ATTRIBUTE', Sheet.ATTRIBUTE_NAMES[item.extra.linked]]);
+    return itemBlock(item.name, meta, itemNotes(item.notes, options));
   }
 
   function renderSpecialtySkill(item, options) {
@@ -207,8 +209,13 @@
         meta.push([label, toNumber(extra.cost, 0)]);
         return;
       }
+      if (fieldKey === 'attack') {
+        meta.push([label, extra.attack === 'melee' ? 'MELEE' : 'RANGED']);
+        return;
+      }
       meta.push([label, extra[fieldKey]]);
     });
+    if ((type === 'weapon' || type === 'throwable') && extra.explosive) meta.push(['EXPLOSIVE', 'YES']);
     const skill = extra.skill && !options.compact ? '<div class="p-item-line"><b>SKILL</b> ' + escapeHtml(extra.skill) + '</div>' : '';
     return itemBlock(item.name, meta, skill + itemNotes(item.notes, options), isAttachment(item) ? 'p-attachment' : '');
   }

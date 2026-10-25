@@ -23,9 +23,9 @@
     if (sectionKey === 'Equipment') {
       const type = extra.type || 'weapon';
       const typeLabel = ((Sheet.EQUIPMENT_TYPES.filter((t) => t[0] === type)[0]) || ['', 'WEAPON'])[1];
-      const parts = [];
+      const parts = Sheet.equipmentTags(extra);
       (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey]) => {
-        if (fieldKey === 'skill' || fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost') return;
+        if (fieldKey === 'skill' || fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost' || fieldKey === 'attack') return;
         const value = extra[fieldKey];
         if (!value) return;
         const prefix = Sheet.META_LABEL_PREFIX[fieldKey];
@@ -43,6 +43,7 @@
     return (Sheet.ITEM_FIELD_SCHEMA[sectionKey] || []).map(([fieldKey, , kind]) => {
       const raw = extra[fieldKey];
       if (kind === 'rank') return Sheet.rankToDieLabel(raw || 1);
+      if (kind === 'attribute') return Sheet.ATTRIBUTE_SHORT[raw] || '';
       return raw;
     }).filter(Boolean).join('  ·  ');
   }

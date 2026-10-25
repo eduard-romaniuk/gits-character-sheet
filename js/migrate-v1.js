@@ -20,42 +20,8 @@
   // v1 has no notion of a shared library, so every imported item is split into a new
   // library definition (left ungrouped, i.e. in the "Core Rulebook" bucket — see
   // Sheet.DEFAULT_GROUP_NAME) plus a linked character instance — nothing lands on the
-  // character as a standalone item.
-
-  // Comparison key for "is this the same item" — every def field except name (name is
-  // the dedup match key itself). Missing fields are normalized to '' so this matches
-  // consistently regardless of whether a field was ever set (undefined) or cleared ('').
-  function bodyFingerprint(sectionKey, candidate) {
-    const split = Sheet.LIBRARY_FIELD_SPLIT[sectionKey];
-    const body = {};
-    split.def.forEach((field) => { if (field !== 'name') body[field] = candidate[field] == null ? '' : candidate[field]; });
-    return JSON.stringify(body);
-  }
-
-  // Dedup by name (trimmed, exact match — no case-folding): reuse an existing library
-  // item's id when the name and every other def field match exactly; on a same-name
-  // collision with different field values, keep both by renaming the new one with a
-  // source-tagged suffix (falling back to a counter if even that's taken).
-  function findOrCreateLibraryItem(sectionKey, candidate, sourceLabel) {
-    const list = Sheet.library[sectionKey] || [];
-    const name = (candidate.name || '').trim();
-    const sameName = list.filter((existing) => (existing.name || '').trim() === name);
-    const exact = sameName.find((existing) => bodyFingerprint(sectionKey, existing) === bodyFingerprint(sectionKey, candidate));
-    if (exact) return exact.id;
-
-    if (sameName.length) {
-      let suffixed = name + ' (from ' + sourceLabel + ')';
-      let n = 2;
-      while (list.some((existing) => (existing.name || '').trim() === suffixed)) {
-        suffixed = name + ' (from ' + sourceLabel + ') (' + n + ')';
-        n += 1;
-      }
-      candidate.name = suffixed;
-    }
-
-    Sheet.library[sectionKey] = list.concat([candidate]);
-    return candidate.id;
-  }
+  // character as a standalone item. Dedup against the existing library is
+  // Sheet.findOrCreateLibraryItem (resolve.js).
 
   // v1 -> v2 import from an already-parsed v1 blob (localStorage or an uploaded file).
   Sheet.importV1FromData = function importV1FromData(v1) {
@@ -101,7 +67,7 @@
 
         const libItem = { id: Sheet.generateId(), groupId: null, name: item.name || '', notes: item.notes || '' };
         split.def.forEach((field) => { if (field !== 'name' && field !== 'notes') libItem[field] = extra[field]; });
-        const libraryId = findOrCreateLibraryItem(sectionKey, libItem, sourceLabel);
+        const libraryId = Sheet.findOrCreateLibraryItem(sectionKey, libItem, sourceLabel);
 
         const overlay = {};
         split.overlay.forEach((field) => { overlay[field] = extra[field]; });

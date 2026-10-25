@@ -6,6 +6,7 @@
   Sheet.loadGroups();
   Sheet.loadSettings();
   Sheet.migrateLegacyDefaultGroup();
+  Sheet.migrateDamageDice();
   Sheet.applySettings();
   Sheet.handleRoute();
 })(window.Sheet = window.Sheet || {});
