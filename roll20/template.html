@@ -609,6 +609,20 @@
   </div>
 
   <div class="tab-pane tab-settings">
+    <div class="panel settings-panel">
+      <div class="panel-header"><div class="title">ROLLS</div></div>
+      <label class="check">
+        <input type="checkbox" class="check-input sr-only" name="attr_skipshift" value="1">
+        <span class="checkbox-box"></span>
+        <span class="label">SKIP DICE SHIFT PROMPT</span>
+      </label>
+      <label class="check">
+        <input type="checkbox" class="check-input sr-only" name="attr_skipdiff" value="1">
+        <span class="checkbox-box"></span>
+        <span class="label">SKIP DIFFICULTY PROMPT</span>
+      </label>
+      <div class="hint">Without a difficulty, rolls show no success or failure and can't be a critical success.</div>
+    </div>
     <div class="panel import-panel">
       <div class="panel-header"><div class="title">IMPORT FROM WEBSITE</div></div>
       <div class="hint">On the website, use EXPORT &#9656; ROLL20, then paste here. Importing replaces everything on this sheet.</div>
@@ -1357,11 +1371,11 @@
     return roll;
   }
 
-  // Check (stat, skill, attack to-hit) inline rolls, including the popup (dice shift, difficulty).
-  // free: no popup (no shift, no difficulty).
-  function checkRollFields(levels, free) {
+  // Check (stat, skill, attack to-hit) inline rolls, including the popup questions that are asked:
+  // prompts = { shift, diff }; an unasked one counts as no shift / no difficulty (0).
+  function checkRollFields(levels, prompts) {
     var roll = ' {{result=[[0]]}} {{crit=[[0]]}}'
-      + ' {{shift=[[' + (free ? 0 : SHIFT_QUERY) + ']]}} {{diff=[[' + (free ? 0 : DIFFICULTY_QUERY) + ']]}}';
+      + ' {{shift=[[' + (prompts.shift ? SHIFT_QUERY : 0) + ']]}} {{diff=[[' + (prompts.diff ? DIFFICULTY_QUERY : 0) + ']]}}';
     levels.forEach(function (level, c) { roll += chainRollFields(CHECK_CHAINS[c], level - MAX_SHIFT, level + MAX_SHIFT); });
     return roll;
   }
@@ -1384,16 +1398,27 @@
     computed.crit = diff > 0 && best >= 2 * diff ? 1 : allFirstOnes ? 2 : !diff ? 0 : best >= diff ? 3 : 4;
   }
 
+  // Which popup questions a check asks: both, unless the character turned them off on the
+  // SETTINGS tab (skipshift / skipdiff). Free rolls ask nothing.
+  function withRollPrompts(free, callback) {
+    if (free) { callback({ shift: false, diff: false }); return; }
+    getAttrs(['skipshift', 'skipdiff'], function (v) {
+      callback({ shift: !isChecked(v.skipshift), diff: !isChecked(v.skipdiff) });
+    });
+  }
+
   // header: plain card fields (kicker, name, cap1, cap2); dice: first die of each chain.
   // free: a free roll, with no popup and no badges (not even a critical failure).
   function rollCheck(header, dice, free) {
     var levels = dice.map(dieLevel);
-    var roll = '&{template:gits} {{charname=@{character_name}}}' + headerFields(header) + checkRollFields(levels, free);
-    startRoll(roll, function (results) {
-      var computed = {};
-      resolveCheck(results, levels, computed);
-      if (free) computed.crit = 0;
-      finishRoll(results.rollId, computed);
+    withRollPrompts(free, function (prompts) {
+      var roll = '&{template:gits} {{charname=@{character_name}}}' + headerFields(header) + checkRollFields(levels, prompts);
+      startRoll(roll, function (results) {
+        var computed = {};
+        resolveCheck(results, levels, computed);
+        if (free) computed.crit = 0;
+        finishRoll(results.rollId, computed);
+      });
     });
   }
 
@@ -1502,29 +1527,31 @@
       cap1: a.trait,
       cap2: a.skill ? 'SKILL  ·  ' + a.skill.name.toUpperCase() : ''
     };
-    var roll = '&{template:gits} {{charname=@{character_name}}} {{loc=[[1d20]]}} {{dmg=[[0]]}}'
-      + headerFields(header) + checkRollFields(levels) + chainRollFields('g', damage, damage);
-    if (a.explosive) {
-      // Splash-hit chat buttons (not run through chatText: the links are the point).
-      // The link labels are blank (no-break spaces) because Roll20 colours link text; the template draws the
-      // label behind the transparent link.
-      var blank = new Array(30).join('\u00a0');
-      roll += ' {{boom=1}} {{prox=[' + blank + '](' + a.splashLink + 'proxhit})}}'
-        + ' {{blast=[' + blank + '](' + a.splashLink + 'blasthit})}}';
-    }
-
-    startRoll(roll, function (results) {
-      var computed = {};
-      resolveCheck(results, levels, computed);
-      if (computed.crit === 2 || computed.crit === 4) {  // jammed / critical miss, or missed
-        computed.loc = 0;
-        computed.dmg = 0;
-        clearChain('g', damage, damage, computed);
-      } else {
-        computed.loc = results.results.loc.result;
-        computed.dmg = resolveChain(results, 'g', damage, damage, damage, computed, computed.crit === 1).best;
+    withRollPrompts(false, function (prompts) {
+      var roll = '&{template:gits} {{charname=@{character_name}}} {{loc=[[1d20]]}} {{dmg=[[0]]}}'
+        + headerFields(header) + checkRollFields(levels, prompts) + chainRollFields('g', damage, damage);
+      if (a.explosive) {
+        // Splash-hit chat buttons (not run through chatText: the links are the point).
+        // The link labels are blank (no-break spaces) because Roll20 colours link text; the template draws the
+        // label behind the transparent link.
+        var blank = new Array(30).join('\u00a0');
+        roll += ' {{boom=1}} {{prox=[' + blank + '](' + a.splashLink + 'proxhit})}}'
+          + ' {{blast=[' + blank + '](' + a.splashLink + 'blasthit})}}';
       }
-      finishRoll(results.rollId, computed);
+
+      startRoll(roll, function (results) {
+        var computed = {};
+        resolveCheck(results, levels, computed);
+        if (computed.crit === 2 || computed.crit === 4) {  // jammed / critical miss, or missed
+          computed.loc = 0;
+          computed.dmg = 0;
+          clearChain('g', damage, damage, computed);
+        } else {
+          computed.loc = results.results.loc.result;
+          computed.dmg = resolveChain(results, 'g', damage, damage, damage, computed, computed.crit === 1).best;
+        }
+        finishRoll(results.rollId, computed);
+      });
     });
   }
 

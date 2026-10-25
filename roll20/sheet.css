@@ -159,7 +159,8 @@
 .sheet .wrap:has(input[name="attr_tab"][value="settings"]:checked) .tab-settings {
   display: flex;
 }
-/* SETTINGS ▸ import from website: paste box, IMPORT button, one-line result. */
+/* SETTINGS ▸ rolls (prompt toggles) and import from website (paste box, IMPORT button, one-line result). */
+.sheet .settings-panel,
 .sheet .import-panel {
   display: flex;
   flex-direction: column;
