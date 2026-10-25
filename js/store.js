@@ -12,7 +12,7 @@
   Sheet.loadMeta = function loadMeta() {
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(Sheet.META_KEY)) || {}; } catch (error) { saved = {}; }
-    Sheet.meta = { version: 1, characters: Array.isArray(saved.characters) ? saved.characters : [], v1BannerDismissed: !!saved.v1BannerDismissed };
+    Sheet.meta = { version: 1, characters: Array.isArray(saved.characters) ? saved.characters : [], v1BannerDismissed: !!saved.v1BannerDismissed, damageDiceMigrated: !!saved.damageDiceMigrated };
     return Sheet.meta;
   };
 
@@ -114,11 +114,13 @@
     Sheet.persistGroups();
   };
 
-  // Free-text damage -> one die (see Sheet.convertDamageField). Runs on every load and after a
-  // backup restore; a no-op once everything is converted. Covers the Codex and the standalone
-  // (legacy) equipment stored on characters, including characters that are never opened;
-  // library-linked instances hold no damage of their own.
+  // Free-text damage -> one die (see Sheet.convertDamageField). Runs once per browser (the
+  // meta.damageDiceMigrated flag) and again after a backup restore, which resets meta. Covers
+  // the Codex and the standalone (legacy) equipment stored on characters, including characters
+  // that are never opened; library-linked instances hold no damage of their own. Imported
+  // character files are converted as they come in (io.js linkPortableItems, resolve.js).
   Sheet.migrateDamageDice = function migrateDamageDice() {
+    if (Sheet.meta.damageDiceMigrated) return;
     let libraryChanged = false;
     (Sheet.library.Equipment || []).forEach((item) => {
       if (Sheet.convertDamageField(item, item)) libraryChanged = true;
@@ -137,6 +139,8 @@
       if (!changed) return;
       try { localStorage.setItem(Sheet.characterKey(character.id), JSON.stringify(blob)); } catch (error) {}
     });
+    Sheet.meta.damageDiceMigrated = true;
+    Sheet.persistMeta();
   };
 
   /* ==================== character (active sheet) ==================== */

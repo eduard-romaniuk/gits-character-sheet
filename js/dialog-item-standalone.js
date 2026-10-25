@@ -236,6 +236,7 @@
     if (!name) { Sheet.closeStandaloneItemDialog(); return; }
 
     const extra = dialog.extra || {};
+    if (dialog.section === 'Equipment') Sheet.clearInapplicableFlags(extra);
     if (dialog.section === 'Equipment' && extra.type === 'attachment' && dialog.mode === 'character') {
       const options = Sheet.weaponOptions();
       if (!options.some((option) => option.value === extra.fittedId)) {

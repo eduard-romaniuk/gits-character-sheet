@@ -39,7 +39,8 @@
   };
 
   // Inverse of buildPortableCharacter: links every item that carries a `def` to a
-  // matching Codex item, creating it (and its group) when this Codex has none.
+  // matching Codex item, creating it (and its group) when this Codex has none. A group
+  // is only created for an item that is added, never for one that matched an existing item.
   // Items without a `def` (older files) keep their libraryId as-is.
   function linkPortableItems(blob) {
     const sourceLabel = ((blob.data && blob.data.AgentName) || '').trim() || 'Agent';
@@ -50,9 +51,11 @@
         if (sectionKey === 'Equipment' && !instance.libraryId && instance.extra) Sheet.convertDamageField(instance.extra, instance);
         const def = instance.def;
         if (!def) return;
-        const candidate = { id: Sheet.generateId(), groupId: Sheet.findOrCreateGroup(def.group), name: def.name || '', notes: def.notes || '' };
+        const candidate = { id: Sheet.generateId(), groupId: null, name: def.name || '', notes: def.notes || '' };
         split.def.forEach((field) => { if (field !== 'name' && field !== 'notes') candidate[field] = def[field]; });
         instance.libraryId = Sheet.findOrCreateLibraryItem(sectionKey, candidate, sourceLabel);
+        // The candidate object itself went into the Codex: give it its group.
+        if (instance.libraryId === candidate.id) candidate.groupId = Sheet.findOrCreateGroup(def.group);
         delete instance.def;
       });
     });

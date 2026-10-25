@@ -21,6 +21,34 @@
     return tags;
   };
 
+  // ATTACK only applies to weapons and EXPLOSIVE to weapons/throwables. Clears them when the
+  // item's type no longer allows them (a weapon switched to armor), so they aren't exported
+  // or counted by import dedup. '' rather than delete, matching items saved before the fields.
+  Sheet.clearInapplicableFlags = (extra) => {
+    const type = extra.type || 'weapon';
+    if (type !== 'weapon' && extra.attack) extra.attack = '';
+    if (type !== 'weapon' && type !== 'throwable' && extra.explosive) extra.explosive = '';
+  };
+
+  // One-line summary of a Codex item, for the Codex list and the ADD FROM CODEX picker. The
+  // equipment type isn't repeated: both views already show it as a tab.
+  Sheet.librarySummary = (section, item) => {
+    if (section === 'Equipment') {
+      const type = item.type || 'weapon';
+      const parts = Sheet.equipmentTags(item);
+      (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey]) => {
+        if (fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost' || fieldKey === 'attack') return;
+        if (item[fieldKey]) parts.push((Sheet.META_LABEL_PREFIX[fieldKey] || fieldKey.toUpperCase()) + ' ' + item[fieldKey]);
+      });
+      parts.push('COST ' + (item.cost || 0));
+      return parts.join('  ·  ');
+    }
+    if (section === 'Skills') return Sheet.ATTRIBUTE_NAMES[item.linked] || '';
+    if (section === 'SpecialtySkills') return 'MAX RANKS ' + (item.maxRanks || 1);
+    if (section === 'Cybernetics') return [item.armor ? 'ARMOR ' + item.armor : '', item.damage ? 'DMG ' + item.damage : ''].filter(Boolean).join('  ·  ');
+    return '';
+  };
+
   // Damage used to be free text ("D8", "2d6", "Stun"); it is now one die from DAMAGE_DICE or ''.
   // Converts fields.damage in place. When the old text was more than a plain die it is kept
   // in notesOwner.notes ("Damage: 2d6"), so nothing is lost. Safe to run repeatedly: a value

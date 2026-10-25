@@ -40,11 +40,11 @@
       type: type, name: item.name, notes: item.notes,
       cost: text(extra.cost), range: text(extra.range), rof: text(extra.rof), skill: text(extra.skill),
       damage: Sheet.DAMAGE_DICE.indexOf(extra.damage) >= 0 ? extra.damage.toLowerCase() : '',
-      attack: extra.attack === 'melee' ? 'melee' : 'ranged',
+      attack: type === 'weapon' && extra.attack === 'melee' ? 'melee' : 'ranged',
       head: text(extra.head), torso: text(extra.torso), arms: text(extra.arms), legs: text(extra.legs), mods: text(extra.mods),
       qty: text(extra.qty), freeqty: text(extra.freeQty), used: text(extra.used),
       single: Sheet.isSingleUse(extra) ? 'on' : '',
-      explosive: extra.explosive ? '1' : '',
+      explosive: (type === 'weapon' || type === 'throwable') && extra.explosive ? '1' : '',
       fittedto: fittedTo ? fittedTo.name : '',
     };
   }

@@ -11,23 +11,6 @@
     return group ? group.name : Sheet.DEFAULT_GROUP_NAME;
   }
 
-  function summaryFor(section, item) {
-    if (section === 'Equipment') {
-      const type = item.type || 'weapon';
-      const parts = Sheet.equipmentTags(item);
-      (Sheet.EQUIPMENT_FIELDS[type] || []).forEach(([fieldKey]) => {
-        if (fieldKey === 'qty' || fieldKey === 'fittedId' || fieldKey === 'cost' || fieldKey === 'attack') return;
-        if (item[fieldKey]) parts.push((Sheet.META_LABEL_PREFIX[fieldKey] || fieldKey.toUpperCase()) + ' ' + item[fieldKey]);
-      });
-      parts.push('COST ' + (item.cost || 0));
-      return parts.join('  ·  ');
-    }
-    if (section === 'Skills') return Sheet.ATTRIBUTE_NAMES[item.linked] || '';
-    if (section === 'SpecialtySkills') return 'MAX RANKS ' + (item.maxRanks || 1);
-    if (section === 'Cybernetics') return [item.armor ? 'ARMOR ' + item.armor : '', item.damage ? 'DMG ' + item.damage : ''].filter(Boolean).join('  ·  ');
-    return '';
-  }
-
   function filteredItems() {
     const section = Sheet.ui.librarySection;
     const groupId = Sheet.ui.libraryGroupId;
@@ -46,7 +29,7 @@
     const items = filteredItems();
     const rows = items.map((item) => '<div class="row"><button class="row-name" data-action="libraryEdit" data-section="' + section + '" data-id="' + item.id + '">' + escapeHtml(item.name) + '</button>'
       + '<div class="spacer"></div>'
-      + '<div class="meta">' + escapeHtml(summaryFor(section, item)) + '</div>'
+      + '<div class="meta">' + escapeHtml(Sheet.librarySummary(section, item)) + '</div>'
       + '<button class="icon" data-action="libraryEdit" data-section="' + section + '" data-id="' + item.id + '" aria-label="Edit" title="Edit">' + Sheet.ICONS.edit + '</button>'
       + '<button class="icon delete" data-action="libraryDelete" data-section="' + section + '" data-id="' + item.id + '" aria-label="Delete" title="Delete">' + Sheet.ICONS.delete + '</button>'
       + '</div>').join('');

@@ -337,8 +337,8 @@
               <div class="col" style="flex:1 1 140px">
                 <label class="label">RANK</label>
                 <select class="field mono" name="attr_rank">
-                  <option value="1">1 &mdash; D4</option>
-                  <option value="2" selected>2 &mdash; D6</option>
+                  <option value="1" selected>1 &mdash; D4</option>
+                  <option value="2">2 &mdash; D6</option>
                   <option value="3">3 &mdash; D8</option>
                   <option value="4">4 &mdash; D10</option>
                   <option value="5">5 &mdash; D12</option>
@@ -962,6 +962,8 @@
     var type = values.type || 'weapon';
     var fields = EQUIPMENT_FIELDS[type] || [];
     var parts = [];
+    if (type === 'weapon' && values.attack === 'melee') parts.push('MELEE');
+    if ((type === 'weapon' || type === 'throwable') && isChecked(values.explosive)) parts.push('EXPLOSIVE');
     fields.forEach(function (fieldKey) {
       if (EQUIPMENT_SUMMARY_SKIP[fieldKey]) return;
       var value = values[fieldKey];
@@ -970,8 +972,6 @@
       var prefix = META_LABEL_PREFIX[fieldKey];
       parts.push(prefix ? prefix + ' ' + value : String(value));
     });
-    if (type === 'weapon' && values.attack === 'melee') parts.unshift('MELEE');
-    if ((type === 'weapon' || type === 'throwable') && isChecked(values.explosive)) parts.unshift('EXPLOSIVE');
     if (type !== 'attachment' && !(options && options.omitType)) parts.push(EQUIPMENT_TYPE_LABELS[type] || 'WEAPON');
     parts.push(META_LABEL_PREFIX.cost + ' ' + (parseInt(values.cost, 10) || 0));
     return parts.join('  ·  ');
@@ -1171,7 +1171,7 @@
     },
     equipment: {
       fields: ['name', 'type', 'attack', 'range', 'damage', 'rof', 'head', 'torso', 'arms', 'legs', 'mods', 'cost',
-        'skill', 'qty', 'freeqty', 'used', 'single', 'fittedto', 'notes'],
+        'skill', 'qty', 'freeqty', 'used', 'single', 'explosive', 'fittedto', 'notes'],
       build: function (v) {
         var type = v.type || 'weapon';
         var total = totalUnits(v);
@@ -1572,22 +1572,6 @@
           computed.dmg = resolveChain(results, 'g', level, level, level, computed).best;
           finishRoll(results.rollId, computed);
         });
-      });
-    });
-  });
-
-  // One-off migration: damage used to be free text ("2d6", "Stun"); it is now a single die (d4..d20) or none.
-  on('sheet:opened', function () {
-    getSectionIDs('repeating_equipment', function (ids) {
-      getAttrs(ids.map(function (id) { return 'repeating_equipment_' + id + '_damage'; }), function (v) {
-        var out = {};
-        ids.forEach(function (id) {
-          var key = 'repeating_equipment_' + id + '_damage', value = v[key] || '';
-          if (value === '' || DAMAGE_DICE[value]) return;
-          var match = /d(4|6|8|10|12|20)\b/i.exec(value);
-          out[key] = match ? 'd' + match[1] : '';
-        });
-        if (Object.keys(out).length) setAttrs(out);
       });
     });
   });

@@ -729,10 +729,11 @@
   display: none;
 }
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(input[name="attr_range"]),
-.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(input[name="attr_damage"]),
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(select[name="attr_damage"]),
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(input[name="attr_rof"]),
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(select[name="attr_attack"]),
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-throwable .col:has(input[name="attr_range"]),
-.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-throwable .col:has(input[name="attr_damage"]),
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-throwable .col:has(select[name="attr_damage"]),
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-throwable .col:has(input[name="attr_qty"]) {
   display: none;
 }
