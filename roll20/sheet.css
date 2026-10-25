@@ -580,7 +580,13 @@
   display: inline-flex;
 }
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-chat,
-.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-roll {
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-roll,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="edit"]:checked) .act-attack,
+/* Attack rolls only for weapons and throwables that have a damage die. */
+.sheet .row-wrap:has(input[name="attr_type"][value="armor"]:checked) .act-attack,
+.sheet .row-wrap:has(input[name="attr_type"][value="utility"]:checked) .act-attack,
+.sheet .row-wrap:has(input[name="attr_type"][value="attachment"]:checked) .act-attack,
+.sheet .row-wrap:has(select[name="attr_damage"] option[value=""]:checked) .act-attack {
   display: none;
 }
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="collapsed"]:checked) > *:not(.row-head):not(.uistate) {
@@ -661,7 +667,8 @@
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-armor,
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-attachment,
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-utility,
-.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .single-use-row {
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .single-use-row,
+.sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .explosive-row {
   display: none;
 }
 .sheet .row-wrap:has(select[name="attr_uistate"] option[value="expanded"]:checked) .fx-weapon .col:has(input[name="attr_range"]),
@@ -707,7 +714,9 @@
 .sheet .fx-throwable,
 .sheet .fx-attachment,
 .sheet .fx-utility,
-.sheet .single-use-row {
+.sheet .single-use-row,
+.sheet .explosive-row,
+.sheet .act-splash {
   display: none;
 }
 .sheet .eq-type-row:has(input[value="weapon"]:checked) ~ .fx-weapon { display: flex; }
@@ -717,6 +726,8 @@
 .sheet .eq-type-row:has(input[value="utility"]:checked) ~ .fx-utility { display: flex; }
 .sheet .eq-type-row:has(input[value="throwable"]:checked) ~ .single-use-row,
 .sheet .eq-type-row:has(input[value="utility"]:checked) ~ .single-use-row { display: flex; align-items: center; }
+.sheet .eq-type-row:has(input[value="weapon"]:checked) ~ .explosive-row,
+.sheet .eq-type-row:has(input[value="throwable"]:checked) ~ .explosive-row { display: flex; align-items: center; }
 
 /* -------- specialty skills: rank description visibility -------- */
 
