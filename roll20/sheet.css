@@ -127,6 +127,27 @@
   font-size: 11px;
   justify-content: center;
 }
+/* Free-roll dice at the right end of the tab row. */
+.sheet .free-dice {
+  display: flex;
+  align-items: center;  /* centred against the 40px tabs (the row is taller: Roll20 gives labels a 10px bottom margin) */
+  align-self: flex-start;
+  min-height: 40px;
+  gap: 2px;
+  margin-left: auto;
+}
+.sheet .free-dice-label {
+  font: 500 10px/1 var(--mono);
+  letter-spacing: .12em;
+  color: var(--mute);
+  margin-right: 6px;
+}
+/* Dice look like the in-row icon buttons (accent on hover via .row-icon:hover), a bit larger with a bigger hit area. */
+.sheet .row-icon.free-die {
+  font-size: 11px;
+  padding: 6px;
+  color: var(--dim);
+}
 .sheet .tab-pane {
   display: none;
   flex-direction: column;
@@ -806,6 +827,10 @@
   .sheet .chip.tab {
     flex: 1 1 0;
     padding: 0 8px;
+  }
+  .sheet .free-dice {
+    width: 100%;
+    justify-content: flex-end;
   }
   .sheet .step button {
     min-height: 40px;

@@ -9,6 +9,16 @@
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="core" checked><span>CORE</span></label>
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="skills"><span>PROFILE</span></label>
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="gear"><span>GEAR</span></label>
+    <!-- Free rolls: one exploding die, no popup (for anything the sheet doesn't cover). -->
+    <div class="free-dice">
+      <span class="free-dice-label">FREE ROLL:</span>
+      <button type="action" class="row-icon free-die" name="act_freed4" title="Free roll D4">D4</button>
+      <button type="action" class="row-icon free-die" name="act_freed6" title="Free roll D6">D6</button>
+      <button type="action" class="row-icon free-die" name="act_freed8" title="Free roll D8">D8</button>
+      <button type="action" class="row-icon free-die" name="act_freed10" title="Free roll D10">D10</button>
+      <button type="action" class="row-icon free-die" name="act_freed12" title="Free roll D12">D12</button>
+      <button type="action" class="row-icon free-die" name="act_freed20" title="Free roll D20">D20</button>
+    </div>
   </div>
 
   <div class="tab-pane tab-core">
@@ -1320,8 +1330,10 @@
   }
 
   // Check (stat, skill, attack to-hit) inline rolls, including the popup (dice shift, difficulty).
-  function checkRollFields(levels) {
-    var roll = ' {{result=[[0]]}} {{crit=[[0]]}} {{shift=[[' + SHIFT_QUERY + ']]}} {{diff=[[' + DIFFICULTY_QUERY + ']]}}';
+  // free: no popup (no shift, no difficulty).
+  function checkRollFields(levels, free) {
+    var roll = ' {{result=[[0]]}} {{crit=[[0]]}}'
+      + ' {{shift=[[' + (free ? 0 : SHIFT_QUERY) + ']]}} {{diff=[[' + (free ? 0 : DIFFICULTY_QUERY) + ']]}}';
     levels.forEach(function (level, c) { roll += chainRollFields(CHECK_CHAINS[c], level - MAX_SHIFT, level + MAX_SHIFT); });
     return roll;
   }
@@ -1345,15 +1357,24 @@
   }
 
   // header: plain card fields (kicker, name, cap1, cap2); dice: first die of each chain.
-  function rollCheck(header, dice) {
+  // free: a free roll, with no popup and no badges (not even a critical failure).
+  function rollCheck(header, dice, free) {
     var levels = dice.map(dieLevel);
-    var roll = '&{template:gits} {{charname=@{character_name}}}' + headerFields(header) + checkRollFields(levels);
+    var roll = '&{template:gits} {{charname=@{character_name}}}' + headerFields(header) + checkRollFields(levels, free);
     startRoll(roll, function (results) {
       var computed = {};
       resolveCheck(results, levels, computed);
+      if (free) computed.crit = 0;
       finishRoll(results.rollId, computed);
     });
   }
+
+  // Free-roll buttons on the tab row: one exploding die of each size.
+  DICE_STEPS.forEach(function (die) {
+    on('clicked:free' + die, function () {
+      rollCheck({ kicker: 'FREE ROLL', name: die.toUpperCase() }, [die], true);
+    });
+  });
 
   var ROLL_ACTIONS = [
     ['rollawarness', 'Awarness'],
