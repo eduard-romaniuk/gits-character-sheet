@@ -16,6 +16,7 @@
     if (Sheet.ui.characterDialog) return 'character';
     if (Sheet.ui.settingsDialog) return 'settings';
     if (Sheet.ui.pdfDialog) return 'pdf';
+    if (Sheet.ui.roll20Dialog) return 'roll20';
     if (Sheet.state && Sheet.state.crop) return 'crop';
     return null;
   }
@@ -35,6 +36,7 @@
       case 'character': Sheet.closeCharacterDialog(); return;
       case 'settings': Sheet.closeSettingsDialog(); return;
       case 'pdf': Sheet.closePdfDialog(); return;
+      case 'roll20': Sheet.closeRoll20ExportDialog(); return;
       case 'crop': Sheet.closeCropDialog(); return;
     }
   }
@@ -137,6 +139,11 @@
         case 'exportMenuToggle': setExportMenuOpen(!isExportMenuOpen()); return;
         case 'export': setExportMenuOpen(false); Sheet.exportCharacterById(Sheet.state.id); return;
         case 'exportPdf': setExportMenuOpen(false); Sheet.openPdfDialog(); return;
+        case 'exportRoll20': setExportMenuOpen(false); Sheet.openRoll20ExportDialog(); return;
+
+        /* ---- roll20 export dialog ---- */
+        case 'roll20Loadout': Sheet.selectRoll20Loadout(actionEl.getAttribute('data-loadout-id')); return;
+        case 'roll20Copy': Sheet.copyRoll20Export(); return;
 
         /* ---- pdf export dialog ---- */
         case 'pdfToggle': Sheet.togglePdfSetting(actionEl.getAttribute('data-key')); return;

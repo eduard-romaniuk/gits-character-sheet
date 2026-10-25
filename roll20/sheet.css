@@ -155,8 +155,43 @@
 }
 .sheet .wrap:has(input[name="attr_tab"][value="core"]:checked) .tab-core,
 .sheet .wrap:has(input[name="attr_tab"][value="skills"]:checked) .tab-skills,
-.sheet .wrap:has(input[name="attr_tab"][value="gear"]:checked) .tab-gear {
+.sheet .wrap:has(input[name="attr_tab"][value="gear"]:checked) .tab-gear,
+.sheet .wrap:has(input[name="attr_tab"][value="settings"]:checked) .tab-settings {
   display: flex;
+}
+/* SETTINGS ▸ import from website: paste box, IMPORT button, one-line result. */
+.sheet .import-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sheet .import-panel textarea.field {
+  min-height: 180px;
+}
+.sheet .import-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sheet .import-warning {
+  color: var(--red);
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: .08em;
+}
+.sheet .import-warning,
+.sheet .import-confirm,
+.sheet .import-actions:has(input[name="attr_importstep"][value="confirm"]) .import-start,
+.sheet .import-actions:has(input[name="attr_importstep"][value="confirm"]) .import-status {
+  display: none;
+}
+.sheet .import-actions:has(input[name="attr_importstep"][value="confirm"]) .import-warning,
+.sheet .import-actions:has(input[name="attr_importstep"][value="confirm"]) .import-confirm {
+  display: inline-flex;
+}
+.sheet .field.import-status {
+  flex: 1 1 auto;
+  background: transparent;
+  border-color: transparent;
 }
 /* Panels sharing a row are stretched to the same height. Only the tab's own */
 /* layout rows; grids nested inside panels keep align-items: start. */

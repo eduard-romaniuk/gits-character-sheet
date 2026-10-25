@@ -9,6 +9,7 @@
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="core" checked><span>CORE</span></label>
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="skills"><span>PROFILE</span></label>
     <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="gear"><span>GEAR</span></label>
+    <label class="chip tab"><input type="radio" class="sr-only" name="attr_tab" value="settings"><span>SETTINGS</span></label>
     <!-- Free rolls: one exploding die, no popup (for anything the sheet doesn't cover). -->
     <div class="free-dice">
       <span class="free-dice-label">FREE ROLL:</span>
@@ -583,6 +584,10 @@
                 <label class="label">USED</label>
                 <input class="field num" type="text" inputmode="numeric" name="attr_used" placeholder="0">
               </div>
+              <div class="col" style="max-width:140px">
+                <label class="label">FREE (NO COST)</label>
+                <input class="field num" type="text" inputmode="numeric" name="attr_freeqty" placeholder="0">
+              </div>
             </div>
 
             <div class="dialog-row explosive-row">
@@ -599,6 +604,23 @@
             </div>
           </div>
         </fieldset>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane tab-settings">
+    <div class="panel import-panel">
+      <div class="panel-header"><div class="title">IMPORT FROM WEBSITE</div></div>
+      <div class="hint">On the website, use EXPORT &#9656; ROLL20, then paste here. Importing replaces everything on this sheet.</div>
+      <textarea class="field mono" name="attr_importjson" placeholder="Paste here"></textarea>
+      <!-- importstep = 'confirm' after IMPORT accepted the pasted text: shows the warning and its two buttons instead. -->
+      <div class="import-actions">
+        <input type="hidden" name="attr_importstep" value="">
+        <button type="action" class="btn import-start" name="act_importchar">IMPORT</button>
+        <span class="import-warning">All current data on this sheet will be replaced.</span>
+        <button type="action" class="btn import-confirm" name="act_importconfirm">REPLACE SHEET</button>
+        <button type="action" class="btn import-confirm" name="act_importcancel">CANCEL</button>
+        <input class="field import-status" type="text" name="attr_importstatus" readonly tabindex="-1">
       </div>
     </div>
   </div>
@@ -1009,16 +1031,21 @@
 
   /* -------- equipment: single-use quantity remaining ("3 / 5"), mirrors js/render-items.js hasQty -------- */
 
+  // Units of a single-use item: the purchased amount (qty, costs RP) plus free bonus units (freeqty, no cost).
+  function totalUnits(v) {
+    return Math.max(0, (parseInt(v.qty, 10) || 0) + (parseInt(v.freeqty, 10) || 0));
+  }
+
   function recalcEquipmentQtyDisplay() {
     recalcRowSummary(
       'repeating_equipment',
-      ['type', 'single', 'qty', 'used'],
+      ['type', 'single', 'qty', 'freeqty', 'used'],
       function (v) {
         var isCountable = v.type === 'throwable' || v.type === 'utility';
-        var qty = parseInt(v.qty, 10) || 0;
-        if (!isCountable || !isChecked(v.single) || qty <= 0) return '';
-        var used = clamp(parseInt(v.used, 10) || 0, 0, qty);
-        return Math.max(0, qty - used) + ' / ' + qty;
+        var total = totalUnits(v);
+        if (!isCountable || !isChecked(v.single) || total <= 0) return '';
+        var used = clamp(parseInt(v.used, 10) || 0, 0, total);
+        return Math.max(0, total - used) + ' / ' + total;
       },
       'qtydisplay'
     );
@@ -1026,16 +1053,16 @@
 
   on(
     'sheet:opened change:repeating_equipment:type change:repeating_equipment:single'
-    + ' change:repeating_equipment:qty change:repeating_equipment:used',
+    + ' change:repeating_equipment:qty change:repeating_equipment:freeqty change:repeating_equipment:used',
     recalcEquipmentQtyDisplay
   );
 
   function stepEquipmentUsed(eventInfo, dir) {
     var src = eventInfo.sourceAttribute;
     var prefix = src.slice(0, src.lastIndexOf('_'));
-    getAttrs([prefix + '_used', prefix + '_qty'], function (values) {
-      var qty = parseInt(values[prefix + '_qty'], 10) || 0;
-      var used = clamp((parseInt(values[prefix + '_used'], 10) || 0) + dir, 0, qty);
+    getAttrs([prefix + '_used', prefix + '_qty', prefix + '_freeqty'], function (values) {
+      var total = totalUnits({ qty: values[prefix + '_qty'], freeqty: values[prefix + '_freeqty'] });
+      var used = clamp((parseInt(values[prefix + '_used'], 10) || 0) + dir, 0, total);
       var out = {};
       out[prefix + '_used'] = used;
       setAttrs(out);
@@ -1130,17 +1157,17 @@
     },
     equipment: {
       fields: ['name', 'type', 'attack', 'range', 'damage', 'rof', 'head', 'torso', 'arms', 'legs', 'mods', 'cost',
-        'skill', 'qty', 'used', 'single', 'fittedto', 'notes'],
+        'skill', 'qty', 'freeqty', 'used', 'single', 'fittedto', 'notes'],
       build: function (v) {
         var type = v.type || 'weapon';
-        var qty = parseInt(v.qty, 10) || 0;
-        var hasUses = (type === 'throwable' || type === 'utility') && isChecked(v.single) && qty > 0;
-        var left = Math.max(0, qty - clamp(parseInt(v.used, 10) || 0, 0, qty));
+        var total = totalUnits(v);
+        var hasUses = (type === 'throwable' || type === 'utility') && isChecked(v.single) && total > 0;
+        var left = Math.max(0, total - clamp(parseInt(v.used, 10) || 0, 0, total));
         return {
           kicker: EQUIPMENT_TYPE_LABELS[type] || 'WEAPON',
           meta: equipmentSummary(v, { omitType: true }),
           info: joinParts([
-            hasUses && 'USES ' + left + ' / ' + qty,
+            hasUses && 'USES ' + left + ' / ' + total,
             v.skill && 'SKILL ' + v.skill,
             type === 'attachment' && v.fittedto && 'FITTED TO ' + v.fittedto
           ]),
@@ -1537,6 +1564,100 @@
       });
     });
   });
+
+  /* -------- SETTINGS ▸ import from website -------- */
+
+  // The website's EXPORT ▸ ROLL20 copies one loadout of a character as JSON that
+  // already uses this sheet's field names (js/export-roll20.js):
+  //   { format: 'gits-roll20', version, name, loadout, attrs: { top-level fields }, rows: { section: [ { field: value } ] } }
+  // Importing replaces the whole sheet: every repeating row is removed and every top-level
+  // field below is overwritten. Only known names are written, whatever the pasted text holds.
+  var IMPORT_TOP_LEVEL = ['Awarness', 'Presence', 'Muscle', 'Reflexes', 'Hacking', 'Barrier',
+    'GW1', 'GW2', 'SP2', 'RP2', 'Aspect1', 'Aspect2', 'SC_Notes', 'Notes']
+    .concat(HIT_LOCATIONS.map(function (loc) { return loc[1] + '_Armor'; }))
+    .concat(HP_PAIRS.map(function (pair) { return pair[1]; }))
+    .concat(SC_PAIRS.map(function (pair) { return pair[1]; }));
+  var IMPORT_ROW_FIELDS = {
+    setbacks: ['name', 'notes'],
+    cybernetics: ['name', 'notes', 'armor', 'damage'],
+    skills: ['name', 'notes', 'rank', 'linked'],
+    specialty: ['name', 'notes', 'maxranks', 'rank', 'r1', 'r2', 'r3', 'r4', 'r5'],
+    equipment: ['type', 'name', 'notes', 'cost', 'range', 'damage', 'rof', 'attack', 'skill', 'head', 'torso', 'arms', 'legs',
+      'mods', 'qty', 'freeqty', 'used', 'single', 'explosive', 'fittedto']
+  };
+  var IMPORT_HINT = 'Paste the text from the website\'s EXPORT > ROLL20.';
+
+  // The pasted export, or null when it isn't one.
+  function readImportFile(text) {
+    var file = null;
+    try { file = JSON.parse(text || ''); } catch (error) { file = null; }
+    return file && file.format === 'gits-roll20' && file.attrs && file.rows ? file : null;
+  }
+
+  // IMPORT only checks the pasted text; the sheet's own warning (importstep 'confirm')
+  // then asks before anything is replaced. No chat message either way.
+  on('clicked:importchar', function () {
+    getAttrs(['importjson'], function (v) {
+      if (!readImportFile(v.importjson)) { setAttrs({ importstep: '', importstatus: IMPORT_HINT }); return; }
+      setAttrs({ importstep: 'confirm', importstatus: '' });
+    });
+  });
+
+  on('clicked:importconfirm', function () {
+    getAttrs(['importjson'], function (v) {
+      var file = readImportFile(v.importjson);
+      setAttrs({ importstep: '' });
+      if (!file) { setAttrs({ importstatus: IMPORT_HINT }); return; }
+      replaceSheet(file);
+    });
+  });
+
+  on('clicked:importcancel', function () { setAttrs({ importstep: '', importstatus: 'Import cancelled.' }); });
+
+  // Editing the pasted text while the warning shows goes back to the IMPORT button.
+  on('change:importjson', function () { setAttrs({ importstep: '' }); });
+
+  function replaceSheet(file) {
+    var sections = Object.keys(IMPORT_ROW_FIELDS);
+    var pending = sections.length;
+    sections.forEach(function (section) {
+      getSectionIDs('repeating_' + section, function (ids) {
+        ids.forEach(function (id) { removeRepeatingRow('repeating_' + section + '_' + id); });
+        pending -= 1;
+        if (!pending) writeImport(file);
+      });
+    });
+  }
+
+  function writeImport(file) {
+    var out = {}, count = 0;
+    IMPORT_TOP_LEVEL.forEach(function (key) {
+      var value = file.attrs[key];
+      out[key] = value == null ? '' : String(value);
+    });
+    Object.keys(IMPORT_ROW_FIELDS).forEach(function (section) {
+      var rows = Array.isArray(file.rows[section]) ? file.rows[section] : [];
+      rows.forEach(function (row) {
+        var prefix = 'repeating_' + section + '_' + generateRowID() + '_';
+        IMPORT_ROW_FIELDS[section].forEach(function (field) {
+          if (row[field] != null) out[prefix + field] = String(row[field]);
+        });
+        out[prefix + 'uistate'] = 'collapsed';
+        count += 1;
+      });
+    });
+    out.importjson = '';
+    out.importstatus = 'Imported ' + (file.name || 'agent') + (file.loadout ? '  ·  loadout ' + file.loadout : '')
+      + '  ·  ' + count + ' item' + (count === 1 ? '' : 's');
+    setAttrs(out, {}, function () {
+      recalcTotals();
+      recalcSkillsSummary();
+      recalcSpecialtySummary();
+      recalcCyberneticsSummary();
+      recalcEquipmentSummary();
+      recalcEquipmentQtyDisplay();
+    });
+  }
 
 })();
 </script>
